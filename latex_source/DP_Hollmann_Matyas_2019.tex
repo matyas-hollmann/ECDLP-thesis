@@ -1,0 +1,147 @@
+% arara: xelatex
+% arara: xelatex
+% arara: xelatex
+
+
+% options:
+% thesis=B bachelor's thesis
+% thesis=M master's thesis
+% czech thesis in Czech language
+% english thesis in English language
+% hidelinks remove colour boxes around hyperlinks
+
+\documentclass[thesis=M,english]{FITthesis}[2012/10/20]
+
+\usepackage[utf8]{inputenc} % LaTeX source encoded as UTF-8
+% \usepackage[latin2]{inputenc} % LaTeX source encoded as ISO-8859-2
+% \usepackage[cp1250]{inputenc} % LaTeX source encoded as Windows-1250
+
+\usepackage{graphicx} %graphics files inclusion
+% \usepackage{subfig} %subfigures
+\usepackage{amsmath} %advanced maths
+\usepackage{amssymb} %additional math symbols
+
+\usepackage{dirtree} %directory tree visualisation
+
+\usepackage{amsthm} 
+\theoremstyle{remark}
+\newtheorem*{RM}{Remark}
+
+\newtheorem*{NRM}{Notational Remark}
+
+\theoremstyle{definition}
+\newtheorem{DF}{Definition}[section]
+
+% % list of acronyms
+% \usepackage[acronym,nonumberlist,toc,numberedsection=autolabel]{glossaries}
+% \iflanguage{czech}{\renewcommand*{\acronymname}{Seznam pou{\v z}it{\' y}ch zkratek}}{}
+% \makeglossaries
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% EDIT THIS
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\department{Department of Information Security}
+\title{Summation polynomials and the discrete logarithm problem on elliptic curve}
+\authorGN{Matyáš} %author's given name/names
+\authorFN{Hollmann} %author's surname
+\author{Matyáš Hollmann} %author's name without academic degrees
+\authorWithDegrees{Bc. Matyáš Hollmann} %author's name with academic degrees
+\supervisor{Ing. Ivo Petr, Ph.D.}
+\acknowledgements{THANKS (remove entirely in case you do not with to thank anyone)}
+\abstractEN{Summarize the contents and contribution of your work in a few sentences in English language.}
+\abstractCS{V n{\v e}kolika v{\v e}t{\' a}ch shr{\v n}te obsah a p{\v r}{\' i}nos t{\' e}to pr{\' a}ce v {\v c}esk{\' e}m jazyce.}
+\placeForDeclarationOfAuthenticity{Prague}
+\keywordsCS{Replace with comma-separated list of keywords in Czech.}
+\keywordsEN{Replace with comma-separated list of keywords in English.}
+\declarationOfAuthenticityOption{4} %select as appropriate, according to the desired license (integer 1-6)
+% \website{http://site.example/thesis} %optional thesis URL
+
+
+\begin{document}
+
+% \newacronym{CVUT}{{\v C}VUT}{{\v C}esk{\' e} vysok{\' e} u{\v c}en{\' i} technick{\' e} v Praze}
+% \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
+
+\setsecnumdepth{part}
+\chapter{Introduction}
+
+\setsecnumdepth{all}
+\chapter{Mathematical background}\label{mathBG}
+%\input{mathBG.tex}
+ %definice pojmu, finite fields, etc.
+ V~této kapitole definujeme základní matematické pojmy použité v~této práce. Čerpali jsme především z~přednášek \cite{BI-LIN} a skript \cite{LIN-skripta} k~předmětu BI-LIN, handoutů k~předmětu MI-MPI \cite{MI-MPI}, disertační práce naší vedoucí \cite{disertace} a článků \cite{nil3}, \cite{niln}. Ostatní zdroje jsou uvedeny explicitně v~místě, kde byly použity.
+
+\section{Introduction to general algebra}
+%\newtheorem{corollary}{Corollary}[theorem] dusledek
+%\newtheorem{lemma}[theorem]{Lemma} poznamka pouzita k dukazu
+\begin{DF}
+A \textbf{group} $G$ is an ordered pair $(M,  \circ)$, where $M$ is any non-empty set and binary operation $\circ : M \times M \to M $ (sometimes called the group law of $G$) that satisfies three requirements known as group axioms: 
+\end{DF}
+\begin{itemize}
+\item 
+$ \forall x,y,z \in M: x\circ (y \circ z) = (x \circ y) \circ z,$ \hfill (associativity)
+\item 
+$ \exists e \in M, \forall x \in M: e \circ x = x \circ e = x,$ \hfill (identity element)
+\item 
+$\forall x \in M, \exists x^{-1} \in M: x \circ x^{-1} = x^{-1} \circ x = e.$ \hfill (inverse element)
+\end{itemize}
+\begin{RM}
+$M$ is closed under an operation $\circ$. 
+\end{RM}
+\begin{NRM}
+When we are gonna talk about an element  $g$ of a group $G$ ($g \in G$) we are actually gonna mean that $g$ is an element of the underlying set $M$ ($g \in M$).
+\end{NRM}
+Groups satisfying commutativity law:
+\begin{itemize}
+\item 
+$ \forall x, y\in M: x \circ y = y \circ x,$
+\end{itemize}
+are called \textbf{Abelian groups} (in honour of a famous Norwegian mathematician Niels Henrik Abel) \url{https://www.britannica.com/biography/Niels-Henrik-Abel}.
+\\
+\\
+
+
+\chapter{Discrete logarithm problem on elliptic curves}
+\chapter{State-of-the-art}
+
+\chapter{Analysis and design}
+
+\chapter{Realisation}
+
+\setsecnumdepth{part}
+\chapter{Conclusion}
+
+
+\bibliographystyle{iso690}
+\bibliography{mybibliographyfile}
+
+\setsecnumdepth{all}
+\appendix
+
+\chapter{Acronyms}
+% \printglossaries
+\begin{description}
+	\item[GUI] Graphical user interface
+	\item[XML] Extensible markup language
+\end{description}
+
+
+\chapter{Contents of enclosed CD}
+
+%change appropriately
+
+\begin{figure}
+	\dirtree{%
+		.1 readme.txt\DTcomment{the file with CD contents description}.
+		.1 exe\DTcomment{the directory with executables}.
+		.1 src\DTcomment{the directory of source codes}.
+		.2 wbdcm\DTcomment{implementation sources}.
+		.2 thesis\DTcomment{the directory of \LaTeX{} source codes of the thesis}.
+		.1 text\DTcomment{the thesis text directory}.
+		.2 thesis.pdf\DTcomment{the thesis text in PDF format}.
+		.2 thesis.ps\DTcomment{the thesis text in PS format}.
+	}
+\end{figure}
+
+\end{document}
