@@ -70,13 +70,12 @@
 \chapter{Mathematical background}\label{mathBG}
 %\input{mathBG.tex}
  %definice pojmu, finite fields, etc.
- V~této kapitole definujeme základní matematické pojmy použité v~této práce. Čerpali jsme především z~přednášek \cite{BI-LIN} a skript \cite{LIN-skripta} k~předmětu BI-LIN, handoutů k~předmětu MI-MPI \cite{MI-MPI}, disertační práce naší vedoucí \cite{disertace} a článků \cite{nil3}, \cite{niln}. Ostatní zdroje jsou uvedeny explicitně v~místě, kde byly použity.
-
+ In this chapter we are going to define terms that will be used in the rest of this thesis. The first part is focused on terms common in general algebra, the second part will deal with elliptic curves and a little bit of algebraic geometry. 
 \section{Introduction to general algebra}
 %\newtheorem{corollary}{Corollary}[theorem] dusledek
 %\newtheorem{lemma}[theorem]{Lemma} poznamka pouzita k dukazu
 \begin{DF}
-A \textbf{group} $G$ is an ordered pair $(M,  \circ)$, where $M$ is any non-empty set and binary operation $\circ : M \times M \to M $ (sometimes called the group law of $G$) that satisfies three requirements known as group axioms: 
+A \textbf{group} $G$ is an ordered pair $(M,  \circ)$, where $M$ is a non-empty set and binary operation $\circ : M \times M \to M $ (sometimes called the group law of $G$) that satisfies three requirements known as group axioms: 
 \end{DF}
 \begin{itemize}
 \item 
@@ -87,7 +86,7 @@ $ \exists e \in M, \forall x \in M: e \circ x = x \circ e = x,$ \hfill (identity
 $\forall x \in M, \exists x^{-1} \in M: x \circ x^{-1} = x^{-1} \circ x = e.$ \hfill (inverse element)
 \end{itemize}
 \begin{RM}
-$M$ is closed under an operation $\circ$. 
+$M$ is closed under the operation $\circ$. 
 \end{RM}
 \begin{NRM}
 When we are gonna talk about an element  $g$ of a group $G$ ($g \in G$) we are actually gonna mean that $g$ is an element of the underlying set $M$ ($g \in M$).
@@ -97,14 +96,43 @@ Groups satisfying commutativity law:
 \item 
 $ \forall x, y\in M: x \circ y = y \circ x,$
 \end{itemize}
-are called \textbf{Abelian groups} (in honour of a famous Norwegian mathematician Niels Henrik Abel) \url{https://www.britannica.com/biography/Niels-Henrik-Abel}.
-\\
-\\
-
-
+are called \textbf{Abelian groups} (in honour of a famous Norwegian mathematician Niels Henrik Abel \cite{Abel}). 
+\begin{DF}
+If the set $M$ has a finite number of elements, $G = (M, \circ)$ is a \textbf{finite} group. \textbf{Order} of the finite group $G$ is the number of elements of the underlying set $M$ and we denote it by $\#G$. If the set $M$ is infinite, the order of $G$ is infinite as well.
+\end{DF}
+\begin{RM}
+In every group there exist just one unique identity element. Also for every element $q \in G$ there exists just one inverse element denoted $q^{-1}$ in the multiplicative notation and $-q$ in the additive notation. Inverse of a product of two group elements is a product of respective inverses in the reversed order (order does matter in non-commutative groups).  
+\end{RM}
+\noindent Identity element in additive notation is called \textbf{zero} and denoted by $0$, in the multiplicative notation \textbf{unit} and denoted $1$. \\ \\
+In an additive group $G$ we define \textbf{multiplication} by an integer (repeated application of the group law) as follows:
+$$
+\forall p \in G,\ \forall k \in \mathbb{Z}: kp := \begin{cases} \underbrace{p + p + \cdots + p}_{\text{k-times}} &\quad k > 0, \\
+0 \text{ (identity element) } &\quad k = 0, \\
+\underbrace{(-p) + (-p) + \cdots + (-p)}_{\text{k-times}} &\quad k < 0.
+\end{cases}
+$$
+In a multiplicative group $G$ we define \textbf{exponentiation} (repeated application of the group law) in a similar manner:
+$$
+\forall p \in G,\ \forall k \in \mathbb{Z}: p^k := \begin{cases} \underbrace{p \cdot p \cdot \cdots \cdot p}_{\text{k-times}} &\quad k > 0, \\
+1 \text{ (identity element) } &\quad k = 0, \\
+\underbrace{p^{-1} \cdot p^{-1} \cdot \cdots \cdot p^{-1}}_{\text{k-times}} &\quad k < 0.
+\end{cases}
+$$
+\begin{DF}
+\textbf{Order of an element} $a \in G$ is the smallest positive integer $k$ such that: $a^k = 1$ (similarly $ka = 0$ in additive notation), we denote it by $\#a= k$, if there isn't such $k$ we say the order of $a$ is infinite (this case may only happen if $G$ itself is of infinite order and we are mostly interested in finite groups in this thesis). Elements of finite order are sometimes called \textbf{torsion} elements.
+\end{DF}
+\begin{RM}
+Order of the identity element $\in G$ is always $1$ and due to the uniqueness of the identity element it's also the only element $\in G$ this order.
+\end{RM}
 \chapter{Discrete logarithm problem on elliptic curves}
 \chapter{State-of-the-art}
 
+\chapter{Algorithms}
+Pollard-Rho
+Pohling-Hellmann
+BabySteps-Giants (mention mods)
+F4, F5 Groebner
+SumPoly \cite{iso690}
 \chapter{Analysis and design}
 
 \chapter{Realisation}
@@ -113,8 +141,10 @@ are called \textbf{Abelian groups} (in honour of a famous Norwegian mathematicia
 \chapter{Conclusion}
 
 
-\bibliographystyle{iso690}
-\bibliography{mybibliographyfile}
+%\bibliographystyle{iso690}
+%\bibliography{bibliography}
+\input{bibliography.tex}
+%citace
 
 \setsecnumdepth{all}
 \appendix
