@@ -22,6 +22,7 @@
 \usepackage{amssymb} %additional math symbols
 
 \usepackage{dirtree} %directory tree visualisation
+\usepackage{relsize}
 
 \usepackage{amsthm} 
 \theoremstyle{remark}
@@ -67,13 +68,12 @@
 \chapter{Introduction}
 
 \setsecnumdepth{all}
-\chapter{Mathematical background}\label{mathBG}
+\chapter{Mathematical Background}\label{mathBG}
 %\input{mathBG.tex}
  %definice pojmu, finite fields, etc.
- In this chapter we are going to define terms that will be used in the rest of this thesis. The first section is a revision of terms common in general algebra, the second section is focused on polynomials and Gröbner bases and the last section will deal with elliptic curves. This chapter is based mostly on book by David A. Cox \cite{algGeom}, MI-MKY lecture notes \cite{mky} and my bachelor thesis \cite{myBP}. Other sources will be cited individually at the specific location.
-\section{Introduction to general algebra}
-%\newtheorem{corollary}{Corollary}[theorem] dusledek
-%\newtheorem{lemma}[theorem]{Lemma} poznamka pouzita k dukazu
+ In this chapter we are going to define terms that will be used in the rest of this thesis. The first section is a revision of terms common in general algebra, the second section is focused on polynomials and Gröbner bases and the last section will deal with elliptic curves. This chapter is based mostly on book by David A. Cox \cite{algGeom}, MI-MKY lecture notes \cite{mky} and my bachelor thesis \cite{myBP}. Other sources will be cited individually at the specific locations.
+\section{Introduction to General Algebra}
+General algebra, also called universal algebra in the past, is the theory of algebraic structures. An algebraic structure is a set of objects with a collection of mathematical operations on this set.  An algebraic structure is defined by a set of axioms, requirements on the set and operations on it, and logically deduce other properties of said algebraic structure based on the axioms. When we encounter a particular problem we may try to classify it as a specific algebraic structure (by verifying its axioms) and use all of its deduced properties without the need to reprove them. We start this section with a definition of an elementary algebraic structure called group.
 \begin{DF}
 A \textbf{group} $G$ is an ordered pair $(M,  \circ)$, where $M$ is a non-empty set and binary operation $\circ : M \times M \to M $ (sometimes called the group law of $G$) that satisfies three requirements known as group axioms: 
 \end{DF}
@@ -127,6 +127,10 @@ Order of the identity element $\in G$ is always $1$ and due to the uniqueness of
 \end{RM}
 \begin{DF}
 A group $(H, \circ)$ is a \textbf{subgroup} of a group $(G, \circ)$ if and only if $H \subseteq G.$ The group law $\circ$ is exactly the same, therefore the identity element $e \in G$ has to be the identity in any subgroup $H$ of $G$ as well. $H$ is called a \textbf{trivial subgroup} of $G$ if $H = \{e\}$ or $H = G$.
+\end{DF}
+\begin{DF}
+\textbf{Lagrange's Theorem}: Let $G$ be a finite group and $H$ a subgroup of $G$, then the order of the subgroup $H$ divides the order of the group $G$: $\exists n \in \mathbb{N}: \#G = \#H \cdot n.$
+\label{lagrange}
 \end{DF}
 \begin{DF}
 A \textbf{relation} $\mathcal{R}$ on a set $M$ is any subset of the Cartesian product $M\times M$. Relation $\mathcal{R}$ on the set $M$ is an \textbf{equivalence} on the set $M$ if and only if $\mathcal{R}$ satisfies following requirements:
@@ -201,7 +205,8 @@ $$
  \underbrace{1 + 1 + \cdots + 1}_\text{n-times} = 0,
 $$ we define the smallest $n \in \mathbb{N}$ satisfying this condition to be the \textbf{characteristic} of the field $\mathbb{F}.$ If there isn't such $n$ we define the characteristic of the field $\mathbb{F}$ to be $0$. We denote the characteristic of the field $\mathbb{F}$ by char$(\mathbb{F})$.
 \end{DF}
-\noindent The characteristic of a field is either $0$ or a prime number. An example of a field of characteristic $0$ are real numbers with standard addition and multiplication $(\mathbb{R}, +, \cdot)$. An example of a field of prime characteristic $p$ is a set of non-negative integers less than $p$ equipped with addition modulo $p$ and multiplication modulo~$p$ $(\{0, 1, \ldots, p-1\}, +_p, \cdot_p)$. 
+\noindent The characteristic of a field is either $0$ or a prime number. An example of a field of characteristic $0$ are real numbers with standard addition and multiplication $(\mathbb{R}, +, \cdot)$. \\ \\
+An example of a field of prime characteristic $p$ is a set of non-negative integers less than $p$ equipped with addition modulo $p$ and multiplication modulo~$p$ $(\{0, 1, \ldots, p-1\}, +_p, \cdot_p)$, we call this field the \textbf{Galois Field} of order $p$ (order of a field is defined as the order of its additive group) and denote it by $GF(p)$.
 
 \begin{RM}
 All finite fields (fields with finite number of elements) are of prime characteristic. 
@@ -213,7 +218,7 @@ Let $\mathbb{F},\ \mathbb{T}$ be fields (equipped with the same binary operation
 \begin{RM}
 The finiteness of the vector space over a field is related only to the dimension of said vector space, it doesn't have to do anything with the finiteness of the base field. For example, we can view complex numbers $\mathbb{C}$ (an infinite field) as a 2-dimensional vector space over the real numbers $\mathbb{R}$ with a basis $(1,\ \mathit{i})$, where $\mathit{i}$ is the imaginary unit satisfying the equation: $\mathit{i}^2 = -1.$
 \end{RM}
-\section{Multivariate polynomials}
+\section{Multivariate Polynomials}
 \begin{DF}
 A \textbf{monomial} $m$ in $x_1,x_2,\ldots,x_n$ is a product of the form:
 $$
@@ -327,7 +332,7 @@ $$
 \langle f_1,\ldots,f_s \rangle \subseteq \mathbf{I}(\mathcal{V}(f_1,\ldots,f_s)) .
 $$
 \end{RM} 
-\subsection{Monomial ordering}
+\subsection{Monomial Ordering}
 \noindent The notion of ordering of terms in polynomial is a key ingredient in many algorithms, e.g. long division of polynomials. When dealing with polynomials in only one variable we usually write the terms of the polynomial in the decreasing order by their monomial degree. For example, $f(x) = 2x^4 - 10x^3 + x^2 + x -12$. The degree ordering on the one-variable monomials is straightforward:
 $$
 \cdots > x^{m+1} > x^m > x^{m-1} \cdots > x^2 > x > 1
@@ -469,7 +474,7 @@ $$
 \end{DF}
 \noindent The algorithm itself will be presented in the chapter \ref{Algorithms}. Unfortunately,  the remainder is not uniquely characterized and depends on the order of the divisors in the set $F$ and also on the monomial order itself. \\ \\
 \noindent Furthermore, we would like to use this idea to answer the ideal membership problem. Let $f, f_1, \ldots, f_s \in \mathbb{F}[X]$ and let $I = \langle f_1, \ldots, f_s \rangle$ be an ideal. We would like to determine whether $f \in I$ is true. We can clearly state that if the remainder $r$ obtained after division of $f$ by $F = (f_1, \ldots, f_s)$ is $0$, then $f$ has to be an element of the ideal $I$. So $r=0$ is a sufficient condition for the ideal membership, however it isn't a necessary condition for $f$ being in the ideal. To remedy this situation we will try to describe a "good" basis of the ideal $I$, such that the remainder $r$ on division by the polynomials of this basis will be uniquely determined and that the condition $r=0$ will be equivalent to the membership in the ideal. Exactly those good properties have Gröbner bases which we are gonna describe in the following section.
-\section{Gröbner bases}
+\section{Gröbner Bases}
 \begin{DF}
 An ideal $I \subseteq \mathbb{F}[X]$ is called a \textbf{monomial ideal} if there exists a (possibly infinite) subset $A \subseteq \mathbb{Z}_{\geq 0}^n$ such that $I$ consists of all polynomials which are finite sums: $\sum_{\alpha \in A} h_\alpha X^\alpha$, where $h_\alpha \in \mathbb{F}[X].$ We can then write $I$ in the form: $I = \langle X^\alpha \ |\ \alpha \in A\rangle.$ Monomial $X^\beta, \beta \in \mathbb{Z}_{\geq 0}^n,$ lies in ideal $I$ if and only if there exist $\alpha \in A$, such that $X^\alpha \ |\ X^\beta$ ($X^\beta$ is divisible by some $X^\alpha$). 
 \end{DF}
@@ -505,7 +510,19 @@ Every ideal $I \subseteq \mathbb{F}[X]$ has a Gröbner basis. Furthermore, any G
 \phantom{.}
 \phantom{.}
 \noindent Now we will mention few important properties of Gröbner bases.
-
+\begin{RM}
+Let $I \subseteq \mathbb{F}[X]$ be an ideal and let $G = \{g_1, \ldots, g_t\}$ be a Gröbner basis of $I$. Then for any $f \mathbb{F}[X],$ there is an unique polynomial $r$ with those two properties:
+\begin{itemize}
+\item No term of $r$ is divisible by any of LT$(g_1),\ldots,$LT$(g_t)$.
+\item $\exists g \in I:\ f = g + r.$
+In particular, $r$ is the remainder on division of $f$ by set $G$ no matter how are the elements of $G$ listed when using the division algorithm. 
+\end{itemize}
+Polynomial $r$ is called the \textbf{normal form} of f. \\ \\ 
+\noindent Polynomial $f \in I$ if and only if the remainder $r$ on division $f$ by $G$ is zero, $r = 0.$
+\end{RM}
+\begin{DF}
+Let $f \in \mathbb{T}[X]$ be an polynomial and let $F = (f_1, \ldots, f_s) \subseteq \mathbb{T}[X]$ be an ordered $s$-tuple of polynomials. We will denote the remainder on the division of $f$ by $F$ by $\overline{f}^F$. If $F$ is a Gröbner basis for $\langle f_1, \ldots, f_s \rangle$, then we can regard $F$ as a set without any particular order, because the remainder on the division by a Gröbner basis is unique.
+\end{DF}
 
 %properties of GBases
 %BCHberg criterium
@@ -514,10 +531,130 @@ Every ideal $I \subseteq \mathbb{F}[X]$ has a Gröbner basis. Furthermore, any G
 %Divison Res => alg in the next section with F4, F5
 %
 %Schoof–Elkies–Atkin algorithm - pocet bodu na EC 
-\chapter{Discrete logarithm problem on elliptic curves}
-\chapter{State-of-the-art}
+\chapter{Elliptic Curves and Discrete Logarithm Problem}
+\section{Elliptic Curves}
+This section's main focus will be elliptic curves and groups of points on those elliptic curves. At first we are going to define what is a general elliptic curve, after that we will define an operation on the set of points on elliptic curve that with "the point in infinity" form an Abelian group. This section is based mostly on \cite{mky}.
+\begin{DF}
+An \textbf{elliptic curve} over a (prime order) finite field $GF(p),$ \\ $p > 3,\ p$ prime, defined by the short Weierstrass equation, is a set:
+$$
+E(GF(p)) := \{(x,y)\ |\ x,y \in \mathbb{T},\ y^2 = x^3 + Ax+B\} \cup \{ \mathcal{O} \},
+$$
+where $A, B \in GF(p)$ are \textbf{coefficients of the elliptic curve} and the \textbf{discriminant} of the elliptic curve, denoted by $\Delta$, is non-zero. Point $\mathcal{O}$ is called the \textbf{point at infinity} (in the projective plane).
+\begin{align*}
+\Delta = -16(4A^3 + 27B^2) \neq 0.
+\end{align*}
+Curves satisfying this condition are called \textbf{non-singular} and the right-hand-side polynomial ($x^3 + Ax+B$) in $x$ has 3 distinct roots. 
+\end{DF}
+\begin{DF}
+Let $E(GF(p))$ be an elliptic curve and let $P,Q \in E(GF(p)),\ P=(x_1,y_1),\ Q=(x_2,y_2)$ be two points on the elliptic curve $E$. We define the binary operation $\oplus: E(GF(p)) \times E(GF(p)) \to E(GF(p))$, called \textbf{addition on the elliptic curve} $E(GF(p))$, as follows:
+\begin{itemize}
+\item Point at infinity $\mathcal{O}$ is an identity element of the operation $\oplus$, therefore if $P = \mathcal{O},\ P \oplus Q = Q,$ or if $Q = \mathcal{O},\ P \oplus Q = P.$
+\item Else if $x_1 = x_2$ and $P\neq Q$, $P\oplus Q = \mathcal{O}.$ Point at infinity $\mathcal{O}$ is the identity element of the operation $\oplus$, therefore point $Q$ is the \textbf{additive inverse} of the point $P$, denoted by $\ominus P$. We can now state the explicit formula for the point $\ominus P$, we know its $x$-coordinate is $x_1$, and we will use the $E$ equation and substitute $X$ with $x_1$:
+$$
+Y^2  = (x_1^3 + Ax_1 + B),
+$$
+which is a quadratic equation in the variable $Y$ and we already know one of its roots, which is $y_1$, the other root has to be $-y_1$, therefore point $\ominus P = (x_1, -y_1).$
+\item Else if $x_1 \neq x_2$, let $\lambda$ be the slope of the line defined by the points $P,Q.$
+$$
+\lambda = \frac{y_2 - y_1}{x_2 - x_1},
+$$
+else if $P = Q$ (\textbf{point doubling}), let $\lambda$ be the slope of the tangent line to the elliptic curve equation at the point $P.$
+$$
+\lambda = \mathlarger{\mathlarger{\frac{\frac{\mathrm{d}E}{\mathrm{d}X}}{\frac{\mathrm{d}E}{\mathrm{d}Y}}}}(x_1, y_1) = \frac{3x_1^2+ A}{2y_1}, 
+$$
+where $\frac{\mathrm{d}E}{\mathrm{d}X}, \frac{\mathrm{d}E}{\mathrm{d}Y}$ is the derivative of the elliptic curve equation with respect to $X,Y$. \\
+The result of the operation $\oplus$ is:
+\begin{align*}
+x_3 &= \lambda^2 - x_1 - x_2, \\
+y_3 &= \lambda(x_1 - x_3) - y_1, \\ 
+ P \oplus Q &= (x_3, y_3).
+\end{align*}
+\end{itemize}
+\end{DF}
+\begin{DF}
+A set of points on the elliptic curve defined by the short Weierstrass equation and the binary operation $\oplus$ form an Abelian group, $(E(GF(p)), \oplus)$ is a group and we denote it by $E$, or if we want to explicitly mention the coefficients $A,B$ and the prime field $GF(p),$ we use $E(A,B,p)$.
+\end{DF}
+\begin{NRM}
+Let $P \in E$ be a point on an elliptic curve $E$ with group operation $\oplus$. To shorten the notation of the repeated application of the group law we will use the notation introduced in chapter 1. To remind our readers: \textbf{multiplication} of a point on the elliptic curve $E$ by an integer has the following meaning:
+$$
+\forall P \in E,\ \forall t \in \mathbb{Z}: tP := \begin{cases} \underbrace{P \oplus P \oplus \cdots \oplus P}_{\text{t-times}} &\quad t > 0, \\
+\mathcal{O} \text{ (identity element) } &\quad t = 0, \\
+\underbrace{(\ominus P) \oplus (\ominus P) \oplus \cdots \oplus (\ominus P)}_{\text{t-times}} &\quad t < 0.
+\end{cases}
+$$
+\end{NRM} 
+\begin{RM}
+The complexity of arithmetic operations on $E$ is based on the complexity of operations in the underlying finite field $GF(p)$.  Exact number of arithmetic operations depends on the used algorithm and on the architecture of the CPU where it's executed. Table \ref{tblComp} provides a brief summary of the relationship between the operations on elliptic curve $E$ and number of arithmetic operations in the underlying finite field $GF(p)$. Addition in $GF(p)$ is denoted by $a_p$, multiplication in $GF(p)$ is denoted by $\cdot_p$, last column is the number of multiplicative inverses in $GF(p)^{\times}$. 
+\begin{table}[!h]
+\centering
+\begin{tabular}{ |c||c|c|c| } 
+ \hline
+ & \# $+_p$ & \# $\cdot_p$ & \# mult. inverses \\ 
+ \hline
+ \hline
+$\ominus P$ & 1 & 0 & 0  \\  \hline
+$P \oplus Q, P \neq Q$ & 6 & 3 & 1 \\  \hline
+$P \oplus Q, P = Q$ & 5 & 5 & 1 \\  \hline
+$tP,\ t \in \mathbb{Z}_{\geq 0},\ k = \mathlarger{\lceil} \log_2(t) \mathlarger{\rceil}$ & $ (5k + 0.5k)$\footnotemark & $5k$ & 0 \\ \hline
+\end{tabular}
+\caption{Complexity of the arithmetic operations on the elliptic curve $E$ over $GF(p)$.}
+\label{tblComp}
+\end{table}
+\end{RM}
+\noindent We denote the number of bits of $p$ by $n = \mathlarger{\lceil} \log_2(p) \mathlarger{\rceil}$, then addition in $GF(p)^{+}$ is asymptotically $O(n)$, multiplication in $GF(p)^{\times}$, using Montgomery method \cite{handbook}, is $O(n^2)$ and multiplicative inverse in $GF(p)^{\times}$, using a careful implementation of the extended Euclidean algorithm (EEA) \cite{handbook}, is $O(n^2)$. An alternative to the EEA for calculating a multiplicative inverse in $GF(p)^{\times}$ is based on the Lagrange's theorem \ref{lagrange}. 
+\begin{align*}
+\forall a \in GF(p)^{\times},\ \exists n \in \mathbb{N}: \#a \cdot n = \#GF(p)^{\times} &= p - 1, \\ 
+\forall a \in GF(p)^{\times}: a^{\#a} = 1 \implies a^{\#a - 1} &= a^{-1}, \\
+\forall a \in GF(p)^{\times}: a^{-1} &= a^{p-2}.
+\end{align*}
+To calculate $a^{p-2}$ we can use the standard algorithm called square-and-multiply, for details see \cite{mky}, which has the same complexity $O(n^2)$ as the EEA.
+\footnotetext{Using signed binary expansion of $t$ for the double-and-add algorithm, see \cite{mky} page 105.}
+\begin{DF}
 
-\chapter{Algorithms}
+\end{DF}
+\section{Discrete Logarithm Problem}
+Let $y = b^x$, given $y \in \mathbb{R}_{> 0}$ and the base $b \in \mathbb{R}_{>0}$, we are asked to find the exponent $x \in \mathbb{R}$. We can rewrite this problem from the exponential form to the logarithmic form: $x = \log_b(y)$, to find the $x$ we can easily evaluate it on a calculator (using change of logarithm basis rule). Even if we didn't know the inverse function (logarithm), the exponential function is a strictly increasing function, therefore we could have just guessed a random $x_0$, evaluate $b^{x_0}$, compare it with $y$ and we would immediately know whether the solution $x$ is bigger/equal/lesser than $x_0$.
+\\
+\\
+\noindent If we were given the same problem in a finite group, instead of over the real numbers, the situation would be significantly more complicated.
+\begin{DF}
+Let $G = (M, \cdot)$ be a group and let $h = g^x$, given $h \in M$ and the base $g \in M,\ \langle g \rangle = G,$ we are asked to find the exponent $x$~$\in$~$\{1, 2, \ldots, \#G\}.$ We call $x$ the \textbf{discrete logarithm} of $h$ with respect to the base $g$ and denote it by $x= \log_g(h)$. Problem of finding the solution $x$ is therefore called the \textbf{discrete logarithm problem} (DLP). We have decided to demand $g$ to be a generator of $G$ in order to guarantee the existence of the solution to the DLP.  
+\end{DF}
+\noindent To illustrate the difficulty of solving the DLP. Lets consider the multiplicative group $G$ of the finite field $GF(19).$ $G = (\{1,2,\ldots,18\}, \cdot_{19})$ and its generator $g=3,\ g \in G$. Group structure is shown on the figure \ref{fig2}. We might be asked to find such $k$, that $3^k \equiv 4 \text{ (mod 19)}$. 
+ \begin{figure}[h]
+\hspace*{-2cm}
+ 	\includegraphics[width=1.25\textwidth]{graph3in19.png}
+ 	\caption[Example of the group structure of $GF(19)^\times$.]{Powers of the generator $g = 3$ in $GF(19)^\times$. Image was created by the author himself.}
+ 	\label{fig2}
+ \end{figure}
+ \newpage
+\noindent Unfortunately, the function $g^k \text{ (mod 19)},\ k \in \mathbb{N},$ isn't monotonic, therefore we can't use the idea of trying a randomly selected $k_0$ and comparing $3^{k_0} \text{ (mod 19)}$ with $4$, but we can use the fact that the group $G$ is finite and its order is $\#G = 18 \implies 3^{18} \equiv 1 \text{ (mod 19)}.$ We can just try all possible values of $k \in \{0, 1, \ldots, 17\}$ and find the answer. This method is called the \textbf{brute-force attack}. 
+\begin{align*}
+3^0 \equiv 1 \text{ (mod 19)} &\not\equiv 4 \text{ (mod 19)}, \\
+3^1 \equiv 3 \text{ (mod 19)} &\not\equiv 4 \text{ (mod 19)}, \\
+3^2 \equiv 9 \text{ (mod 19)} &\not\equiv 4 \text{ (mod 19)}, \\
+3^3 \equiv 8 \text{ (mod 19)} &\not\equiv 4 \text{ (mod 19)}, \\
+&\vdots \quad \vdots \\
+3^{13} \equiv 14 \text{ (mod 19)} &\not\equiv 4 \text{ (mod 19)}, \\
+3^{14} &\equiv 4 \text{ (mod 19)}.
+\end{align*}
+The solution of this DLP is therefore $k = 14$ and we can see that the brute-force approach is very lengthy even for DLP in groups of small order. Complexity of solving the DLP in a group $G$ using the brute-force attack is $O(\#G)$ of group operations.
+\begin{RM}
+Standard properties of the logarithm may be used in the discrete logarithm case as well. Let $G$ be a finite Abelian group and let $g$ be a generator of $G$.
+\begin{itemize}
+\item $\forall p, q \in G: \log_g(pq) \equiv log_g(p) + log_g(q) \text{ (mod $\#G$)}$,
+\item $\forall p, q \in G: \log_g(p(q)^{-1}) \equiv log_g(p) - log_g(q) \text{ (mod $\#G$)}$,
+\item $\forall k \in \mathbb{Z},\ p \in G: \log_g(p^k) \equiv k \cdot log_g(p) \text{ (mod $\#G$)}$,
+\item $h \in G,\ \langle h \rangle = G,\ \forall p \in G: log_g(p) \equiv log_h(p) \cdot log_g(h)  \text{ (mod $\#G$)}$.
+\end{itemize}
+Last property is the well-known change-of-base formula and tells us that if we are able to effectively solve the DLP with respect to some base we can use it to effectively solve the DLP with respect to any other base.
+\end{RM}
+\section{ECDLP description}
+\section{General algorithms solving ECDLP}
+\section{Summation Polynomials}
+\chapter{Realisation in SageMath}
+
+\chapter{Experimental Results}
 poly division alg
 Pohling-Hellmann
 Pollard-Rho
@@ -525,9 +662,6 @@ BsGs
 Groebner basic
 F4, F5 Groebner
 SumPoly 
-\chapter{Analysis and design}
-
-\chapter{Realisation}
 
 \setsecnumdepth{part}
 \chapter{Conclusion}
@@ -544,8 +678,9 @@ SumPoly
 \chapter{Acronyms}
 % \printglossaries
 \begin{description}
-	\item[GUI] Graphical user interface
-	\item[XML] Extensible markup language
+	\item[EEA] Extended Euclidean algorithm
+	\item[DLP] Discrete logarithm problem
+	\item[ECDLP] Elliptic curve discrete logarithm problem
 \end{description}
 
 
