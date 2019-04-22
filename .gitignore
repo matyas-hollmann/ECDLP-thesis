@@ -1,0 +1,17 @@
+*.aux
+*.bbl
+*.blg
+*.log
+*.lot
+*.out
+*.gz
+*.toc
+*.bib
+*.lof
+DP_example/
+.ipynb_checkpoints/
+*.sws
+pdfBiblioInFile*
+withBibtex.pdf
+Smernice_OBSAH_DP.pdf
+template_orig_all_files/

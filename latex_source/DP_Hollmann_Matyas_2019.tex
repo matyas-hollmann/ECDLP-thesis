@@ -107,16 +107,16 @@ In every group there exist just one unique identity element. Also for every elem
 \noindent Identity element in the additive notation is called \textbf{zero} and denoted by $0$, in the multiplicative notation \textbf{unit} and denoted by $1$. \\ \\
 In an additive group $G$ we define \textbf{multiplication} by an integer (repeated application of the group law) as follows:
 $$
-\forall p \in G,\ \forall k \in \mathbb{Z}: kp := \begin{cases} \underbrace{p + p + \cdots + p}_{\text{k-times}} &\quad k > 0, \\
+\forall p \in G,\ \forall k \in \mathbb{Z}: kp := \begin{cases} \underbrace{p + p + \cdots + p}_{\text{$k$-times}} &\quad k > 0, \\
 0 \text{ (identity element) } &\quad k = 0, \\
-\underbrace{(-p) + (-p) + \cdots + (-p)}_{\text{k-times}} &\quad k < 0.
+\underbrace{(-p) + (-p) + \cdots + (-p)}_{\text{$k$-times}} &\quad k < 0.
 \end{cases}
 $$
 In a multiplicative group $G$ we define \textbf{exponentiation} (repeated application of the group law) in a similar manner:
 $$
-\forall p \in G,\ \forall k \in \mathbb{Z}: p^k := \begin{cases} \underbrace{p \cdot p \cdots  p}_{\text{k-times}} &\quad k > 0, \\
+\forall p \in G,\ \forall k \in \mathbb{Z}: p^k := \begin{cases} \underbrace{p \cdot p \cdots  p}_{\text{$k$-times}} &\quad k > 0, \\
 1 \text{ (identity element) } &\quad k = 0, \\
-\underbrace{p^{-1} \cdot p^{-1} \cdots  p^{-1}}_{\text{k-times}} &\quad k < 0.
+\underbrace{p^{-1} \cdot p^{-1} \cdots  p^{-1}}_{\text{$k$-times}} &\quad k < 0.
 \end{cases}
 $$
 \begin{DF}
@@ -202,7 +202,7 @@ Let $R = (M,+,\cdot)$ be an unital ring and $(M \setminus \{0\}, \cdot)$ be an A
 \begin{DF}
 Let $\mathbb{F}$ be a field, 0 be the identity element of $\mathbb{F}^+$ and 1~be the identity element of $\mathbb{F}^\times$, if there exists such $n \in \mathbb{N}:$
 $$
- \underbrace{1 + 1 + \cdots + 1}_\text{n-times} = 0,
+ \underbrace{1 + 1 + \cdots + 1}_\text{$n$-times} = 0,
 $$ we define the smallest $n \in \mathbb{N}$ satisfying this condition to be the \textbf{characteristic} of the field $\mathbb{F}.$ If there isn't such $n$ we define the characteristic of the field $\mathbb{F}$ to be $0$. We denote the characteristic of the field $\mathbb{F}$ by char$(\mathbb{F})$.
 \end{DF}
 \noindent The characteristic of a field is either $0$ or a prime number. An example of a field of characteristic $0$ are real numbers with standard addition and multiplication $(\mathbb{R}, +, \cdot)$. \\ \\
@@ -577,9 +577,9 @@ A set of points on the elliptic curve defined by the short Weierstrass equation 
 \begin{NRM}
 Let $P \in E$ be a point on an elliptic curve $E$ with group operation $\oplus$. To shorten the notation of the repeated application of the group law we will use the notation introduced in chapter 1. To remind our readers: \textbf{multiplication} of a point on the elliptic curve $E$ by an integer has the following meaning:
 $$
-\forall P \in E,\ \forall t \in \mathbb{Z}: tP := \begin{cases} \underbrace{P \oplus P \oplus \cdots \oplus P}_{\text{t-times}} &\quad t > 0, \\
+\forall P \in E,\ \forall t \in \mathbb{Z}: tP := \begin{cases} \underbrace{P \oplus P \oplus \cdots \oplus P}_{\text{$t$-times}} &\quad t > 0, \\
 \mathcal{O} \text{ (identity element) } &\quad t = 0, \\
-\underbrace{(\ominus P) \oplus (\ominus P) \oplus \cdots \oplus (\ominus P)}_{\text{t-times}} &\quad t < 0.
+\underbrace{(\ominus P) \oplus (\ominus P) \oplus \cdots \oplus (\ominus P)}_{\text{$t$-times}} &\quad t < 0.
 \end{cases}
 $$
 \end{NRM} 
@@ -649,9 +649,175 @@ Standard properties of the logarithm may be used in the discrete logarithm case 
 \end{itemize}
 Last property is the well-known change-of-base formula and tells us that if we are able to effectively solve the DLP with respect to some base we can use it to effectively solve the DLP with respect to any other base.
 \end{RM}
-\section{ECDLP description}
-\section{General algorithms solving ECDLP}
-\section{Summation Polynomials}
+
+\noindent Discrete logarithm problem can be stated in any group, the difficulty of solving it greatly depends on the group structure and the group operation. To solve the DLP we can develop a generic algorithm that works in any group and doesn't explore the group structure, or we can develop a specific algorithm for a chosen type of a group. For example, in an additive group $(\{0,1,\ldots, p-1\}, +_p)$, $p$ prime, we can solve the DLP in $O(\log^2(p))$ time using the extended Euclidean algorithm. Shoup proved that a generic algorithm to solve the DLP in a generic group of prime order $p$ would have to do $O(\sqrt{p})$ group operations \cite{shoup}. The best general algorithm to match this lower bound is Pollard's $\rho$ (rho) algorithm, described in the subsection \ref{polard}. 
+\\
+\\
+\noindent The main focus of this thesis is to solve the DLP stated on an elliptic curve using a specific algorithm. 
+\begin{DF}
+Let $E$ be an elliptic curve over a prime field $GF(p)$, let $P$ be a generator of $E$ and let $Q$ be a second point on $E$. \textbf{Elliptic curve discrete logarithm problem} (ECDLP) is to find an integer $k \in \{1,2,\ldots	, \#E\}$ such that $Q = kP$.
+\end{DF}
+\section{Generic algorithms for solving ECDLP}
+In this section we will describe three most known generic algorithms for solving the DLP, we will use the elliptic curve notation. The first algorithm is based on collision finding, time complexity is lower than for a naive brute-force algorithm, but we the memory requirements are significant. This section was based mostly on \cite{mky}.
+\subsection{Baby-step Giant-step Algorithm (BsGs)}
+\begin{DF}
+\textbf{(Baby-step Giant-step)}: Let $E$ be an elliptic curve group over $GF(p)$, equipped with operation $\oplus$, $P \in E$ its generator and $xP = Q \in G,\ x \in \{0, 1, \ldots, \#E - 1\}$, we will denote the order of $E$ by $N = \#E$. We know, based on Hasse's theorem (\ref{hase}), for large $p$, $N$ is approximately $p$. Following algorithm solves the ECDLP in $O(\sqrt{N})$ group operations $\oplus$.
+\begin{itemize}
+\item Let $n = \mathlarger{\mathlarger{\mathlarger{\lceil}}} \sqrt{N} \mathlarger{\mathlarger{\mathlarger{\rceil}}}$, we will pre-compute a list of length $n$ of multiples of $P$.
+\item $0P = \mathcal{O}, P, 2P, \ldots, (n-1)P,$ \hfill (baby-step phase) \\
+next generate multiples of $Q$ and try to find it in the list generated in the baby-step phase.
+\item $Q \oplus (0\cdot n \ominus P) = Q, Q \oplus (1\cdot n \ominus P), Q \oplus (2\cdot n \ominus P), \ldots, Q \oplus ((n-1)\cdot n \ominus P),$\\
+This is called the giant-step phase.
+\item If there is a collision for some $iP$ and $Q \oplus (j\cdot n \ominus P)$, we can solve the ECDLP and find $x$:
+\begin{align*}
+iP = Q \oplus (j\cdot n \ominus P) \implies i &\equiv x + (-jn) \text{ (mod $N$)} \\
+x &\equiv i + jn \text{ (mod $N$)}.
+\end{align*}
+\end{itemize}
+\noindent The algorithm is deterministic and is guaranteed to find the solution, because it basically tries all the possible values of $x$. Every number in $\{0, 1, \ldots, N - 1\}$ can be expressed as $i + jn,\ n = \mathlarger{\mathlarger{\mathlarger{\lceil}}} \sqrt{N} \mathlarger{\mathlarger{\mathlarger{\rceil}}},i,j \in \{0,1,\ldots, n-1\}.$ 
+For the efficient implementation it's crucial to be able to effectively find a collision in the pre-computed list, therefore it's advisable to use a hash table, to achieve the constant time lookup. If that is satisfied the algorithm time complexity is $O(\sqrt{N})$ of group operations and space complexity is $O(\sqrt{N})$.
+\end{DF}
+\noindent For example, let $E = E(1,1,29)$ be an elliptic curve group over $GF(29)$ and its elliptic curve equation is $y^2 = x^3 + x + 1$. Let $P = (24,25)$ be a generator of $E$, let $Q \in E$, we want to find an integer $x$ such that: $Q = xP.$ Order of $E$ is 36, so we will set $n = 6$ and pre-calculate the baby-step list:
+\begin{center}
+\begin{tabular}{ |c||c|c|c|c|c|c| }
+\hline
+$i$ & 0 & 1 & 2 & 3 & 4 & 5\\ \hline
+ $iP$ & $\mathcal{O}$ & $(24,25)$ &  $(6,7)$ & $(0,28)$ & $(10,24)$ & $\textbf{(28,12)}$ \\ \hline
+\end{tabular}
+\end{center}
+This step depends only on the group $E$ and its generator $P$, we can pre-calculate it only once and reuse it for different points $Q$. Let solve the ECDLP in this group for $Q = (18,15)$. We will now iterate over multiples of $Q$ and look for a collision in the pre-calculated list.
+\begin{center}
+\begin{tabular}{ |c||c|c|c|c|c|c| }
+\hline
+$j$ & 0 & 1 & 2 & 3 & 4 & 5\\ \hline
+ $Q\oplus(6j\ominus P)$ & $(18,15)$ & $(11,3)$ &  $(12,1)$ & $(8,17)$ & $\mathbf{(28,12)}$ & $(24,4)$ \\ \hline
+\end{tabular}
+\end{center}
+We have found a collision for $j=4$ and $i=5$ (in the pre-computed list):
+$$
+5P = Q\oplus(24\ominus P) \implies 4 \equiv x -24 \text{ (mod 36)} \implies x \equiv 29  \text{ (mod 36)}.
+$$
+We can now verify that $29P = (18,15) = Q.$
+\subsection{Pollard $\mathbf{\rho}$-Algorithm}
+\noindent The main drawback of the BsGs algorithm is its space complexity, we need to store $\sqrt{\#E}$ elliptic curve points. To remedy this problem, in 1978 John Pollard published a different algorithm, which is called after him the Pollard~$\rho$(rho)-algorithm, with the same time complexity as BsGs but with very little memory requirements. A similar algorithm can be used for factoring composite integers. This subsection is based on \cite{mky}.
+\begin{DF}
+\label{pol}
+ \textbf{(Pollard $\mathbf{\rho}$ idea)}: Let $S$ be a finite set of $N$ elements, let $f: S \to S$ be a function. Choose $x_0 \in S$ a starting point of the sequence defined by: $x_i = (\underbrace{f\circ f \circ \cdots \circ f}_\text{$i$-times})(x_0)$, then there exists $L \in \mathbb{N}$ such that:
+ $$
+ x_{2i} = x_i, \quad 1\leq i < L.
+ $$
+Set $S$ is finite, therefore for some $k \in \mathbb{N}_{< N}$ the sequence $x_0, x_1, \ldots, x_k$ has to a point that repeats twice in this sequence, we denote the first such point by $x_T$, it's clear that after that point the sequence is in a cycle of length $M$, where $T+M$ is the index of the second occurrence of the point $x_T$ in the sequence. To prove the existence of $i$ such that: $x_{2i} = x_i$ we can start with the fact that: $\forall k \in \{0, 1, \ldots, M-1\}: x_{T+k} = x_{T+k+M},$ which implies:
+$$
+\exists i \geq T,\ i < T + M: 2i \equiv i \text{ (mod $M$)} \implies i\ |\ M.
+$$
+The argument is simple, in every sequence of $M$ consecutive integers there has to be exactly one that is divisible by $M$, therefore we can see that the $L$ in the definition \ref{pol} is in fact $L= T + M \leq N$. On average (with different choices of $x_0$ and function $f$) it takes $O(\sqrt{N})$ steps to obtain a collision with a probability over 50\% (based on the birthday paradox), for a thorough analysis see \cite{polProb}. \\ \\
+\noindent For a graphical illustration see figure \ref{rho}, the first point in the sequence that repeats itself twice is $x_3$, therefore we set $T = 3$, and the length of the cycle is $M = 6$, because $x_T = x_3 = x_{3+6}$. The only integer in the set $\{3,4,5,6,7,8\}$ that is divisible by $M = 6$ is $6$, therefore $i=6$ and we can easily verify that $x_6 = x_{2*6} = x_{12}$. The graph \ref{rho} has a strong resemblance to the Greek letter $\rho$, hence the name of the algorithm.
+ \begin{figure}[h]
+ \centering
+ \hspace*{-1cm}
+ 	\includegraphics[width=1\textwidth]{rho.png}
+ 	\caption[Graphical illustration of Pollard $\rho$ collision idea.]{Graphical illustration of the idea behind the Pollard $\rho$ algorithm. $T = 3$, length of the cycle $M = 6$. Image source: (\cite{mky}, page $70$).}
+ 	\label{rho}
+ \end{figure}
+ \end{DF}
+ \begin{DF}
+ The Pollard $\rho$ idea might be used to solve the ECDLP. Let $E$ be an elliptic curve group with points' coordinates $\in GF(p)$, let $P$ be its generator and let $Q \in E$ be some other point. We want to find $x=\log_P(Q)$. Let denote the order of $E$ by $N := \#E$. We divide $E$ into three disjunctive sets $S_1, S_2, S_3$, so that $\mathcal{O} \not\in S_2$ and for $i \in \mathbb{Z}_{\geq 0}$ define $f: E \to E$:
+ $$
+ T_{i+1} = f(T_i) := \begin{cases} P \oplus T_i,\quad T_i \in S_1, \\
+ 2T_i, \quad T_i \in S_2, \\
+ Q \oplus T_i, \quad T_i \in S_3.
+ \end{cases}
+ $$
+ We can start with $T_0 = \mathcal{O}$, so after $k$ steps we get:
+ $$
+ T_k = (\underbrace{f\circ f \circ \cdots \circ f}_\text{$k$-times}(\mathcal{O}) = \alpha_k P \oplus \beta_k Q.
+ $$
+ We need to keep track of $\alpha_k,\ \beta_k$, so we set $\alpha_0 = \beta_0 = 0$ and define it recursively for $k \in \mathbb{Z}_{\geq 0}$:
+$$ 
+  \alpha_{k+1} := \begin{cases} \alpha_k + 1\text{ (mod $N$)},\quad T_k \in S_1, \\
+ 2\alpha_k\text{ (mod $N$)}, \quad T_k \in S_2, \\
+ \alpha_k, \quad T_k \in S_3.
+ \end{cases}
+$$
+$$ 
+  \beta_{k+1} := \begin{cases} \beta_k,\quad T_k \in S_1, \\
+ 2\beta_k\text{ (mod $N$)}, \quad T_k \in S_2, \\
+ \beta_k + 1\text{ (mod $N$)}, \quad T_k \in S_3.
+ \end{cases}
+$$
+We also create a second sequence of points on elliptic curve $E$: $R_0 = \mathcal{O},\forall k \in \mathbb{N}: R_k := T_{2k} = \gamma_kP \oplus \delta_kQ$, we also need to keep track of $\gamma_k,\ \delta_k$. After some number of steps ($i$) we will encounter a collision: $R_i = T_{2i} = T_i$, then we have a relation: 
+$$
+\gamma_iP \oplus \delta_iQ = \alpha_iP \oplus \beta_iQ.
+$$
+Let $d = \text{gcd}(\beta_i - \delta_i, N)$, if $d=1$ we can easily find the solution $x$ to the ECDLP:
+$$
+x \equiv (\gamma_i - \alpha_i)\cdot(\beta_i - \delta_i)^{-1} \text{ (mod $N$)}.
+$$
+If $d \neq 1$ and is small it might be worthy to to find a solution $y$ mod($\frac{N}{d}$) in the same fashion:
+$$
+y \equiv (\gamma_i - \alpha_i)\cdot(\beta_i - \delta_i)^{-1} \text{ $\bigg($mod $\frac{N}{d}\bigg)$}, 
+$$then we can find $x$ in the set:
+$$
+\bigg\{y + k\cdot\frac{N}{d}\ \bigg| \ k \in \{0, 1, \ldots, d -1\}\bigg\}.
+$$
+For $N$ prime $d$ will be small, if $N$ is not small and $d$ is not small we can restart the algorithm with a different partitioning $S_1,S_2,S_3$ or a different starting point $T_0$. Another option is to use the Pohlig-Hellman algorithm and solve multiple ECDLPs in prime subgroups and then find the final solution $x$ using the Chinese remainder theorem (CRT).
+\end{DF}
+\noindent For example, let $E = E(11,18,29)$ be an elliptic curve group over $GF(29)$ and its elliptic curve equation is $y^2 = x^3 + 11x + 11$. Let $P = (1,1)$ be a generator of $E$, let $Q \in E$, we want to find an integer $x$ such that: $Q = xP.$
+Order of $E$ is 29 (prime). We divide elliptic curve points into sets $S_1,S_2,S_3$ based on their $x$-coordinates:
+$$
+\forall R = (R_x, R_y) \in E: \begin{cases} R \in S_1, \quad \text{ if } 0\leq R_x < \big\lfloor\frac{p}{3}\big\rfloor, \\ 
+R \in S_2, \quad \text{ if } \big\lfloor\frac{p}{3}\big\rfloor \leq R_x < 2\big\lfloor\frac{p}{3}\big\rfloor, \\
+R \in S_3, \quad \text{ if } 2\big\lfloor\frac{p}{3}\big\rfloor \leq R_x, 
+\end{cases}
+$$ where $p = 29.$ 
+Set $S_1$ contains the identity element $\mathcal{O}$. Cardinalities of the sets are following $|S_1| = 9,\ |S_2| = 12, \ |S_3| = 8.$ \\
+Lets solve the ECDLP for $Q=(13,26)$. In the table \ref{tblRho} are shown the intermediate results of the algorithm.
+\begin{table}[!h]
+\centering
+\begin{tabular}{ |c||c|c|c|c|c|c| } 
+\hline
+$i$ & $\alpha_i$ & $\beta_i$ & $T_i$ & $\gamma_i$ & $\delta_i$ & $R_i$ \\ 
+\hline
+\hline
+0 & 0 & 0 & $\mathcal{O}$ &  0 & 0 & $\mathcal{O}$ \\ \hline
+1 & 1 & 0 & $(1,1)$ &  2 & 0 & $(18,25)$ \\ \hline
+2 & 2 & 0 & $(18,25)$ &  3 & 1 & $(3,22$ \\ \hline
+3 & 2 & 1 & $(5,13)$ &  8 & 2 & $(11,7)$ \\ \hline
+4 & 3 & 1 & $(3,22)$ &  3 & 8 & $(8,3)$ \\ \hline
+5 & 4 & 1 & $(12,14)$ &  4 & 9 & $(13,3)$ \\ \hline
+6 & 8 & 2 & $(11,7)$ &  8 & 19 & $(13,3)$ \\ \hline
+7 & 16 & 4 & $(14,4)$ &  16 & 10 & $(13,3)$ \\ \hline
+8 & 3 & 8 & $(8,3)$ &  3 & 21 & $(13,3)$ \\ \hline
+9 & 4 & 8 & $(26,25)$ &  6 & 14 & $(13,3)$ \\ \hline
+10 & 4 & 9 & $\mathbf{(13,3)}$ &  12 & 0 & $\mathbf{(13,3)}$ \\ \hline
+\end{tabular}
+\caption{Intermediate values of the Pollard $\rho$ algorithm.}
+\label{tblRho}
+\end{table}
+\\
+\noindent After 10 iterations we have found a collision: 
+$$
+4P + 9Q = 12P \implies x \equiv 8\cdot9^{-1} \text{ (mod $29$)} \equiv 17 \text{ (mod $29$)}. 
+$$
+We can now verify that $17P = (13,26) = Q.$
+\subsection{Pohlig-Hellman Algorithm}
+As we have mentioned in the previous subsection, Pollard $rho$ algorithm works the best in a prime order group. In a case when order of a group $G$ is a composite number $N$ with small factors, we can solve multiple ECDLPs in subgroups of prime order and then using the CRT find the final solution. This algorithm was developed by Stephen Pohlig and Martin Hellman in 1978 in their article \cite{PH}. 
+\begin{DF}
+Let $m_i \in \mathbb{N},\ i \in \{1,\ldots, k\},$ be mutually relatively prime integers, and $N=\prod_i=1^k m_i,\ a_i \in \mathbb{Z},\ i \in \{1,\ldots, k\}.$. 
+The following system of congruences:
+\begin{align*}
+x &\equiv a_1 \text{ (mod $m_1$)}, \\
+x &\equiv a_2 \text{ (mod $m_2$)}, \\
+&\vdots \quad \vdots \\
+x &\equiv a_k \text{ (mod $m_k$)},
+\end{align*}
+has a solution $c$:
+$$
+c = \sum_{i=1}^k a_iN_iM_i,
+$$ where $N_i=\frac{N}{m_i}$ and $M_i\equiv(N_i)^{-1} \text{ (mod $m_i$)}$ and any other solution $c'$ is congruent to $c$ modulo $N$.
+\end{DF}
+
+\section{Specific algorithms for solving ECDLP}
 \chapter{Realisation in SageMath}
 
 \chapter{Experimental Results}
@@ -681,6 +847,8 @@ SumPoly
 	\item[EEA] Extended Euclidean algorithm
 	\item[DLP] Discrete logarithm problem
 	\item[ECDLP] Elliptic curve discrete logarithm problem
+	\item[BsGs] Baby-step giant-step (algorithm)
+	\item[CRT] Chinese remainder theorem
 \end{description}
 
 
