@@ -704,7 +704,7 @@ $tP,\ t \in \mathbb{Z}_{\geq 0},\ k = \mathlarger{\lceil} \log_2(t) \mathlarger{
 \forall a \in GF(p)^{\times}: a^{-1} &= a^{p-2}.
 \end{align*}
 To calculate $a^{p-2}$, we can use the standard algorithm, called square-and-multiply, for details see \cite{mky}, which has the same complexity $O(n^2)$ as the EEA.
-\section{Discrete Logarithm Problem}
+\section{The Discrete Logarithm Problem}
 Let $y = b^x$, given $y \in \mathbb{R}_{> 0}$ and the base $b \in \mathbb{R}_{>0}$, we are asked to find the exponent $x \in \mathbb{R}$. We can rewrite this problem from the exponential form to the logarithmic form, i.e. $x = \log_b(y)$. To find the $x$ we can easily evaluate it on a calculator (using change of logarithm basis rule). Even if we didn't know the inverse function (logarithm), the exponential function is a strictly increasing function. Therefore, we could have just guessed a random initial solution $x_0$, evaluate $b^{x_0}$, compare it with $y$. And based on the result of this comparison, we would have immediately known, whether the true solution $x$ is greater, equal, or less than $x_0$. Therefore, we can solve this problem effortlessly over the real numbers.
 \\
 \\
@@ -1168,7 +1168,7 @@ Let $G = \{g_1,\ldots,g_s\}$ be the reduced basis for a zero-dimensional ideal $
 \chapter{Specialized Algorithms Solving ECDLP}
 \label{specAlg}
 In this chapter we first describe four specialized algorithms for solving ECDLP that are based on the theoretical concepts presented in the previous chapters. Afterwords, we follow up with the actual implementation's details. The experimental results are presented in chapter~\ref{expResults}.
-\section{Algorithm 1 (Semaev 2015)}
+\section{Algorithm 1 (based on Semaev 2015)}
 Algorithm 1 is based on the Semaev's algorithm presented in \cite{semaev15}, few changes had to be made to make the algorithm work for ECDLP over finite fields $GF(p),\ p$ prime. Semaev's algorithm works best over prime field extensions, where the base field is of prime characteristic $q,\ q \leq 2^{10}$ ( approximately).  \\ \\
 \noindent Let $P$ be a generator of the prime order ($\#P = r$) group $E(p)$, where $E$ is an elliptic curve defined over prime field $GF(p)$, $p$ prime. We are restricting this algorithm to the case where $E(p)$ is a group of prime order, because if it's not the case, we can use the Pohlig-Hellman algorithm to split the initial ECDLP in the group of composite order to a multiple smaller ECDLPs in prime order subgroups, where algorithm 1 can be used to find the solution. The ECDLP is given a generator $P$ and some other point $Q \in E(p)$, find an integer $k$ such that $kP = Q,$ since $E(p)$ is a finite group of prime order $r$ we are interested in the solution $k\ \text{(mod }r)$. For large $p$, $r \approx p$. Algorithm 1, which computes this integer $k$, works in multiple steps and is described below.
 \begin{enumerate}
@@ -1237,7 +1237,7 @@ $$
 $$
 This multiplicative inverse of $(-b')$ always exists, since $r$ is a prime and $b' \not\equiv 0$ (mod $r$), because $P \neq \mathcal{O}$. If we denote the rank of the matrix $M$ by~$d$, then the last non-zero row of the matrix $M_R$ is the $d$-th row. \\ Integer $k$ is the solution to the ECDLP.
 \end{enumerate}
-\section{Algorithm 2 (Amadori et al. 2017)}
+\section{Algorithm 2 (based on Amadori et al. 2017)}
 Algorithm 2 is based on the algorithm by Amadori, Pintore and Sala presented in \cite{amadori17}, the main difference to the algorithm 1 is using a factor base with known decomposition of each of its elements as a linear combination of $P,Q$, so we only need to find one relation to solve the ECDLP. 
 
 %$$\bigg[\prod_{\mathcal{F}_i \in V_j}\Big(x_j - \mathcal{F}_i\Big)\bigg] = 0, \quad  j \in \{1, \ldots, m\},\ i \in \{0, \ldots, |\mathcal{F}| - 1\},$$
