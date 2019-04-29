@@ -25,6 +25,9 @@
 \usepackage{dirtree} %directory tree visualisation
 \usepackage{relsize}
 
+\usepackage{float}
+\restylefloat{table}
+
 \usepackage{amsthm} 
 \theoremstyle{remark}
 \newtheorem*{RM}{Remark}
@@ -412,7 +415,7 @@ $$
 \begin{DF}
 A \textbf{monomial ordering} $>$ on $\mathbb{F}[X]$, where $X = (x_1, \ldots, x_n)$ is a relation $>$ on $\mathbb{Z}_{\geq 0}^n$ satisfying:
 \begin{itemize}
-\item $>$ is a total ordering on $\mathbb{Z}_{\geq 0}^n$,
+\item $>$ is a total order on $\mathbb{Z}_{\geq 0}^n$,
 \item $\forall \alpha, \beta, \gamma \in \mathbb{Z}_{\geq 0}^n: \alpha > \beta \implies \alpha + \gamma > \beta + \gamma,$
 \item $\forall A \subseteq \mathbb{Z}_{\geq 0}^n,\ A \neq \emptyset: \exists \alpha \in A,\ \forall \beta \in A \setminus \{\alpha \}: \beta > \alpha.$ 
 \end{itemize}
@@ -459,7 +462,7 @@ $$
 (1,0,\ldots,0) >_{grevlex} (0,1,0,\ldots, 0) >_{grevlex} \cdots >_{grevlex} (0, \ldots, 0, 1),
 $$
 \end{itemize}
-Now we show, how would the polynomial $f(x,y,z) = 4xy^2z + 4z^2 - 5x^3 + 7x^2z^2 \in \mathbb{Z}[x,y,z]$ be written, if we reorder its terms by a monomial ordering in decreasing order:
+Now we show, how would the polynomial $f(x,y,z) = 4xy^2z + 4z^2 - 5x^3 + 7x^2z^2 \in \mathbb{Z}[x,y,z]$ be written, if we reorder its terms by a monomial order in decreasing order:
 \begin{itemize}
 \item With respect to the lex order:
 $$
@@ -522,7 +525,8 @@ $$
 \text{multideg}(f) \geq \text{multideg}(q_if_i).
 $$
 \end{DF}
-\noindent The algorithm itself is presented in chapter \ref{divAlg}. Unfortunately,  the remainder is not uniquely characterised and depends on the order of the divisors in the set $F$, and also on the monomial order itself. \\ \\
+\noindent We won't describe the division algorithm itself in this thesis. If you are not familiar with this algorithm, please refer to \cite{algGeom} on pages 61-68, where the algorithm is discussed in great detail.\\ \\
+\noindent Unfortunately, the remainder is not uniquely characterised and depends on the order of the divisors in the set $F$, and also on the monomial order itself. \\ \\
 \noindent Furthermore, we would like to use this idea to answer the ideal membership problem. Let $f, f_1, \ldots, f_s \in \mathbb{F}[X]$ and let $I = \langle f_1, \ldots, f_s \rangle$ be an ideal. We would like to determine whether $f \in I$ is true. We can clearly state, that if the remainder $r$ obtained after division of $f$ by $F = (f_1, \ldots, f_s)$ is $0$, then $f$ has to be an element of the ideal $I$. So $r=0$ is a sufficient condition for the ideal membership. However, it isn't a necessary condition for $f$ being in the ideal. To remedy this situation, we try to describe a "good" basis of the ideal $I$, such that the remainder $r$ on division by the polynomials of this basis is uniquely determined, and that the condition $r=0$ is equivalent to the membership in the ideal. Exactly those good properties have Gröbner bases, which we describe in the following section.
 \section{Gröbner Bases}
 Gröbner bases may be used to solve many problems about polynomial ideals in an algorithmic or computational fashion. It is one of the most used methods for solving systems of multivariate polynomial equations, i.e. calculating the affine variety defined by those polynomial equations. This section is based on~\cite{algGeom}.
@@ -536,7 +540,7 @@ An ideal $I \subseteq \mathbb{F}[X]$ is called a \textbf{monomial ideal} if ther
 A monomial ideal $I \subseteq \mathbb{F}[X]$ has a finite basis $(X^{\alpha(1)}, \ldots, $\\$X^{\alpha(s)})$ with the property that $X^{\alpha(i)}$ does not divide $X^{\alpha(j)}$ for any $i \neq j$. Furthermore, this basis is unique and is called the \textbf{minimal basis} of $I$.
 \end{DF}
 \begin{DF}
-Let $I \subseteq \mathbb{F}[X],\ I \neq {0},$ be an ideal and fix a monomial ordering on $\mathbb{F}[X]$.  Then:
+Let $I \subseteq \mathbb{F}[X],\ I \neq {0},$ be an ideal and fix a monomial order on $\mathbb{F}[X]$.  Then:
 \begin{itemize}
 \item We denote by LT$(I)$ the \textbf{set of leading terms} of non-zero elements of~$I$.
 $$
@@ -599,7 +603,7 @@ A \textbf{reduced Gröbner basis} for a polynomial ideal $I$ is a Gröbner basis
 \item $\forall p \in G$: no monomial $p$ lies in $\langle\text{LT}(G \setminus \{p\}) \rangle.$
 \end{itemize}
 \end{DF}
-\noindent Any polynomial ideal $I\neq \{\emptyset\}$ for a given monomial ordering has a unique reduced Gröbner basis. 
+\noindent Any polynomial ideal $I\neq \{\emptyset\}$ for a given monomial order has a unique reduced Gröbner basis. 
 \\
 \\
 \noindent Now we describe, how to use Gröbner bases for finding all the solutions of a system of multivariate polynomial equations.
@@ -624,39 +628,38 @@ is a Gröbner basis of the $l$-th elimination ideal $I_l$.
 %Divison Res => alg in the next section with F4, F5
 %
 %Schoof–Elkies–Atkin algorithm - pocet bodu na EC 
-\chapter{Elliptic Curves and Discrete Logarithm Problem}
+\chapter{Elliptic Curves and the Discrete Logarithm Problem}
+In this chapter, we revise the theory of elliptic curves and state the elliptic curve discrete logarithm problem (ECDLP). In the last section, we also introduce the reader to the concept of summation polynomials, which are the primary building block in many specialised algorithms (exploiting the particular group structure) solving the ECDLP. Examples of such algorithms are discussed in detail in chapter \ref{specAlg}.
 \section{Elliptic Curves}
-This section's main focus will be elliptic curves and groups of points on those elliptic curves. At first we are going to define what is a general elliptic curve, after that we will define an operation on the set of points on elliptic curve that with "the point in infinity" form an Abelian group. This section is based mostly on \cite{mky}.
+This section focuses on elliptic curves over finite fields and groups of points on them. At first, we define what is a general elliptic curve. Afterwards, we show how to define an Abelian group on the set of points of an elliptic curve. This section is based mostly on \cite{mky}.
 \begin{DF}
 An \textbf{elliptic curve} over a (prime order) finite field $GF(p),$ \\ $p > 3,\ p$ prime, defined by the short Weierstrass equation, is a set:
 $$
 E(GF(p)) := \{(x,y)\ |\ x,y \in \mathbb{F},\ y^2 = x^3 + Ax+B\} \cup \{ \mathcal{O} \},
 $$
-where $A, B \in GF(p)$ are \textbf{coefficients of the elliptic curve} and the \textbf{discriminant} of the elliptic curve, denoted by $\Delta$, is non-zero. Point $\mathcal{O}$ is called the \textbf{point at infinity} (in the projective plane).
-\begin{align*}
-\Delta = -16(4A^3 + 27B^2) \neq 0.
-\end{align*}
-Curves satisfying this condition are called \textbf{non-singular} and the right-hand-side polynomial ($x^3 + Ax+B$) in $x$ has 3 distinct roots. 
+where $A, B \in GF(p)$ are \textbf{coefficients of the elliptic curve}. Coefficients $A,B$ have to satisfy the following condition: $4A^3 + 27B^2 \neq 0$, which guarantees the right-hand side polynomial $f(x)=x^3 + Ax+B$ has 3 distinct roots. Elliptic curves are \textbf{non-singular} curves, i.e. they don't have any cusps nor self-intersections. \\
+\noindent Point $\mathcal{O}$ is called the \textbf{point at infinity} (in the projective plane).
 \end{DF}
 \begin{DF}
-Let $E(GF(p))$ be an elliptic curve and let $P,Q \in E(GF(p)),\ P=(x_1,y_1),\ Q=(x_2,y_2)$ be two points on the elliptic curve $E$. We define the binary operation $\oplus: E(GF(p)) \times E(GF(p)) \to E(GF(p))$, called \textbf{addition on the elliptic curve} $E(GF(p))$, as follows:
+Let $E(GF(p))$ be an elliptic curve, and let $P,Q \in E(GF(p)),$\\${P=(x_1,y_1),\ Q=(x_2,y_2)}$ be two points on the elliptic curve $E$. We define the binary operation $\oplus: E(GF(p)) \times E(GF(p)) \to E(GF(p))$, called \textbf{addition on the elliptic curve} $E(GF(p))$, as follows:
 \begin{itemize}
 \item Point at infinity $\mathcal{O}$ is an identity element of the operation $\oplus$, therefore if $P = \mathcal{O},\ P \oplus Q = Q,$ or if $Q = \mathcal{O},\ P \oplus Q = P.$
-\item Else if $x_1 = x_2$ and $P\neq Q$, $P\oplus Q = \mathcal{O}.$ Point at infinity $\mathcal{O}$ is the identity element of the operation $\oplus$, therefore point $Q$ is the \textbf{additive inverse} of the point $P$, denoted by $\ominus P$. We can now state the explicit formula for the point $\ominus P$, we know its $x$-coordinate is $x_1$, and we will use the $E$ equation and substitute $X$ with $x_1$:
+\item Else if $x_1 = x_2$ and $P\neq Q$, $P\oplus Q = \mathcal{O}.$ Point at infinity $\mathcal{O}$ is the identity element of the operation $\oplus$. Therefore, point $Q$ is the \textbf{additive inverse} of the point $P$, denoted by $\ominus P$. We now state the explicit formula for the point $\ominus P$, we know its $x$-coordinate is $x_1$, and we use the $E$ equation and substitute $X$ with $x_1$:
 $$
 Y^2  = (x_1^3 + Ax_1 + B),
 $$
-which is a quadratic equation in the variable $Y$ and we already know one of its roots, which is $y_1$, the other root has to be $-y_1$, therefore point $\ominus P = (x_1, -y_1).$
+which is a quadratic equation in the variable $Y$. We already know one of its roots $y_1$, the other root has to be $-y_1$. Therefore:
+$$\ominus P = (x_1, -y_1).$$
 \item Else if $x_1 \neq x_2$, let $\lambda$ be the slope of the line defined by the points $P,Q.$
 $$
 \lambda = \frac{y_2 - y_1}{x_2 - x_1},
 $$
-else if $P = Q$ (\textbf{point doubling}), let $\lambda$ be the slope of the tangent line to the elliptic curve equation at the point $P.$
+Else if $P = Q$ (\textbf{point doubling}), let $\lambda$ be the slope of the tangent line to the elliptic curve equation at the point $P.$
 $$
 \lambda = \mathlarger{\mathlarger{\frac{\frac{\mathrm{d}E}{\mathrm{d}X}}{\frac{\mathrm{d}E}{\mathrm{d}Y}}}}(x_1, y_1) = \frac{3x_1^2+ A}{2y_1}, 
 $$
-where $\frac{\mathrm{d}E}{\mathrm{d}X}, \frac{\mathrm{d}E}{\mathrm{d}Y}$ is the derivative of the elliptic curve equation with respect to $X,Y$. \\
-The result of the operation $\oplus$ is:
+where $\frac{\mathrm{d}E}{\mathrm{d}X}, \frac{\mathrm{d}E}{\mathrm{d}Y}$ are the derivatives of the elliptic curve equation with respect to $X,Y$. \\ \\
+\noindent The result of the operation $\oplus$ is:
 \begin{align*}
 x_3 &= \lambda^2 - x_1 - x_2, \\
 y_3 &= \lambda(x_1 - x_3) - y_1, \\ 
@@ -665,20 +668,20 @@ y_3 &= \lambda(x_1 - x_3) - y_1, \\
 \end{itemize}
 \end{DF}
 \begin{DF}
-A set of points on the elliptic curve defined by the short Weierstrass equation and the binary operation $\oplus$ form an Abelian group, $(E(GF(p)), \oplus)$ is a group and we denote it by $E$, or if we want to explicitly mention the coefficients $A,B$ and the prime field $GF(p),$ we use $E(A,B,p)$.
+A set of points on the elliptic curve defined by the short Weierstrass equation and the binary operation $\oplus$ form an Abelian group, $(E(GF(p)), \oplus)$ is a group, and we denote it by $E(p)$. If we want to explicitly mention the coefficients $A,B$ we use $E_{A,B}(p)$.
 \end{DF}
 \begin{NRM}
-Let $P \in E$ be a point on an elliptic curve $E$ with group operation $\oplus$. To shorten the notation of the repeated application of the group law we will use the notation introduced in chapter 1. To remind our readers: \textbf{multiplication} of a point on the elliptic curve $E$ by an integer has the following meaning:
+Let $P \in E(p)$ be a point on an elliptic curve $E$ over $GF(p)$. To shorten the notation of the repeated application of the group law, we use the notation introduced in chapter 1. To remind our readers; \textbf{multiplication} of a point on the elliptic curve $E$ by an integer $t$ has the following meaning:
 $$
-\forall P \in E,\ \forall t \in \mathbb{Z}: tP := \begin{cases} \underbrace{P \oplus P \oplus \cdots \oplus P}_{\text{$t$-times}} &\quad t > 0, \\
+\forall P \in E(p),\ \forall t \in \mathbb{Z}: tP := \begin{cases} \underbrace{P \oplus P \oplus \cdots \oplus P}_{\text{$t$-times}} &\quad t > 0, \\
 \mathcal{O} \text{ (identity element) } &\quad t = 0, \\
 \underbrace{(\ominus P) \oplus (\ominus P) \oplus \cdots \oplus (\ominus P)}_{\text{$t$-times}} &\quad t < 0.
 \end{cases}
 $$
-\end{NRM} 
-\begin{RM}
-The complexity of arithmetic operations on $E$ is based on the complexity of operations in the underlying finite field $GF(p)$.  Exact number of arithmetic operations depends on the used algorithm and on the architecture of the CPU where it's executed. Table \ref{tblComp} provides a brief summary of the relationship between the operations on elliptic curve $E$ and number of arithmetic operations in the underlying finite field $GF(p)$. Addition in $GF(p)$ is denoted by $a_p$, multiplication in $GF(p)$ is denoted by $\cdot_p$, last column is the number of multiplicative inverses in $GF(p)^{\times}$. 
-\begin{table}[!h]
+\end{NRM}
+\subsection{Complexity of the Arithmetic Operations on an Elliptic Curve} 
+The complexity of arithmetic operations on $E$ is based on the complexity of operations in the underlying finite field $GF(p)$. The exact number of arithmetic operations depends on the used algorithm, its implementation, and on the architecture of the CPU, where the particular code is executed. Table \ref{tblComp} provides a brief summary of the relationship between the operations on elliptic curve $E$ and the number of arithmetic operations in the underlying finite field $GF(p)$. Addition in $GF(p)$ is denoted by $+_p$, multiplication in $GF(p)$ is denoted by $\cdot_p$, and the last column is the number of multiplicative inverses in $GF(p)^{\times}$.
+\begin{table}[H]
 \centering
 \begin{tabular}{ |c||c|c|c| } 
  \hline
@@ -690,28 +693,24 @@ $P \oplus Q, P \neq Q$ & 6 & 3 & 1 \\  \hline
 $P \oplus Q, P = Q$ & 5 & 5 & 1 \\  \hline
 $tP,\ t \in \mathbb{Z}_{\geq 0},\ k = \mathlarger{\lceil} \log_2(t) \mathlarger{\rceil}$ & $ (5k + 0.5k)$\footnotemark & $5k$ & 0 \\ \hline
 \end{tabular}
-\caption{Complexity of the arithmetic operations on the elliptic curve $E$ over $GF(p)$.}
+\caption[Complexity of arithmetic operations on $E$]{Complexity of arithmetic operations on the elliptic curve $E$ over a finite field $GF(p)$.}
 \label{tblComp}
 \end{table}
-\end{RM}
-\noindent We denote the number of bits of $p$ by $n = \mathlarger{\lceil} \log_2(p) \mathlarger{\rceil}$, then addition in $GF(p)^{+}$ is asymptotically $O(n)$, multiplication in $GF(p)^{\times}$, using Montgomery method \cite{handbook}, is $O(n^2)$ and multiplicative inverse in $GF(p)^{\times}$, using a careful implementation of the extended Euclidean algorithm (EEA) \cite{handbook}, is $O(n^2)$. An alternative to the EEA for calculating a multiplicative inverse in $GF(p)^{\times}$ is based on the Lagrange's theorem \ref{lagrange}. 
+\footnotetext{Using signed binary expansion of $t$ for the double-and-add algorithm, see \cite{mky} page 105.}
+\noindent We denote the number of bits of $p$ by $n = \mathlarger{\lceil} \log_2(p) \mathlarger{\rceil}$, then addition in $GF(p)^{+}$ is asymptotically $O(n)$, multiplication in $GF(p)^{\times}$, using Montgomery method \cite{handbook}, is $O(n^2)$ and calculation of a multiplicative inverse in $GF(p)^{\times}$, using a careful implementation of the extended Euclidean algorithm (EEA) \cite{handbook}, is $O(n^2)$. An alternative to the EEA, for calculating a multiplicative inverse in $GF(p)^{\times}$, is based on (Lagrange's) theorem \ref{lagrange}. 
 \begin{align*}
 \forall a \in GF(p)^{\times},\ \exists n \in \mathbb{N}: \#a \cdot n = \#GF(p)^{\times} &= p - 1, \\ 
-\forall a \in GF(p)^{\times}: a^{\#a} = 1 \implies a^{\#a - 1} &= a^{-1}, \\
+\forall a \in GF(p)^{\times},\ \forall n \in \mathbb{N}: a^{\#a \cdot n} = 1 \implies a^{\#a \cdot n - 1} &= a^{-1}, \\
 \forall a \in GF(p)^{\times}: a^{-1} &= a^{p-2}.
 \end{align*}
-To calculate $a^{p-2}$ we can use the standard algorithm called square-and-multiply, for details see \cite{mky}, which has the same complexity $O(n^2)$ as the EEA.
-\footnotetext{Using signed binary expansion of $t$ for the double-and-add algorithm, see \cite{mky} page 105.}
-\begin{DF}
-
-\end{DF}
+To calculate $a^{p-2}$, we can use the standard algorithm, called square-and-multiply, for details see \cite{mky}, which has the same complexity $O(n^2)$ as the EEA.
 \section{Discrete Logarithm Problem}
-Let $y = b^x$, given $y \in \mathbb{R}_{> 0}$ and the base $b \in \mathbb{R}_{>0}$, we are asked to find the exponent $x \in \mathbb{R}$. We can rewrite this problem from the exponential form to the logarithmic form: $x = \log_b(y)$, to find the $x$ we can easily evaluate it on a calculator (using change of logarithm basis rule). Even if we didn't know the inverse function (logarithm), the exponential function is a strictly increasing function, therefore we could have just guessed a random $x_0$, evaluate $b^{x_0}$, compare it with $y$ and we would immediately know whether the solution $x$ is bigger/equal/lesser than $x_0$.
+Let $y = b^x$, given $y \in \mathbb{R}_{> 0}$ and the base $b \in \mathbb{R}_{>0}$, we are asked to find the exponent $x \in \mathbb{R}$. We can rewrite this problem from the exponential form to the logarithmic form, i.e. $x = \log_b(y)$. To find the $x$ we can easily evaluate it on a calculator (using change of logarithm basis rule). Even if we didn't know the inverse function (logarithm), the exponential function is a strictly increasing function. Therefore, we could have just guessed a random initial solution $x_0$, evaluate $b^{x_0}$, compare it with $y$. And based on the result of this comparison, we would have immediately known, whether the true solution $x$ is greater, equal, or less than $x_0$. Therefore, we can solve this problem effortlessly over the real numbers.
 \\
 \\
-\noindent If we were given the same problem in a finite group, instead of over the real numbers, the situation would be significantly more complicated.
+\noindent If we were asked to solve the same problem in a finite group instead, the situation would be significantly more complicated.
 \begin{DF}
-Let $G = (M, \cdot)$ be a group and let $h = g^x$, given $h \in M$ and the base $g \in M,\ \langle g \rangle = G,$ we are asked to find the exponent $x$~$\in$~$\{1, 2, \ldots, \#G\}.$ We call $x$ the \textbf{discrete logarithm} of $h$ with respect to the base $g$ and denote it by $x= \log_g(h)$. Problem of finding the solution $x$ is therefore called the \textbf{discrete logarithm problem} (DLP). We have decided to demand $g$ to be a generator of $G$ in order to guarantee the existence of the solution to the DLP.  
+Let $G = (M, \cdot)$ be an Abelian group and let $h = g^x$, given $h \in M$ and the base $g \in M,\ \langle g \rangle = G,$ we are asked to find the exponent $x$~$\in$~$\{0,1, \ldots, \#G - 1\}.$ We call $x$ the \textbf{discrete logarithm} of $h$ with respect to the base $g$, and denote it by $x= \log_g(h)$. Problem of finding the solution $x$ is therefore called the \textbf{discrete logarithm problem} (DLP). We require $g$ to be a generator of $G$, in order to guarantee the existence of the solution to the DLP. 
 \end{DF}
 \noindent To illustrate the difficulty of solving the DLP. Lets consider the multiplicative group $G$ of the finite field $GF(19).$ $G = (\{1,2,\ldots,18\}, \cdot_{19})$ and its generator $g=3,\ g \in G$. Group structure is shown on the figure \ref{fig2}. We might be asked to find such $k$, that $3^k \equiv 4 \text{ (mod 19)}$. 
  \begin{figure}[h]
@@ -720,7 +719,6 @@ Let $G = (M, \cdot)$ be a group and let $h = g^x$, given $h \in M$ and the base 
  	\caption[Example of the group structure of $GF(19)^\times$.]{Powers of the generator $g = 3$ in $GF(19)^\times$. Image was created by the author himself.}
  	\label{fig2}
  \end{figure}
- \newpage
 \noindent Unfortunately, the function $g^k \text{ (mod 19)},\ k \in \mathbb{N},$ isn't monotonic, therefore we can't use the idea of trying a randomly selected $k_0$ and comparing $3^{k_0} \text{ (mod 19)}$ with $4$, but we can use the fact that the group $G$ is finite and its order is $\#G = 18 \implies 3^{18} \equiv 1 \text{ (mod 19)}.$ We can just try all possible values of $k \in \{0, 1, \ldots, 17\}$ and find the answer. This method is called the \textbf{brute-force attack}. 
 \begin{align*}
 3^0 \equiv 1 \text{ (mod 19)} &\not\equiv 4 \text{ (mod 19)}, \\
@@ -1168,14 +1166,15 @@ Let $G = \{g_1,\ldots,g_s\}$ be the reduced basis for a zero-dimensional ideal $
 \end{DF}
 \noindent In the next chapter we describe specific algorithms solving ECDLP that were implemented and tested by us. The experimental results are in the chapter~\ref{expResults}.
 \chapter{Specialized Algorithms Solving ECDLP}
+\label{specAlg}
 In this chapter we first describe four specialized algorithms for solving ECDLP that are based on the theoretical concepts presented in the previous chapters. Afterwords, we follow up with the actual implementation's details. The experimental results are presented in chapter~\ref{expResults}.
 \section{Algorithm 1 (Semaev 2015)}
 Algorithm 1 is based on the Semaev's algorithm presented in \cite{semaev15}, few changes had to be made to make the algorithm work for ECDLP over finite fields $GF(p),\ p$ prime. Semaev's algorithm works best over prime field extensions, where the base field is of prime characteristic $q,\ q \leq 2^{10}$ ( approximately).  \\ \\
-\noindent Let $P$ be a generator of the prime order ($\#P = r$) group $E(GF(p))$, where $E$ is an elliptic curve defined over prime field $GF(p)$, $p$ prime. We are restricting this algorithm to the case where $E(GF(p))$ is a group of prime order, because if it's not the case, we can use the Pohlig-Hellman algorithm to split the initial ECDLP in the group of composite order to a multiple smaller ECDLPs in prime order subgroups, where algorithm 1 can be used to find the solution. The ECDLP is given a generator $P$ and some other point $Q \in E(GF(p))$, find an integer $k$ such that $kP = Q,$ since $E(GF(p))$ is a finite group of prime order $r$ we are interested in the solution $k\ \text{(mod }r)$. For large $p$, $r \approx p$. Algorithm 1, which computes this integer $k$, works in multiple steps and is described below.
+\noindent Let $P$ be a generator of the prime order ($\#P = r$) group $E(p)$, where $E$ is an elliptic curve defined over prime field $GF(p)$, $p$ prime. We are restricting this algorithm to the case where $E(p)$ is a group of prime order, because if it's not the case, we can use the Pohlig-Hellman algorithm to split the initial ECDLP in the group of composite order to a multiple smaller ECDLPs in prime order subgroups, where algorithm 1 can be used to find the solution. The ECDLP is given a generator $P$ and some other point $Q \in E(p)$, find an integer $k$ such that $kP = Q,$ since $E(p)$ is a finite group of prime order $r$ we are interested in the solution $k\ \text{(mod }r)$. For large $p$, $r \approx p$. Algorithm 1, which computes this integer $k$, works in multiple steps and is described below.
 \begin{enumerate}
 \item Define the decomposition constant $m \geq 2,\ m \in \mathbb{N},$ and a factor base $\mathcal{F} \subset GF(p)$ of size $\mathlarger{\Big\lceil \sqrt[m]{r} \Big\rceil}$, where $\lceil \cdot \rceil$ is the ceiling function. The factor base $\mathcal{F}$ might consist of random $x$-coordinates of points on the elliptic curve $E$ (non-deterministic):
 $$
-\mathcal{F} := \Big\{x\ \Big|\ x \in GF(p),\ \exists y \in GF(p): (x,y) \in E(GF(p))  \Big\},
+\mathcal{F} := \Big\{x\ \Big|\ x \in GF(p),\ \exists y \in GF(p): (x,y) \in E(p)  \Big\},
 $$
 or we can take the $|\mathcal{F}|$ smallest $x$-coordinates of points on the elliptic curve $E$ (deterministic).
 \item Construct a relation matrix $M \in GF(r)^{|\mathcal{F}| + 1 \times |\mathcal{F}| + 2}$, $r$ is prime, therefore there exists a finite field of order $r$. Lets order elements of $\mathcal{F}$ and denote the $i$-th element of the factor base $\mathcal{F}$ by $\mathcal{F}_i,\ i \in \{0,\ldots,|\mathcal{F}| - 1\}.$
@@ -1189,11 +1188,11 @@ m_{1,1} & m_{1,2} & \ldots & m_{1,|\mathcal{F}|} & a_1 & b_1 \\
 \hphantom{.}m_{|\mathcal{F}| + 1,1} & m_{|\mathcal{F}| + 1,2} & \ldots & m_{|\mathcal{F}| + 1,|\mathcal{F}|} & a_{|\mathcal{F}| + 1} & b_{|\mathcal{F}| + 1} \hphantom{.}
 \end{pmatrix},
 \end{align*}
-where all elements of the matrix $M$ are in $GF(r)$. Each row of this matrix represents a relation in the group $E(GF(p))$:
+where all elements of the matrix $M$ are in $GF(r)$. Each row of this matrix represents a relation in the group $E(p)$:
 $$
 \forall j \in \{1,\ldots,|\mathcal{F}| + 1\}: a_jP \oplus b_jQ \oplus \sum_{i=1}^{\mathcal{F}} m_{j,i} (\mathcal{F}_{i-1}, y_{i-1}) = \mathcal{O}, 
 $$
-where $y_k,\ k \in \{0,\ldots,|\mathcal{F}| - 1\}$ is smaller of the $y$-coordinates of the points on $E$ with $x$-coordinate equal to $\mathcal{F}_k$ (if there is a point $(\mathcal{F}_k, y)$ in $E(GF(p))$ there is also its additive inverse $(\mathcal{F}_k,-y) = (\mathcal{F}_k, p - y)$ in $E(GF(p))$. We take smaller of these two values as $y_k := \text{min}(y, p - y)$.  \\ \\
+where $y_k,\ k \in \{0,\ldots,|\mathcal{F}| - 1\}$ is smaller of the $y$-coordinates of the points on $E$ with $x$-coordinate equal to $\mathcal{F}_k$ (if there is a point $(\mathcal{F}_k, y)$ in $E(p)$ there is also its additive inverse $(\mathcal{F}_k,-y) = (\mathcal{F}_k, p - y)$ in $E(p)$. We take smaller of these two values as $y_k := \text{min}(y, p - y)$.  \\ \\
 The matrix $M$ is initialized as a zero matrix and we gradually fill it with relations. And initialize the row index $rowID = 1$ telling us where to insert the next found relation.
 \item For random integers $a,b \in \{0, \ldots, r-1\}$ compute point ${R = aP \oplus bQ.}$ If $R = \mathcal{O}$ and $b \neq 0$ we can immediately solve the ECDLP:
 $$k \equiv  (-a)(b)^{-1} \text{ (mod $r$)}.$$ Otherwise, $R$ has affine coordinates $(R_x, R_y)$. If $R_x = \mathcal{F}_k,$ for some $k \in \{0,\ldots,|\mathcal{F}| - 1\},$ then we have a relation and we add to the relation matrix $M$.
