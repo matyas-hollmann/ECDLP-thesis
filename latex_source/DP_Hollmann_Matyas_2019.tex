@@ -76,10 +76,9 @@
 \setsecnumdepth{all}
 \chapter{Mathematical Background}\label{mathBG}
 %\input{mathBG.tex}
- %definice pojmu, finite fields, etc.
- In this chapter we are going to define terms that will be used in the rest of this thesis. The first section is a revision of terms common in general algebra, the second section is focused on polynomials and Gröbner bases and the last section will deal with elliptic curves. This chapter is based mostly on book by David A. Cox \cite{algGeom}, MI-MKY lecture notes \cite{mky} and my bachelor thesis \cite{myBP}. Other sources will be cited individually at the specific locations.
+ In this chapter, we define terms that we use in the rest of this thesis. The first section is a revision of the terms standard in general algebra, the second part focuses on polynomials, and the last section introduces the reader to the topic of Gröbner bases. In the next chapter, we revise elliptic curve theory, introduce the reader to the concept of summation polynomials and state the discrete logarithm problem. This chapter is based mostly on the book by David A. Cox~\cite{algGeom}, MI-MKY lecture notes~\cite{mky} and my bachelor thesis~\cite{myBP}. Other sources are cited individually at specific locations.
 \section{Introduction to General Algebra}
-General algebra, also called universal algebra in the past, is the theory of algebraic structures. An algebraic structure is a set of objects with a collection of mathematical operations on this set.  An algebraic structure is defined by a set of axioms, requirements on the set and operations on it, and logically deduce other properties of said algebraic structure based on the axioms. When we encounter a particular problem we may try to classify it as a specific algebraic structure (by verifying its axioms) and use all of its deduced properties without the need to reprove them. We start this section with a definition of an elementary algebraic structure called group.
+General algebra, also called universal algebra in the past, is the theory of algebraic structures. An algebraic structure is a set of objects with a collection of mathematical operations on this set.  An algebraic structure is defined by a set of axioms, requirements on the set and operations on it, and other properties of said algebraic structure are logically deduced based on the axioms. When we encounter a particular problem, we may try to classify it as a specific algebraic structure (by verifying its axioms) and use all of its deduced properties without the need to reprove them. We start this section with a definition of a simple algebraic structure called group.
 \begin{DF}
 A \textbf{group} $G$ is an ordered pair $(M,  \circ)$, where $M$ is a non-empty set and binary operation $\circ : M \times M \to M $ (sometimes called the group law of $G$) that satisfies three requirements known as group axioms: 
 \end{DF}
@@ -95,82 +94,82 @@ $\forall x \in M,\ \exists x^{-1} \in M: x \circ x^{-1} = x^{-1} \circ x = e.$ \
 $M$ is closed under the operation $\circ$. 
 \end{RM}
 \begin{NRM}
-When we are gonna talk about an element  $g$ of a group $G$ ($g \in G$) we are actually gonna mean that $g$ is an element of the underlying set $M$ ($g \in M$).
+When we talk about an element $g$ of a group $G$ ($g \in G$), we mean that $g$ is an element of the underlying set $M$ ($g \in M$).
 \end{NRM}
-Groups satisfying commutativity law:
+Groups that satisfy commutativity law:
 \begin{itemize}
 \item 
 $ \forall x, y\in M: x \circ y = y \circ x,$
 \end{itemize}
 are called \textbf{Abelian groups} (in honour of a famous Norwegian mathematician Niels Henrik Abel). 
 \begin{DF}
-If the set $M$ has a finite number of elements, $G = (M, \circ)$ is called a \textbf{finite group}. \textbf{Order} of the finite group $G$ is the number of elements of the underlying set $M$ and we denote it by $\#G$. If the set $M$ is infinite, the order of $G$ is infinite as well.
+If the set $M$ has a finite number of elements, $G = (M, \circ)$ is called a \textbf{finite group}. \textbf{Order} of the finite group $G$ is the number of elements of the underlying set $M$, and we denote it by $\#G$. If the set $M$ is infinite, the order of $G$ is infinite as well.
 \end{DF}
-\noindent A simple example of an infinite Abelian group is $(\mathbb{Z}, +)$, set of all integers equipped with standard addition. An example of a finite Abelian group is $\mathbb{Z}_n^+ = (\{0, 1, \ldots, n-1\}, +_{n}),\ n \in \mathbb{N},$ where $+_n$ is addition modulo $n$ and $\mathbb{N}$ is the set of all natural numbers (positive integers). Order of this group is $n$.
+\noindent A simple example of an infinite Abelian group is $(\mathbb{Z}, +)$, the set of all integers equipped with standard addition. An example of a finite Abelian group is $\mathbb{Z}_n^+ = (\{0, 1, \ldots, n-1\}, +_{n}),\ n \in \mathbb{N},$ where $+_n$ is addition modulo $n$ and $\mathbb{N}$ is the set of all natural numbers (positive integers). Order of this group is $n$.
 \begin{RM}
-In every group there exist just one unique identity element. Also for every element $q \in G$ there exists just one inverse element denoted $q^{-1}$ in the multiplicative notation and $-q$ in the additive notation. Inverse of a product of two group elements is a product of the respective inverses in the reversed order (order does matter in non-commutative groups), although in this thesis we are mostly concerned about commutative groups.
+In every group, there exists just one unique identity element. Also, for every element $q \in G$ there exists just one inverse element, denoted by $q^{-1}$ in the multiplicative notation and $-q$ in the additive notation. The inverse of a product of two group elements is a product of the respective inverses in the reversed order (order does matter in non-commutative groups, although in this thesis we are only concerned about Abelian groups).
 \end{RM}
-\noindent Identity element in the additive notation is called \textbf{zero} and denoted by $0$, in the multiplicative notation \textbf{unit} and denoted by $1$. \\ \\
-In an additive group $G$ we define \textbf{multiplication} by an integer (repeated application of the group law) as follows:
+\noindent An identity element in the additive notation is called a \textbf{zero} and denoted by $0$, in the multiplicative notation an \textbf{unit} and denoted by $1$. \\ \\
+In an additive group $G$, we define \textbf{multiplication} by an integer (repeated application of the group law) as follows:
 $$
 \forall p \in G,\ \forall k \in \mathbb{Z}: kp := \begin{cases} \underbrace{p + p + \cdots + p}_{\text{$k$-times}} &\quad k > 0, \\
 0 \text{ (identity element) } &\quad k = 0, \\
 \underbrace{(-p) + (-p) + \cdots + (-p)}_{\text{$k$-times}} &\quad k < 0.
 \end{cases}
 $$
-In a multiplicative group $G$ we define \textbf{exponentiation} (repeated application of the group law) in a similar manner:
+In a multiplicative group $G$, we define \textbf{exponentiation} (repeated application of the group law) in a similar manner:
 $$
-\forall p \in G,\ \forall k \in \mathbb{Z}: p^k := \begin{cases} \underbrace{p \cdot p \cdots  p}_{\text{$k$-times}} &\quad k > 0, \\
+\forall p \in G,\ \forall k \in \mathbb{Z}: p^k := \begin{cases} \underbrace{p \cdot p \cdot\ \cdots\ \cdot  p}_{\text{$k$-times}} &\quad k > 0, \\
 1 \text{ (identity element) } &\quad k = 0, \\
-\underbrace{p^{-1} \cdot p^{-1} \cdots  p^{-1}}_{\text{$k$-times}} &\quad k < 0.
+\underbrace{p^{-1} \cdot p^{-1} \cdot\ \cdots\ \cdot  p^{-1}}_{\text{$k$-times}} &\quad k < 0.
 \end{cases}
 $$
 \begin{DF}
-\textbf{Order of an element} $a \in G$ is the smallest positive integer $k \in \mathbb{N}$ such that: $a^k = 1$ (similarly $ka = 0$ in the additive notation), we denote it by $\#a= k$, if there isn't such $k$, we say the order of $a$ is infinite (this case may only happen if $G$ itself is of infinite order and in this thesis we are mostly interested in finite groups). Elements of finite order are sometimes called \textbf{torsion} elements.
+\textbf{Order of an element} $a \in G$ is the smallest positive integer $k \in \mathbb{N}$ such that: $a^k = 1$ (similarly $ka = 0$ in the additive notation). We denote the order of an element $a$ by $\#a= k$, and if there isn't such $k$, we say the order of $a$ is infinite (this case may only happen if $G$ itself is of infinite order). Elements of finite order are sometimes called \textbf{torsion} elements.
 \end{DF}
 \begin{RM}
-Order of the identity element $\in G$ is always $1$ and due to the uniqueness of the identity element it's also the only element $\in G$ of this order.
+Order of an identity element in any group $G$ is always $1$, and due to the uniqueness of the identity element, it's also the only element in $G$ of this order.
 \end{RM}
 \begin{DF}
-A group $(H, \circ)$ is a \textbf{subgroup} of a group $(G, \circ)$ if and only if $H \subseteq G.$ The group law $\circ$ is exactly the same, therefore the identity element $e \in G$ has to be the identity in any subgroup $H$ of $G$ as well. $H$ is called a \textbf{trivial subgroup} of $G$ if $H = \{e\}$ or $H = G$.
+A group $(H, \circ)$ is a \textbf{subgroup} of a group $(G, \circ)$ if and only if $H \subseteq G.$ The group law $\circ$ is the same, therefore an identity element $e \in G$ has to be an identity in any subgroup $H$ of $G$ as well. $H$ is called a \textbf{trivial subgroup} of $G$ if $H = \{e\}$ or $H = G$.
 \end{DF}
 \begin{DF}
 \textbf{Lagrange's Theorem}: Let $G$ be a finite group and $H$ a subgroup of $G$, then the order of the subgroup $H$ divides the order of the group $G$: $\exists n \in \mathbb{N}: \#G = \#H \cdot n.$
 \label{lagrange}
 \end{DF}
-\begin{DF}
-A \textbf{relation} $\mathcal{R}$ on a set $M$ is any subset of the Cartesian product $M\times M$. Relation $\mathcal{R}$ on the set $M$ is an \textbf{equivalence} on the set $M$ if and only if $\mathcal{R}$ satisfies following requirements:
-\begin{itemize}
-\item $\forall	x \in M: (x,x) \in \mathcal{R},$ \hfill (reflexivity)
-\item $\forall x,y \in M: (x,y) \in \mathcal{R} \implies (y,x) \in \mathcal{R},$ \hfill (symmetry)
-\item $\forall x,y,z \in M: \bigg( (x,y) \in \mathcal{R} \land (y,z) \in \mathcal{R}\bigg) \implies (x,z) \in \mathcal{R}.$ \hfill (transitivity)
-\end{itemize}
-\end{DF}
-\noindent Set of all elements equivalent to $x \in M$ is called an \textbf{equivalence class} of an element $x$ and denoted by:
-$$
-[x]_\mathcal{R} := \{y \in M \ |\ (x,y) \in \mathcal{R}\}.
-$$
-\begin{NRM}
-Let $\mathcal{R}$ be an equivalence relation on a set $M$, to denote the equivalence of $x,y \in M$ we will shorten the notation to $x \sim_\mathcal{R} y := (x,y) \in \mathcal{R}.$ 
-\end{NRM}
-\noindent For any subgroup $H$ of a group $G$ and an element $a \in G$, we define a \textbf{left coset} of $H$ as $aH := \{ah\ |\ h \in H\}$. Similarly a \textbf{right coset} of $H$ is defined as $Ha := \{ha\ |\ h \in H\}$.  We also define an equivalence relation $\sim_{\mathcal{H}}$ by: 
-$$
-x,y \in G: (x \sim_{\mathcal{H}} y) \Leftrightarrow (\exists h \in H: x = yh).
-$$
-The equivalence classes ($[a]_{\mathcal{H}} = \{ah\ |\ h \in H \}$) of the equivalence relation $\sim_{\mathcal{H}}$ are exactly the left cosets of $H$ so we can write $[a]_{\mathcal{H}} = aH$. Thus the left cosets of $H$ form a partition of $G$, see \cite{coset}.
-\begin{RM}
-If $G$ is an Abelian group and $H$ is any subgroup of $G$, the left cosets of $H$ are the same as the right cosets of $H$, $H$ is then called \textbf{normal subgroup} of $G$. 
-$$
-\forall a \in G: aH = Ha.
-$$ 
-\end{RM} 
-\noindent In the case $H$ is a normal subgroup of $G$ we can extend the group law ($\circ$) of $G$ to the the set of (left) cosets of $H$ as follows:
-$$
-\forall a,b \in G: [a]_{\mathcal{H}} \circ [b]_{\mathcal{H}} := [a \circ b]_{\mathcal{H}}.
-$$
-\begin{DF}
-The ordered pair $(\{[a]_{\mathcal{H}}\ |\ a \in G\}, \circ)$ forms a \textbf{factor group} (sometimes called a \textbf{quotient group}) of $G$ with respect to $H$ and we denote it by $G/H$.
-\end{DF}
+%\begin{DF}
+%A \textbf{relation} $\mathcal{R}$ on a set $M$ is any subset of the Cartesian product $M\times M$. Relation $\mathcal{R}$ on the set $M$ is an \textbf{equivalence} on the set $M$ if and only if $\mathcal{R}$ satisfies following requirements:
+%\begin{itemize}
+%\item $\forall	x \in M: (x,x) \in \mathcal{R},$ \hfill (reflexivity)
+%\item $\forall x,y \in M: (x,y) \in \mathcal{R} \implies (y,x) \in \mathcal{R},$ \hfill (symmetry)
+%\item $\forall x,y,z \in M: \bigg( (x,y) \in \mathcal{R} \land (y,z) \in \mathcal{R}\bigg) \implies (x,z) \in \mathcal{R}.$ \hfill (transitivity)
+%\end{itemize}
+%\end{DF}
+%\noindent Set of all elements equivalent to $x \in M$ is called an \textbf{equivalence class} of an element $x$ and denoted by:
+%$$
+%[x]_\mathcal{R} := \{y \in M \ |\ (x,y) \in \mathcal{R}\}.
+%$$
+%\begin{NRM}
+%Let $\mathcal{R}$ be an equivalence relation on a set $M$, to denote the equivalence of $x,y \in M$ we will shorten the notation to $x \sim_\mathcal{R} y := (x,y) \in \mathcal{R}.$ 
+%\end{NRM}
+%\noindent For any subgroup $H$ of a group $G$ and an element $a \in G$, we define a \textbf{left coset} of $H$ as $aH := \{ah\ |\ h \in H\}$. Similarly a \textbf{right coset} of $H$ is defined as $Ha := \{ha\ |\ h \in H\}$.  We also define an equivalence relation $\sim_{\mathcal{H}}$ by: 
+%$$
+%x,y \in G: (x \sim_{\mathcal{H}} y) \Leftrightarrow (\exists h \in H: x = yh).
+%$$
+%The equivalence classes ($[a]_{\mathcal{H}} = \{ah\ |\ h \in H \}$) of the equivalence relation $\sim_{\mathcal{H}}$ are exactly the left cosets of $H$ so we can write $[a]_{\mathcal{H}} = aH$. Thus the left cosets of $H$ form a partition of $G$, see \cite{coset}.
+%\begin{RM}
+%If $G$ is an Abelian group and $H$ is any subgroup of $G$, the left cosets of $H$ are the same as the right cosets of $H$, $H$ is then called \textbf{normal subgroup} of $G$. 
+%$$
+%\forall a \in G: aH = Ha.
+%$$ 
+%\end{RM} 
+%\noindent In the case $H$ is a normal subgroup of $G$ we can extend the group law ($\circ$) of $G$ to the the set of (left) cosets of $H$ as follows:
+%$$
+%\forall a,b \in G: [a]_{\mathcal{H}} \circ [b]_{\mathcal{H}} := [a \circ b]_{\mathcal{H}}.
+%$$
+%\begin{DF}
+%The ordered pair $(\{[a]_{\mathcal{H}}\ |\ a \in G\}, \circ)$ forms a \textbf{factor group} (sometimes called a \textbf{quotient group}) of $G$ with respect to $H$ and we denote it by $G/H$.
+%\end{DF}
 \begin{DF}
 Group $G$ is called a \textbf{cyclic group} if and only if there exists an element $g \in G$ such that:
 \begin{itemize}
@@ -183,33 +182,33 @@ or
 \end{DF}
 \noindent Element $g$ is then called a \textbf{generator} of the group $G$.
 \begin{RM}
-Ordered pair $(\langle a \rangle, \circ)$ form a subgroup of $(G, \circ)$ for any $a \in G$. Order of the group generated by the element $a$ is the same as order of the element~$a$. 
+Ordered pair $(\langle a \rangle, \circ)$ form a subgroup of $(G, \circ)$ for any $a \in G$. The order of the group generated by the element $a$ is the same as the order of the element~$a$. 
 $$
 \forall a \in G: \#\langle a \rangle = \#a.
 $$
 \end{RM}
 
 \begin{DF}
-An (unital) \textbf{ring} $R = (M, +, \cdot)$  is a set equipped with two binary operations $+: M\times M \to M$ and $\cdot:  M\times M \to M$ satisfying following requirements:
+A \textbf{ring} $R = (M, +, \cdot)$  is a set equipped with two binary operations $+: M\times M \to M$ and $\cdot:  M\times M \to M$ satisfying following requirements:
 \begin{itemize}
 \item $(M, +)$ is an Abelian group, 
 \item $\forall x,y,z \in M: x\cdot(y\cdot z) = (x \cdot y) \cdot z, $ \hfill (associativity)
-\item $\exists e \in M,\forall x \in M: e \cdot x = x \cdot e = x,$ \hfill (identity element w.r.t. operation $\cdot$)
+\item $\exists e \in M,\ \forall x \in M: e \cdot x = x \cdot e = x,$ \hfill (identity element w.r.t. oper. $\cdot$)
 \item $\forall x,y,z \in M:x \cdot(y+z)= x\cdot y + x \cdot z,$ \hfill (left distributive law) 
 \item $\forall x,y, z \in M:(y + z) \cdot x = y\cdot x + z \cdot x.$ \hfill(right distributive law)
 \end{itemize}
 \end{DF}
 \begin{NRM}
-When we are gonna talk about an element $r$ of a ring $R$ ($r \in R$) we are actually gonna mean that $r$ is an element of the underlying set~$M$ ($r \in M$).
+When we talk about an element $r$ of a ring $R$ ($r \in R$), we mean that $r$ is an element of the underlying set~$M$ ($r \in M$).
 \end{NRM}
 \begin{DF}
-Let $R = (M,+,\cdot)$ be an unital ring and $(M \setminus \{0\}, \cdot)$ be an Abelian group, then $\mathbb{F} = (M, +, \cdot)$ is a \textbf{field}. Group $(M, +)$ is  called the additive group of the field $\mathbb{F}$ and denoted by $\mathbb{F}^+$, the identity element of this group is denoted by~$0$. Group $(M \setminus \{0\}, \cdot)$ is called the multiplicative group of the field $\mathbb{F}$ and denoted by $\mathbb{F}^\times$, the identity element of this group is denoted by~$1$.
+Let $R = (M,+,\cdot)$ be a ring and $(M \setminus \{0\}, \cdot)$ be an Abelian group, then $\mathbb{F} = (M, +, \cdot)$ is a \textbf{field}. Abelian group $(M, +)$ is  called the additive group of the field $\mathbb{F}$ and denoted by $\mathbb{F}^+$, the identity element of this group is denoted by~$0$. Abelian group $(M \setminus \{0\}, \cdot)$ is called the multiplicative group of the field $\mathbb{F}$ and denoted by $\mathbb{F}^\times$, the identity element of this group is denoted by~$1$.
 \end{DF}
 \begin{DF}
 Let $\mathbb{F}$ be a field, 0 be the identity element of $\mathbb{F}^+$ and 1~be the identity element of $\mathbb{F}^\times$, if there exists such $n \in \mathbb{N}:$
 $$
  \underbrace{1 + 1 + \cdots + 1}_\text{$n$-times} = 0,
-$$ we define the smallest $n \in \mathbb{N}$ satisfying this condition to be the \textbf{characteristic} of the field $\mathbb{F}.$ If there isn't such $n$ we define the characteristic of the field $\mathbb{F}$ to be $0$. We denote the characteristic of the field $\mathbb{F}$ by char$(\mathbb{F})$.
+$$ we define the smallest $n \in \mathbb{N}$ satisfying this condition to be the \textbf{characteristic} of the field $\mathbb{F}.$ If there isn't such $n$, we define the characteristic of the field $\mathbb{F}$ to be $0$. We denote the characteristic of the field $\mathbb{F}$ by char$(\mathbb{F})$.
 \end{DF}
 \noindent The characteristic of a field is either $0$ or a prime number. An example of a field of characteristic $0$ are real numbers with standard addition and multiplication $(\mathbb{R}, +, \cdot)$. \\ \\
 An example of a field of prime characteristic $p$ is a set of non-negative integers less than $p$ equipped with addition modulo $p$ and multiplication modulo~$p$ $(\{0, 1, \ldots, p-1\}, +_p, \cdot_p)$, we call this field the \textbf{Galois Field} of order $p$ (order of a field is defined as the order of its additive group) and denote it by $GF(p)$.
@@ -219,12 +218,13 @@ All finite fields (fields with finite number of elements) are of prime character
 \end{RM}
 
 \begin{DF}
-Let $\mathbb{F},\ \mathbb{T}$ be fields (equipped with the same binary operations), if $\mathbb{F} \subseteq \mathbb{T}$ we call $\mathbb{T}$ a \textbf{field extension} of the field $\mathbb{F}$. Field extension $\mathbb{T}$ can be viewed as $\mathbb{F}$-vector space, we treat elements of $\mathbb{F}$ as scalars and elements of $\mathbb{T}$ as vectors. If it is a finite-dimensional vector space we call the dimension of this vector space the \textbf{degree of the extension} and denote it by $[\mathbb{T}\ :\ \mathbb{F}]$. From now on we will denote the $n$-dimensional vector space over the field $\mathbb{F}$ by $\mathbb{F}^n,\ n \in \mathbb{N}$.
+Let $\mathbb{F},\ \mathbb{T}$ be fields (equipped with the same binary operations), if $\mathbb{F} \subseteq \mathbb{T}$ we call $\mathbb{T}$ a \textbf{field extension} of the field $\mathbb{F}$. The field extension $\mathbb{T}$ of $\mathbb{F}$ can be viewed as $\mathbb{F}$-vector space, we treat elements of $\mathbb{F}$ as scalars and elements of $\mathbb{T}$ as vectors. If it is a finite-dimensional vector space, we call the dimension of this vector space the \textbf{degree of the extension} and denote it by $[\mathbb{T}\ :\ \mathbb{F}]$. From now on, we will denote the $n$-dimensional vector space over a field $\mathbb{F}$ by $\mathbb{F}^n,\ n \in \mathbb{N}$.
 \end{DF}
 \begin{RM}
-The finiteness of the vector space over a field is related only to the dimension of said vector space, it doesn't have to do anything with the finiteness of the base field. For example, we can view complex numbers $\mathbb{C}$ (an infinite field) as a 2-dimensional vector space over the real numbers $\mathbb{R}$ with a basis $(1,\ \mathit{i})$, where $\mathit{i}$ is the imaginary unit satisfying the equation: $\mathit{i}^2 = -1.$
+The finiteness of a vector space over a field is related only to the dimension of said vector space, it doesn't have to do anything with the finiteness of the base field. For example, we can view complex numbers $\mathbb{C}$ (an infinite field) as a 2-dimensional vector space over the real numbers $\mathbb{R}$ with a basis $(1,\ \mathit{i})$, where $\mathit{i}$ is the imaginary unit satisfying the equation: $\mathit{i}^2 = -1.$
 \end{RM}
 \section{Multivariate Polynomials}
+In this section, we discuss monomials and polynomials of multiple variables. In the first part, we revise some standard notation regarding polynomials. And in the second part, we introduce the reader to the concept of a monomial ordering, which is an essential building block for Gröbner bases that are the main topic of the next section. This section is based on~\cite{algGeom}.
 \begin{DF}
 A \textbf{monomial} $m$ in $x_1,x_2,\ldots,x_n$ is a product of the form:
 $$
@@ -249,9 +249,9 @@ $$
 f(X) := \sum_{\alpha} a_{\alpha}X^\alpha, \quad a_{\alpha} \in \mathbb{F},
 $$
 \end{DF}
-\noindent where the sum is over a finite number of $n$-tuples $\alpha = (\alpha_1, \ldots, \alpha_n)$, $a_\alpha$ is the \textbf{coefficient} of a monomial $X^\alpha$. If $a_\alpha \neq 0$ , then we call $a_{\alpha}X^\alpha$ a \textbf{term} of the  polynomial $f$. The \textbf{total degree} of the polynomial $f \neq 0$ is the maximum  of $|\alpha |$ over the terms of $f$. The total order of a zero polynomial is set to $-\infty$. 
+\noindent where the sum is over a finite number of $n$-tuples $\alpha = (\alpha_1, \ldots, \alpha_n)$, $a_\alpha$ is the \textbf{coefficient} of a monomial $X^\alpha$. If $a_\alpha \neq 0$ , then we call $a_{\alpha}X^\alpha$ a \textbf{term} of the  polynomial $f$. The \textbf{total degree} of the polynomial $f \neq 0$ is the maximum  of $|\alpha |$ over the terms of $f$. The total degree of a zero polynomial is undefined. We denote the total degree of a polynomial $f$ by deg$(f)$.
 \begin{RM}
-The set of all polynomials in $X$ over a field $\mathbb{F}$ is denoted by $\mathbb{F}[X]$ and it has the unital ring structure (with standard polynomial addition and multiplication). We will call it a \textbf{polynomial ring} over $\mathbb{F}$.
+The set of all polynomials in $X$ over a field $\mathbb{F}$ is denoted by $\mathbb{F}[X]$, and it has the ring structure (with standard polynomial addition and multiplication). We call it a \textbf{polynomial ring} over a field $\mathbb{F}$.
 \end{RM}
 \begin{NRM}
 \noindent When dealing with polynomials in a small number of formal variables we will usually use variables $x,y,z$. 
@@ -260,12 +260,12 @@ The set of all polynomials in $X$ over a field $\mathbb{F}$ is denoted by $\math
 $$
 f(x,y,z) = 2x^2y^5 - 17x^5z^4.
 $$
-$f$ is a polynomial in $\mathbb{Z}[x,y,z]$ and deg$(f)=9.$
+$f$ is a polynomial in $\mathbb{Z}[x,y,z]$ of a total degree, deg$(f)=9.$
 \begin{RM}
-Every polynomial $f \in \mathbb{F}[X]$ (in $n$ variables $X = (x_1,\ldots,x_n)$) can be viewed as a function $f(x_1,\ldots,x_n) : \mathbb{F}^n \to \mathbb{F}$.
+Every polynomial $f \in \mathbb{F}[x_1,\ldots,x_n]$ can be viewed as a function $f(x_1,\ldots,x_n) : \mathbb{F}^n \to \mathbb{F}$.
 \end{RM}
 \begin{DF}
-Let $f \in \mathbb{T}[x_1,\ldots,x_n]$ be a polynomial, we say $f$ has a \textbf{root} $r = (r_1, \ldots, r_n),\ r_1, \ldots, r_n \in \mathbb{T}$ if $f(r) = 0.$ We may also view $r$ as a vector in $\mathbb{T}^n$. We say that a field $\mathbb{T}$ is \textbf{algebraically closed} if every non-constant polynomial in $\mathbb{T}[x_1,\ldots,x_n]$ has a root in $\mathbb{T}^n$. For example, $\mathbb{C}$ is algebraically closed field. On the other hand $\mathbb{R}$ is not an algebraically  closed field, because there exist polynomials with coefficients in $\mathbb{R}$ that have only complex roots e.g. $x^2 + 16$.
+Let $f \in \mathbb{F}[x_1,\ldots,x_n]$ be a polynomial, we say $f$ has a \textbf{root} $r = (r_1, \ldots, r_n),\ r_1, \ldots, r_n \in \mathbb{F}$ if $f(r) = 0.$ We may also view $r$ as a vector in $\mathbb{F}^n$. We say that a field $\mathbb{F}$ is \textbf{algebraically closed} if every non-constant polynomial in $\mathbb{F}[x_1,\ldots,x_n]$ has a root in $\mathbb{F}^n$. For example, $\mathbb{C}$ is an algebraically closed field. On the other hand, $\mathbb{R}$ is not an algebraically  closed field, because there exist polynomials with coefficients in $\mathbb{R}$ that have only complex roots, e.g. $f(x) = x^2 + 16$.
 \end{DF}
 
 \begin{DF}
@@ -275,7 +275,7 @@ f(x_{i_1}, \ldots, x_{i_n}) = f(x_1, \ldots, x_n)
 $$
 for every possible permutation $x_{i_1}, \ldots, x_{i_n}$ of the variables $x_1, \ldots, x_n$.
 \end{DF}
-\noindent For example polynomials $x^2+y^2+z^2$ and $xyz$ in variables $x,y,z$ are obviously symmetric.
+\noindent For example, polynomials $x^2+y^2+z^2$ and $xyz$ in variables $x,y,z$ are clearly symmetric.
 \begin{DF}
 A polynomial $f \in \mathbb{F}[X]$ is \textbf{homogeneous of total degree} $m \in \mathbb{Z}_{\geq 0}$ provided that every term of $f$ has total degree $m$.
 \end{DF}
@@ -285,11 +285,11 @@ A polynomial $f \in \mathbb{F}[X]$ is symmetric if and only if all of its homoge
 \begin{DF}
 Let $\mathbb{F}$ be a field, and let $f_1, \ldots, f_s,\ s \in \mathbb{N},$ be polynomials in $\mathbb{F}[x_1,\ldots, x_n].$ Then the set of their common zeroes:
 $$
-\mathcal{V}(f_1, \ldots, f_s) := \{a \in \mathbb{F}^n\ |\ \forall k \in \{1,\ldots,s\}: f_k(a) =  0\}
+\mathcal{V}(f_1, \ldots, f_s) := \{a \in \mathbb{F}^n\ |\ \forall k \in \{1,\ldots,s\}: f_k(a) =  0\},
 $$
 is called the \textbf{affine variety} in $\mathbb{F}^n$ defined by polynomials $f_1, \ldots, f_s$.
 \end{DF}
-\noindent Thus, an affine variety $\mathcal{V}(f_1, \ldots, f_s) \subseteq \mathbb{F}^n$ is the set of all solutions of the system of equations $f_1(x_1,\ldots,x_n) = \cdots = f_s(x_1,\ldots,x_n) = 0$ restricted to $\mathbb{F}^n$ (in the case $\mathbb{F}^n$ is not an algebraically closed field, there might be some solutions that lie in an extension $\mathbb{F}^n$ but not in $\mathbb{F}^n$ itself).\\ \\
+\noindent Thus, an affine variety $\mathcal{V}(f_1, \ldots, f_s) \subseteq \mathbb{F}^n$ is the set of all solutions of the system of multivariate polynomial equations $f_1(x_1,\ldots,x_n) = \cdots = f_s(x_1,\ldots,x_n) = 0$ restricted to $\mathbb{F}^n$, in the case $\mathbb{F}^n$ is not an algebraically closed field, there might be some solutions that lie in an extension $\mathbb{F}^n$, but not in $\mathbb{F}^n$ itself.\\ \\
 \noindent For example consider the variety $\mathcal{V}(xz,\ yz)$ in $\mathbb{R}$, we can easily check that the set of all solutions to the polynomial system:
 \begin{align*}
 xz &= 0, \\
@@ -304,7 +304,7 @@ is the union of the $(x,y)$-plane and the $z$-axis. For graphical illustration s
  \end{figure}
 
  \begin{DF}
-Let $R$ be an commutative ring, then any non-empty subset $I \subseteq R$ is called a (two-sided) \textbf{ideal} of $R$ if it satisfies following requirements:
+Let $R$ be a commutative ring, then any non-empty subset $I \subseteq R$ is called a (two-sided) \textbf{ideal} of $R$ if it satisfies following requirements:
 \begin{itemize}
 \item $I \neq \emptyset,$\hfill ($I$ is a non-empty set)
 \item $\forall f,g \in I: (f + g) \in I,$ \hfill ($I$ is closed under addition)
@@ -320,11 +320,11 @@ $$
 \end{DF}
 \noindent to be the \textbf{ideal generated by} polynomials $f_1,\ldots,f_s$.
 \begin{RM}
-Every ideal $I$ of $\mathbb{F}[X]$ is finitely generated which means:
+Every ideal $I$ of $\mathbb{F}[X]$ is finitely generated, which means:
 $$
 \exists s \in \mathbb{N},\ \exists f_1,\ldots,f_s \in \mathbb{F}[X]: I = \langle f_1, \ldots, f_s \rangle,
 $$
-\noindent and we say that these polynomials $f_1,\ldots,f_s$ form a \textbf{basis} of $I$. Note that a given ideal $I$ may have many different bases. If we have two different bases $B_1 = (f_1,\ldots,f_s),\ s \in \mathbb{N},$ and $B_2 = (g_1, \ldots, g_t),\ t \in \mathbb{N},$ of the same ideal $I$ in $\mathbb{F}[X]$ such that $I = \langle B_1\rangle = \langle B_2 \rangle,$ then the affine varieties in $\mathbb{F}^n$ defined by the bases $B_1$ and $B_2$ are the same.
+\noindent and we say that the polynomials $f_1,\ldots,f_s$ form a \textbf{basis} of $I$. Note that a given ideal $I$ may have many different bases. If we have two different bases $B_1 = (f_1,\ldots,f_s),\ s \in \mathbb{N},$ and $B_2 = (g_1, \ldots, g_t),\ t \in \mathbb{N},$ of the same ideal $I$ in $\mathbb{F}[X]$, such that $I = \langle B_1\rangle = \langle B_2 \rangle,$ then the affine varieties ${\text{in }\mathbb{F}^n}$, defined by the bases $B_1$ and $B_2$, are the same.
 $$
 \mathcal{V}(B_1) = \mathcal{V}(B_2).
 $$
@@ -343,7 +343,7 @@ $$
 $$
 \end{RM} 
 \begin{DF}
-Let $f,g \in \mathbb{F}[x]$ be two non-constant polynomials of degrees $l,m \in \mathbb{Z}_{>0}$, deg$(f) = l,\ $deg$(g)=m$. Then $f,g$ have a common factor $\in \mathbb{F}[x]$ if and only if there are polynomials $A,B \in \mathbb{F}[x]$ such that:
+Let $f,g \in \mathbb{F}[x]$ be two non-constant polynomials of degrees $l,m \in \mathbb{Z}_{>0}$, deg$(f) = l,\ $deg$(g)=m$. Then $f,g$ have a common factor in $\mathbb{F}[x]$ if and only if there are polynomials $A,B \in \mathbb{F}[x]$, such that:
 \begin{enumerate}
 \item $A \neq 0,\ B \neq 0,$ 
 \item deg$(A) \leq m - 1,$ deg$(B) \leq l - 1,$
@@ -356,7 +356,7 @@ B &= v_0x^{l-1} + \cdots + v_{l-1}, \\
 f &= c_0x^l + \cdots + c_l, \quad c_0 \neq 0, \\
 g &= d_0x^m + \cdots + d_m, \quad d_0 \neq 0. \\
 \end{align*}
-If we compare the coefficients of powers of $x$, then we get a system of linear equations with variables $u_i,\ i \in \{0,1,\ldots	, m - 1\}$ and $v_j,\ j \in \{0,1,\ldots, l - 1\}$ and coefficients $c_i, d_j \in \mathbb{T}.$ The coefficient matrix of this system is called the \textbf{Sylvester matrix} of $f$ and $g$ with respect to $x$, denoted by Syl$_{x}(f,g)$. Syl$_{x}(f,g)$ is the following $(l + m) \times (l + m)$ matrix:
+If we compare the coefficients of powers of $x$, then we get a system of linear equations with variables $u_i,\ i \in \{0,1,\ldots	, m - 1\}$ and $v_j,\ j \in \{0,1,\ldots, l - 1\}$ and coefficients $c_i, d_j \in \mathbb{F}.$ The coefficient matrix of this system is called the \textbf{Sylvester matrix} of $f$ and $g$ with respect to $x$, denoted by Syl$_{x}(f,g)$. Syl$_{x}(f,g)$ is the following $(l + m) \times (l + m)$ matrix:
 $$
 \text{Syl}_{x}(f,g) := \begin{pmatrix}
 c_0 &  &  &  &             d_0 &  &  &  \\
@@ -368,27 +368,29 @@ c_l &  &  &  &  d_m&  &  & \\
  & c_l &  & \vdots &  & d_m &  & \vdots \\
  &  & \ddots &  &  &  & \ddots &  \\
 \coolunder{m \text{ columns}}{\hphantom{..} & \hphantom{...} & \hphantom{..}  & c_l & }\coolunder{l \text{ columns}}{\hphantom{...} & \hphantom{...} & \hphantom{......} & d_m \hphantom{..}} \\
-\end{pmatrix}
-$$
-where the empty spaces are filled by zeros. \\
-\noindent The determinant (we expect our reader is familiar with this term, if not, you can find its definition in any decent linear algebra textbook) of the Sylvester matrix is called the \textbf{resultant} of polynomials $f$ and $g$ with respect to $x$ and is denoted by Res$_{x}(f,g)$. Furthermore, $f,g$ have a common factor in $\mathbb{F}[x]$ if and only if Res$_x(f,g) = 0$. Example of the resultant of two quadratic polynomials is shown on page \pageref{resExample}. \\ \\
-\noindent If $f,g$ have a common factor $h \in \mathbb{F}[x],\ \text{deg}(h) \geq 1$, then there exist $f_1, g_1 \in \mathbb{F}[x]$ such that:
+\end{pmatrix},
+$$ \\  \\
+\noindent where the empty spaces are filled by zeros. \\ \\
+\noindent The determinant (we expect our reader is familiar with this term, if not, you can find its definition in any decent linear algebra textbook) of the Sylvester matrix is called the \textbf{resultant} of polynomials $f$ and $g$ with respect to $x$, and is denoted by Res$_{x}(f,g)$. Furthermore, $f,g$ have a common factor in $\mathbb{F}[x]$ if and only if Res$_x(f,g) = 0$, which is equivalent to the above-presented system of linear equations having a non-zero solution. An example of the resultant of two quadratic polynomials is shown on page \pageref{resExample}. 
+\\ \\
+\noindent If $f,g$ have a common factor $h \in \mathbb{F}[x],\ \text{deg}(h) \geq 1$, then there exist ${f_1, g_1 \in \mathbb{F}[x]}$, such that:
 $$
 f = hf_1, \quad g = hg_1.
 $$
 \end{DF}
-\noindent If $\mathbb{F}$ is an algebraically closed field, polynomials $f,g$ have a common root $r \in \mathbb{F}$. Since $\mathbb{F}$ is algebraically closed field, (non-constant) common factor $h$ has a root $r \in \mathbb{F}$: $h(r) = 0$ which implies $r$ is a common root of polynomials $f,g$:
+\noindent Moreover, if $\mathbb{F}$ is an algebraically closed field, polynomials $f,g$ have a common root $r \in \mathbb{F}$. Since $\mathbb{F}$ is algebraically closed field, a (non-constant) common factor $h$ has a root ${r \in \mathbb{F}}$: ${h(r) = 0}$. Therefore, $r$ is a common root of polynomials $f,g$:
 \begin{align*}
 (hf_1)(r) &= h(r)f_1(r) = 0f_1(r) = 0 \Leftrightarrow f(r) = 0 ,\\
 (hg_1)(r) &= h(r)g_1(r) = 0g_1(r) = 0 \Leftrightarrow g(r) = 0.\\
 \end{align*}
 
 \subsection{Monomial Ordering}
-\noindent The notion of ordering of terms in polynomial is a key ingredient in many algorithms, e.g. long division of polynomials. When dealing with polynomials in only one variable we usually write the terms of the polynomial in the decreasing order by their monomial degree. For example, $f(x) = 2x^4 - 10x^3 + x^2 + x -12$. The degree ordering on the one-variable monomials is straightforward:
+\noindent The notion of ordering of terms in a polynomial is a key ingredient in many algorithms, e.g. the long division of polynomials. When dealing with polynomials in only one variable, we usually write the terms of the polynomial in the decreasing order by their monomial degree. \\
+\noindent For example, ${f(x) = 2x^4 - 10x^3 + x^2 + x -12}$. The degree ordering on the one-variable monomials is straightforward:
 $$
 \cdots > x^{m+1} > x^m > x^{m-1} \cdots > x^2 > x > 1
 $$
-We would like to establish an ordering on the terms in polynomials in $\mathbb{F}[X],$ where $X = (x_1, \ldots, x_n)$. First, we note that we can reconstruct the monomial $X^{\alpha} = x_1^{\alpha_1}\cdots x_n^{\alpha_n}$ from the $n$-tuple of exponents $\alpha = (\alpha_1,\ldots, \alpha_n) \in \mathbb{Z}_{\geq 0}^n.$ Based on this observation we can define an ordering $>$ on the space $\mathbb{Z}_{\geq 0}^n$ which will also gives us an ordering on the monomials $\in \mathbb{F}[X].$ If for some $\alpha, \beta \in  \mathbb{Z}_{\geq 0}^n$ and some ordering $>$ holds: $\alpha > \beta$ we will also say that $X^\alpha > X^\beta.$ We will only consider \textbf{total orderings} which means that for every pair of monomials $X^\alpha$ and $X^\beta$, exactly one of the three statements holds:
+We would like to establish an ordering on the terms in polynomials in $\mathbb{F}[X],$ where $X = (x_1, \ldots, x_n)$. First, we note that we can reconstruct the monomial $X^{\alpha} = x_1^{\alpha_1}\cdots x_n^{\alpha_n}$ from the $n$-tuple of exponents $\alpha = (\alpha_1,\ldots, \alpha_n) \in \mathbb{Z}_{\geq 0}^n.$ Based on this observation, we define an ordering $>$ on the space $\mathbb{Z}_{\geq 0}^n$ which also gives us an ordering on the monomials $\in \mathbb{F}[X].$ If for some $\alpha, \beta \in  \mathbb{Z}_{\geq 0}^n$ and some ordering $>$ holds: $\alpha > \beta$ we also say that $X^\alpha > X^\beta.$ In this thesis, we only consider \textbf{total orderings}, which means that for every pair of monomials $X^\alpha$ and $X^\beta$, exactly one of the three statements holds:
 \begin{itemize}
 \item $X^\alpha > X^\beta,$\hfill (when $\alpha > \beta$)
 \item $X^\alpha = X^\beta,$\hfill (when $\alpha = \beta$)
@@ -398,7 +400,7 @@ We would like to establish an ordering on the terms in polynomials in $\mathbb{F
 $$
 \forall \alpha, \beta, \gamma \in \mathbb{Z}_{\geq 0}^n: (X^\alpha > X^\beta \land X^\beta > X^\gamma) \implies X^\alpha > X^\gamma.
 $$
-\noindent We also require that multiplication of two polynomials does not change the relative order of terms. Therefore the following property for $>$ must hold:
+\noindent We also require that multiplication of two polynomials does not change the relative order of terms. Therefore, the following property for $>$ must hold:
 $$
 \forall \alpha, \beta, \gamma \in \mathbb{Z}_{\geq 0}^n: X^\alpha > X^\beta \implies X^\alpha X^\gamma > X^\beta X^\gamma.
 $$
@@ -414,13 +416,10 @@ A \textbf{monomial ordering} $>$ on $\mathbb{F}[X]$, where $X = (x_1, \ldots, x_
 \item $\forall \alpha, \beta, \gamma \in \mathbb{Z}_{\geq 0}^n: \alpha > \beta \implies \alpha + \gamma > \beta + \gamma,$
 \item $\forall A \subseteq \mathbb{Z}_{\geq 0}^n,\ A \neq \emptyset: \exists \alpha \in A,\ \forall \beta \in A \setminus \{\alpha \}: \beta > \alpha.$ 
 \end{itemize}
-\noindent Last requirement tells us that in every non-empty subset of $\mathbb{Z}_{\geq 0}^n$ there exists a smallest element under the relation $>$.
+\noindent The last requirement tells us, that in every non-empty subset of $\mathbb{Z}_{\geq 0}^n$ there exists a minimum element under the relation $>$.
 \end{DF}
-\phantom{.}
-\phantom{.}
-\noindent Now we will define a couple of standard monomial orderings.
 \begin{DF}
-Let $\alpha = (\alpha_1, \ldots, \alpha_n),\ \beta = (\beta_1, \ldots, \beta_n)\in \mathbb{Z}_{\geq 0}^n.$ \textbf{Lexicographic Order} (\textbf{lex}), denoted by $>_{lex}$, is a generalization of the way words are ordered in a dictionary. We say $\alpha >_{lex} \beta$ if the leftmost non-zero entry of the vector difference $\alpha - \beta \in \mathbb{Z}^n$ is positive. We will write: $X^\alpha >_{lex} X^\beta$ if $\alpha >_{lex} \beta$.
+Let $\alpha = (\alpha_1, \ldots, \alpha_n),\ \beta = (\beta_1, \ldots, \beta_n)\in \mathbb{Z}_{\geq 0}^n.$ \textbf{Lexicographic Order} (\textbf{lex}), denoted by $>_{lex}$, is a generalisation of the way words are ordered in a dictionary. We say $\alpha >_{lex} \beta$ if the leftmost non-zero entry of the vector difference $\alpha - \beta \in \mathbb{Z}^n$ is positive. We write: $X^\alpha >_{lex} X^\beta$ if $\alpha >_{lex} \beta$.
 \end{DF}
 For example:
 \begin{itemize}
@@ -431,10 +430,10 @@ $$
 (1,0,\ldots,0) >_{lex} (0,1,0,\ldots, 0) >_{lex} \cdots >_{lex} (0, \ldots, 0, 1),
 $$
 so $x_1 >_{lex} x_2 >_{lex} \cdots >_{lex} x_n.$ \\ \\
-In the rest of the thesis we will also assume $x >_{lex} y >_{lex} z,$ unless stated otherwise.
+In the rest of this thesis, we assume $x >_{lex} y >_{lex} z,$ unless stated otherwise.
 \end{itemize} 
 \begin{DF}
-Let $\alpha = (\alpha_1, \ldots, \alpha_n),\ \beta = (\beta_1, \ldots, \beta_n)\in \mathbb{Z}_{\geq 0}^n.$ \textbf{Graded Lexicographic Order} (\textbf{grlex}), denoted by $>_{grlex}$, at first orders terms by the total degree, then break ties using the standard lexicographic order defined above. 
+Let $\alpha = (\alpha_1, \ldots, \alpha_n),\ \beta = (\beta_1, \ldots, \beta_n)\in \mathbb{Z}_{\geq 0}^n.$ \textbf{Graded Lexicographic Order} (\textbf{grlex}), denoted by $>_{grlex}$, at first orders the terms by the total degree, then break ties using the standard lexicographic order defined above. 
 $$
 \alpha >_{grlex} \beta: (|\alpha| > |\beta|) \lor (|\alpha| = |\beta| \land \alpha >_{lex} \beta),
 $$
@@ -442,8 +441,8 @@ where $|\alpha| = \sum_{i=1}^n \alpha_i$ and $|\beta| = \sum_{i=1}^n \beta_i$.
 \end{DF}
 \begin{itemize}
 \item $(10,2,6) >_{grlex} (10, 3,4),$ since $|\alpha| = 18 > |\beta| = 17$.
-\item $(7,5,3,1) >_{grlex} (7, 5, 1, 3),$ since $|\alpha| = 16 = |\beta|$ and $\alpha >_{lex} \beta$.
-\item The variables $x_1,\ldots,x_n$ are ordered the same way as by $>_{lex}$ order:
+\item $(7,5,3,1) >_{grlex} (7, 5, 2, 4),$ since $|\alpha| = 16 = |\beta|$ and $\alpha >_{lex} \beta$.
+\item The variables $x_1,\ldots,x_n$ are ordered in the same way as by $>_{lex}$ order:
 $$
 (1,0,\ldots,0) >_{grlex} (0,1,0,\ldots, 0) >_{grlex} \cdots >_{grlex} (0, \ldots, 0, 1),
 $$
@@ -453,31 +452,31 @@ Let $\alpha = (\alpha_1, \ldots, \alpha_n),\ \beta = (\beta_1, \ldots, \beta_n)\
 \end{DF}
 \begin{itemize}
 \item $(4,7,1) >_{grevlex} (4, 2,5),$ since $|\alpha| = 12 > |\beta| = 11$.
-\item $  (7, 5, 1, 3) >_{grevlex} (1,5,3,7),$ since $|\alpha| = 16 = |\beta|$ \\
-\phantom{.}\hfill and $\alpha - \beta = (6,0,-2, -4),\ -4 < 0$.
-\item The variables $x_1,\ldots,x_n$ are ordered the same way as by $>_{lex}$ order:
+\item $  (7, 5, 1, 3) >_{grevlex} (1,5,3,7),$ since $|\alpha| = 16 = |\beta|$, \\
+and $\alpha - \beta = (6,0,-2, -4),\ -4 < 0$.
+\item The variables $x_1,\ldots,x_n$ are ordered in the same way as by $>_{lex}$ order:
 $$
 (1,0,\ldots,0) >_{grevlex} (0,1,0,\ldots, 0) >_{grevlex} \cdots >_{grevlex} (0, \ldots, 0, 1),
 $$
 \end{itemize}
-Now we will show how would the polynomial $f(x,y,z) = 4xy^2z + 4z^2 - 5x^3 + 7x^2z^2 \in \mathbb{Z}[x,y,z]$ be written if we reorder its terms by those standard monomial orderings.
+Now we show, how would the polynomial $f(x,y,z) = 4xy^2z + 4z^2 - 5x^3 + 7x^2z^2 \in \mathbb{Z}[x,y,z]$ be written, if we reorder its terms by a monomial ordering in decreasing order:
 \begin{itemize}
-\item With respect to the lex order, we would reorder the terms of $f$ in decreasing order:
+\item With respect to the lex order:
 $$
 f(x,y,z) = -5x^3 + 7x^2z^2 + 4xy^2z + 4z^2.
 $$
-\item With respect to grlex order:
+\item With respect to the grlex order:
 $$
 f(x,y,z) = 7x^2z^2  + 4xy^2z -5x^3 + 4z^2.
 $$
-\item With respect to grevlex order:
+\item With respect to the grevlex order:
 $$
 f(x,y,z) = 4xy^2z + 7x^2z^2  -5x^3 + 4z^2.
 $$
 The first two terms have the same total degree of $4$ and $xy^2z >_{grevlex} x^2z^2$ because $(1,2,1) - (2,0,2) = (-1,2,-1)$ and $-1 < 0$.
 \end{itemize} 
 \begin{DF}
-Let $f = \sum_\alpha a_\alpha X^\alpha$ be a non-zero polynomial in $\mathbb{F}[X]$ and let $>$ be a monomial order.
+Let $f = \sum_\alpha a_\alpha X^\alpha$ be a non-zero polynomial in $\mathbb{F}[X]$, and let $>$ be a monomial order.
 \begin{itemize}
 \item The \textbf{multidegree} of $f$ is:
 $$
@@ -510,7 +509,7 @@ f(x,y,z) &= 4xy^2z + 7x^2z^2  -5x^3 + 4z^2, \text{ (in  grevlex order)}\\
 \end{align*}
 Now we can formulate the idea of a general division algorithm in $\mathbb{F}[X]$.
 \begin{RM}
-Let $p, q \in \mathbb{F}[X]$ be two monomials, we say that the monomial $p$ is \textbf{divisible} by the monomial $q$ if and only if there exists a monomial $h \in \mathbb{F}[X]$ such that: $p = qh$. We denote it by $q\ |\ p$ which can be read  as \textbf{$\mathbf{q}$ divides $\mathbf{p}$}.
+Let $p, q \in \mathbb{F}[X]$ be two monomials, we say the monomial $p$ is \textbf{divisible} by the monomial $q$ if and only if there exists a monomial $h \in \mathbb{F}[X]$, such that: $p = qh$. We denote it by $q\ |\ p$ which we read  as \textbf{$\mathbf{q}$ divides $\mathbf{p}$}.
 \end{RM}
 \begin{DF}
 Let $>$ be a monomial order on $\mathbb{Z}_{\geq 0}^n$, let $F = (f_1, \ldots, f_s)$ be an ordered $s$-tuple of polynomials in $\mathbb{F}[X],$ where $X = (x_1, \ldots, x_n)$. Then every $f \in \mathbb{F}[X]$ can be written as:
@@ -523,17 +522,18 @@ $$
 \text{multideg}(f) \geq \text{multideg}(q_if_i).
 $$
 \end{DF}
-\noindent The algorithm itself will be presented in the chapter \ref{Algorithms}. Unfortunately,  the remainder is not uniquely characterized and depends on the order of the divisors in the set $F$ and also on the monomial order itself. \\ \\
-\noindent Furthermore, we would like to use this idea to answer the ideal membership problem. Let $f, f_1, \ldots, f_s \in \mathbb{F}[X]$ and let $I = \langle f_1, \ldots, f_s \rangle$ be an ideal. We would like to determine whether $f \in I$ is true. We can clearly state that if the remainder $r$ obtained after division of $f$ by $F = (f_1, \ldots, f_s)$ is $0$, then $f$ has to be an element of the ideal $I$. So $r=0$ is a sufficient condition for the ideal membership, however it isn't a necessary condition for $f$ being in the ideal. To remedy this situation we will try to describe a "good" basis of the ideal $I$, such that the remainder $r$ on division by the polynomials of this basis will be uniquely determined and that the condition $r=0$ will be equivalent to the membership in the ideal. Exactly those good properties have Gröbner bases which we are gonna describe in the following section.
+\noindent The algorithm itself is presented in chapter \ref{divAlg}. Unfortunately,  the remainder is not uniquely characterised and depends on the order of the divisors in the set $F$, and also on the monomial order itself. \\ \\
+\noindent Furthermore, we would like to use this idea to answer the ideal membership problem. Let $f, f_1, \ldots, f_s \in \mathbb{F}[X]$ and let $I = \langle f_1, \ldots, f_s \rangle$ be an ideal. We would like to determine whether $f \in I$ is true. We can clearly state, that if the remainder $r$ obtained after division of $f$ by $F = (f_1, \ldots, f_s)$ is $0$, then $f$ has to be an element of the ideal $I$. So $r=0$ is a sufficient condition for the ideal membership. However, it isn't a necessary condition for $f$ being in the ideal. To remedy this situation, we try to describe a "good" basis of the ideal $I$, such that the remainder $r$ on division by the polynomials of this basis is uniquely determined, and that the condition $r=0$ is equivalent to the membership in the ideal. Exactly those good properties have Gröbner bases, which we describe in the following section.
 \section{Gröbner Bases}
+Gröbner bases may be used to solve many problems about polynomial ideals in an algorithmic or computational fashion. It is one of the most used methods for solving systems of multivariate polynomial equations, i.e. calculating the affine variety defined by those polynomial equations. This section is based on~\cite{algGeom}.
 \begin{DF}
-An ideal $I \subseteq \mathbb{F}[X]$ is called a \textbf{monomial ideal} if there exists a (possibly infinite) subset $A \subseteq \mathbb{Z}_{\geq 0}^n$ such that $I$ consists of all polynomials which are finite sums: $\sum_{\alpha \in A} h_\alpha X^\alpha$, where $h_\alpha \in \mathbb{F}[X].$ We can then write $I$ in the form: $I = \langle X^\alpha \ |\ \alpha \in A\rangle.$ Monomial $X^\beta, \beta \in \mathbb{Z}_{\geq 0}^n,$ lies in ideal $I$ if and only if there exist $\alpha \in A$, such that $X^\alpha \ |\ X^\beta$ ($X^\beta$ is divisible by some $X^\alpha$). 
+An ideal $I \subseteq \mathbb{F}[X]$ is called a \textbf{monomial ideal} if there exists a (possibly infinite) subset $A \subseteq \mathbb{Z}_{\geq 0}^n$, such that $I$ consists of all polynomials which are finite sums: $\sum_{\alpha \in A} h_\alpha X^\alpha$, where $h_\alpha \in \mathbb{F}[X].$ We can then write $I$ in the form: $I = \langle X^\alpha \ |\ \alpha \in A\rangle.$ Monomial $X^\beta, \beta \in \mathbb{Z}_{\geq 0}^n,$ lies in the ideal $I$ if and only if there exist $\alpha \in A$, such that $X^\alpha \ |\ X^\beta$ ($X^\beta$ is divisible by some $X^\alpha$). 
 \end{DF}
 \begin{RM}
-\textbf{(Dickson's Lemma).} Any monomial ideal $I = \langle X^\alpha \ |\ \alpha \in A\rangle \subseteq \mathbb{F}[X]$ can be written in the form $I = \langle X^{\alpha(1)}, \ldots, X^{\alpha(s)}\rangle,\ s \in \mathbb{N},$ where $\alpha(1), \ldots, \alpha(s) \in A$. In particular, $I$ has a finite basis $(X^{\alpha(1)}, \ldots, X^{\alpha(s)})$.
+\textbf{(Dickson's Lemma).} Any monomial ideal ${I = \langle X^\alpha \ |\ \alpha \in A\rangle \subseteq \mathbb{F}[X]}$ can be written in the form $I = \langle X^{\alpha(1)}, \ldots, X^{\alpha(s)}\rangle,\ s \in \mathbb{N},$ where $\alpha(1), \ldots, \alpha(s)$\\ $\in A$. In particular, $I$ has a finite basis $(X^{\alpha(1)}, \ldots, X^{\alpha(s)})$.
 \end{RM}
 \begin{DF}
-A monomial ideal $I \subseteq \mathbb{F}[X]$ has a finite basis $(X^{\alpha(1)}, \ldots, X^{\alpha(s)})$ with the property that $X^{\alpha(i)}$ does not divide $X^{\alpha(j)}$ for any $i \neq j$. Furthermore, this basis is unique and is called the \textbf{minimal basis} of $I$.
+A monomial ideal $I \subseteq \mathbb{F}[X]$ has a finite basis $(X^{\alpha(1)}, \ldots, $\\$X^{\alpha(s)})$ with the property that $X^{\alpha(i)}$ does not divide $X^{\alpha(j)}$ for any $i \neq j$. Furthermore, this basis is unique and is called the \textbf{minimal basis} of $I$.
 \end{DF}
 \begin{DF}
 Let $I \subseteq \mathbb{F}[X],\ I \neq {0},$ be an ideal and fix a monomial ordering on $\mathbb{F}[X]$.  Then:
@@ -549,34 +549,76 @@ $$
 \end{itemize}
 \end{DF}
 \begin{DF}
-Fix a monomial order on $\mathbb{F}[X]$, therefore every polynomial $f \in \mathbb{F}[X]$ has an unique leading term. A finite subset $G = \{g_1, \ldots, g_t \}$ of an ideal $I \subseteq \mathbb{F}[X],\ I \neq \{ 0 \}$ is said to be a \textbf{Gröbner basis} (or \textbf{standard basis}) if:
+Fix a monomial order on $\mathbb{F}[X]$, therefore every polynomial $f \in \mathbb{F}[X]$ has a unique leading term. A finite subset $G = \{g_1, \ldots, g_t \}$ of an ideal $I \subseteq \mathbb{F}[X],\ I \neq \{ 0 \}$ is said to be a \textbf{Gröbner basis} (or \textbf{standard basis}) if:
 $$
 \langle \text{LT}(g_1), \ldots, \text{LT}(g_t) \rangle = \langle \text{LT}(I) \rangle.
 $$
-Additionally we define the Gröbner basis of the zero ideal $\{0\}$ to be the empty set $\emptyset$ using the convention that $\langle \emptyset \rangle = \{0\}.$
+Additionally, we define the Gröbner basis of the zero ideal $\{0\}$ to be the empty set $\emptyset$ using the convention that $\langle \emptyset \rangle = \{0\}.$
 \end{DF}
 \begin{RM}
-Every ideal $I \subseteq \mathbb{F}[X]$ has a Gröbner basis. Furthermore, any Gröbner basis for an ideal $I$ is a basis of $I$. The theory of Gröbner bases was developed by B. Buchberger in his PhD thesis (1965) and named after his thesis's advisor W. Gröbner. Buchberger also developed fundamental algorithms to find and work with Gröbner bases. In many computer algebra systems there is usually used an alternative spelling "Groebner bases".
+Every ideal $I \subseteq \mathbb{F}[X]$ has a Gröbner basis. Furthermore, any Gröbner basis for an ideal $I$ is a basis of $I$. Gröbner bases for ideals in polynomial rings were introduced by B. Buchberger in his PhD thesis (1965) \cite{bruno} and named by him in honour of his thesis's advisor W. Gröbner. Buchberger also developed fundamental algorithms to find and work with Gröbner bases. In many computer algebra systems, there is usually used an alternative spelling "Groebner bases".
 \end{RM}
 \phantom{.}
 \phantom{.}
 \noindent Now we will mention few important properties of Gröbner bases.
 \begin{RM}
-Let $I \subseteq \mathbb{F}[X]$ be an ideal and let $G = \{g_1, \ldots, g_t\}$ be a Gröbner basis of $I$. Then for any $f \mathbb{F}[X],$ there is an unique polynomial $r$ with those two properties:
+Let $I \subseteq \mathbb{F}[X]$ be an ideal and let $G = \{g_1, \ldots, g_t\}$ be a Gröbner basis of $I$. Then for any $f \mathbb{F}[X],$ there is a unique polynomial $r$ with those two properties:
 \begin{itemize}
 \item No term of $r$ is divisible by any of LT$(g_1),\ldots,$LT$(g_t)$.
 \item $\exists g \in I:\ f = g + r.$
-In particular, $r$ is the remainder on division of $f$ by set $G$ no matter how are the elements of $G$ listed when using the division algorithm. 
+In particular, $r$ is the remainder on division of $f$ by set $G$ no matter, how are the elements of $G$ listed, when using the division algorithm. 
 \end{itemize}
 Polynomial $r$ is called the \textbf{normal form} of f. \\ \\ 
 \noindent Polynomial $f \in I$ if and only if the remainder $r$ on division $f$ by $G$ is zero, $r = 0.$
 \end{RM}
 \begin{DF}
-Let $f \in \mathbb{T}[X]$ be an polynomial and let $F = (f_1, \ldots, f_s) \subseteq \mathbb{T}[X]$ be an ordered $s$-tuple of polynomials. We will denote the remainder on the division of $f$ by $F$ by $\overline{f}^F$. If $F$ is a Gröbner basis for $\langle f_1, \ldots, f_s \rangle$, then we can regard $F$ as a set without any particular order, because the remainder on the division by a Gröbner basis is unique.
+Let $f \in \mathbb{F}[X]$ be a polynomial and let $F = (f_1, \ldots, f_s) \subseteq \mathbb{F}[X]$ be an ordered $s$-tuple of polynomials. We will denote the remainder on the division of $f$ by $F$ by $\overline{f}^F$. If $F$ is a Gröbner basis for $\langle f_1, \ldots, f_s \rangle$, then we can regard $F$ as a set without any particular order, because the remainder on the division by a Gröbner basis is unique.
 \end{DF}
-
-%properties of GBases
-%BCHberg criterium
+\begin{DF}
+Let $f,g \in \mathbb{F}[x_1,\ldots,x_n]$ be non-zero polynomials. Let $\alpha = \text{multideg}(f)$ and $\beta = \text{multideg}(g)$, then ${\gamma = (\gamma_1,\ldots,\gamma_n)},$ where ${\gamma_i = \text{max}(\alpha_i,\beta_i)}$ for each $i \in \{1,\ldots,n\}.$ We call $X^\gamma$ the \textbf{least common multiple} of LM$(f)$ and LM$(g)$, denoted by $X^\gamma = \text{lcm(LM}(f),(\text{LM}(g)).$ \\ \\
+\noindent The \textbf{S-polynomial} of $f$ and $g$ is the combination:
+$$
+\text{S}(f,g) := \frac{X^\gamma}{\text{LT}(f)}\cdot f - \frac{X^\gamma}{\text{LT}(g)}\cdot g.
+$$
+\end{DF}
+\noindent For example, let $f=x^3y^2 - x^2y^3 + x$ and $g = 3x^4y + y^2$ in $\mathbb{R}[x,y]$ with grlex order. Then $\gamma = (4,2)$ and
+\begin{align*}
+\text{S}(f,g) &= \frac{x^4y^2}{x^3y^2}\cdot f - \frac{x^4y^2}{3x^4y}\cdot g \\
+&= x\cdot f - \frac{1}{3}y^3\cdot g \\
+&= -x^3y^3 + x^2 - \frac{1}{3}y^3.
+\end{align*}
+An S-polynomial is "designed" to produce cancellation of the leading terms.
+\begin{DF}
+\textbf{(Buchberger's Criterion)}: Let $I$ be a polynomial ideal. Then a basis $G = \{g_1,\ldots,g_t\}$ of $I$ is a Gröbner basis of $I$ if and only if for all pairs $i\neq j$, the remainder on division by S$(g_i,g_j)$ by $G$ (listed in some order) is zero.
+\end{DF}
+\noindent Based on this criterion, there is the Buchberger's algorithm (described on page 91 in \cite{algGeom}), that computes the Gröbner basis.
+\begin{DF}
+A \textbf{reduced Gröbner basis} for a polynomial ideal $I$ is a Gröbner basis $G$ for $I$ such that:
+\begin{itemize}
+\item $\forall p \in G: \text{LC}(p) = 1.$
+\item $\forall p \in G$: no monomial $p$ lies in $\langle\text{LT}(G \setminus \{p\}) \rangle.$
+\end{itemize}
+\end{DF}
+\noindent Any polynomial ideal $I\neq \{\emptyset\}$ for a given monomial ordering has a unique reduced Gröbner basis. 
+\\
+\\
+\noindent Now we describe, how to use Gröbner bases for finding all the solutions of a system of multivariate polynomial equations.
+\begin{DF}
+Given ideal $I = \langle f_1,\ldots,f_s\rangle \subseteq \mathbb{F}[x_1,\ldots,x_n]$, the $l$-th \textbf{elimination ideal} $I_l$ is the ideal of $\mathbb{F}[x_{l+1},\ldots,x_n]$ defined by:
+$$
+I_l := I \cap \mathbb{F}[x_{l+1},\ldots,x_n].
+$$
+\end{DF}
+\noindent Note that different orderings of the variables lead to different elimination ideals.
+\begin{DF}
+\textbf{(The Elimination Theorem).} Let $I \subseteq \mathbb{F}[x_1,\ldots,x_n]$ be an ideal and let $G$ be a Gröbner basis of $I$ with respect to lex order where $x_1 > x_2 > \cdots > x_n$. Then, for every $0\leq l \leq n$, the set:
+$$
+G_l := G \cap \mathbb{F}[x_{l+1},\ldots,x_n]
+$$
+is a Gröbner basis of the $l$-th elimination ideal $I_l$.
+\end{DF}
+\vphantom{.}
+\noindent To find all the points in the affine variety $\mathcal{V}(I)$, we build up the solutions one coordinate at a time. At first, we find the affine variety $\mathcal{V}(I_{n-1})$, which is equivalent to finding the roots of a univariate polynomial in $\mathbb{F}[x_n]$. We call any solution $(a_n) \in \mathcal{V}(I_{n-1})$ a \textbf{partial solution} of the original system of equations. Next step is to extend a partial solution $(a_n)$ to a partial solution $(a_{n-1},a_n) \in \mathcal{V}(I_{n-2})$. To do that, we substitute $(a_n)$ into all the polynomial equations in $I_{n-2}$. Thereafter, we obtain a univariate polynomial equation in $\mathbb{F}[x_{n-1}]$, which we can conveniently solve. Note that not every partial solution in $\mathcal{V}(I_{n-1})$ extends to a partial solution in $\mathcal{V}(I_{n-2})$. We repeat this process until we find $\mathcal{V}(I_0) = \mathcal{V}(I)$, a set of all \textbf{complete solutions} to the original system of equations.
 %
 %Define VectorSpace?
 %Divison Res => alg in the next section with F4, F5
@@ -588,7 +630,7 @@ This section's main focus will be elliptic curves and groups of points on those 
 \begin{DF}
 An \textbf{elliptic curve} over a (prime order) finite field $GF(p),$ \\ $p > 3,\ p$ prime, defined by the short Weierstrass equation, is a set:
 $$
-E(GF(p)) := \{(x,y)\ |\ x,y \in \mathbb{T},\ y^2 = x^3 + Ax+B\} \cup \{ \mathcal{O} \},
+E(GF(p)) := \{(x,y)\ |\ x,y \in \mathbb{F},\ y^2 = x^3 + Ax+B\} \cup \{ \mathcal{O} \},
 $$
 where $A, B \in GF(p)$ are \textbf{coefficients of the elliptic curve} and the \textbf{discriminant} of the elliptic curve, denoted by $\Delta$, is non-zero. Point $\mathcal{O}$ is called the \textbf{point at infinity} (in the projective plane).
 \begin{align*}
@@ -708,7 +750,7 @@ Last property is the well-known change-of-base formula and tells us that if we a
 \begin{DF}
 Let $E$ be an elliptic curve over a prime field $GF(p)$, let $P$ be a generator of $E$ and let $Q$ be a second point on $E$. \textbf{Elliptic curve discrete logarithm problem} (ECDLP) is to find an integer $k \in \{1,2,\ldots	, \#E\}$ such that $Q = kP$.
 \end{DF}
-\section{Generic algorithms for solving ECDLP}
+\section{Generic Algorithms for Solving ECDLP}
 In this section we will describe three most known generic algorithms for solving the DLP, we will use the elliptic curve notation. The first algorithm is based on collision finding, time complexity is lower than for a naive brute-force algorithm, but we the memory requirements are significant. This section was based mostly on \cite{mky}.
 \subsection{Baby-step Giant-step Algorithm (BsGs)}
 \begin{DF}
@@ -767,7 +809,7 @@ The argument is simple, in every sequence of $M$ consecutive integers there has 
  \centering
  \hspace*{-1cm}
  	\includegraphics[width=1\textwidth]{rho.png}
- 	\caption[Graphical illustration of Pollard $\rho$ collision idea.]{Graphical illustration of the idea behind the Pollard $\rho$ algorithm. $T = 3$, length of the cycle $M = 6$. Image source: (\cite{mky}, page $70$).}
+ 	\caption[Graphical illustration of Pollard $\rho$ collision idea]{Graphical illustration of the idea behind the Pollard $\rho$ algorithm. $T = 3$, length of the cycle $M = 6$. Image source: (\cite{mky}, page $70$).}
  	\label{rho}
  \end{figure}
  \end{DF}
@@ -1128,7 +1170,7 @@ Let $G = \{g_1,\ldots,g_s\}$ be the reduced basis for a zero-dimensional ideal $
 \chapter{Specialized Algorithms Solving ECDLP}
 In this chapter we first describe four specialized algorithms for solving ECDLP that are based on the theoretical concepts presented in the previous chapters. Afterwords, we follow up with the actual implementation's details. The experimental results are presented in chapter~\ref{expResults}.
 \section{Algorithm 1 (Semaev 2015)}
-Algorithm 1 is based on the Semaev's algorithm presented in \cite{semaev2015}, few changes had to be made to make the algorithm work for ECDLP over finite fields $GF(p),\ p$ prime. Semaev's algorithm works best over prime field extensions, where the base field is of prime characteristic $q,\ q \leq 2^{10}$ ( approximately).  \\ \\
+Algorithm 1 is based on the Semaev's algorithm presented in \cite{semaev15}, few changes had to be made to make the algorithm work for ECDLP over finite fields $GF(p),\ p$ prime. Semaev's algorithm works best over prime field extensions, where the base field is of prime characteristic $q,\ q \leq 2^{10}$ ( approximately).  \\ \\
 \noindent Let $P$ be a generator of the prime order ($\#P = r$) group $E(GF(p))$, where $E$ is an elliptic curve defined over prime field $GF(p)$, $p$ prime. We are restricting this algorithm to the case where $E(GF(p))$ is a group of prime order, because if it's not the case, we can use the Pohlig-Hellman algorithm to split the initial ECDLP in the group of composite order to a multiple smaller ECDLPs in prime order subgroups, where algorithm 1 can be used to find the solution. The ECDLP is given a generator $P$ and some other point $Q \in E(GF(p))$, find an integer $k$ such that $kP = Q,$ since $E(GF(p))$ is a finite group of prime order $r$ we are interested in the solution $k\ \text{(mod }r)$. For large $p$, $r \approx p$. Algorithm 1, which computes this integer $k$, works in multiple steps and is described below.
 \begin{enumerate}
 \item Define the decomposition constant $m \geq 2,\ m \in \mathbb{N},$ and a factor base $\mathcal{F} \subset GF(p)$ of size $\mathlarger{\Big\lceil \sqrt[m]{r} \Big\rceil}$, where $\lceil \cdot \rceil$ is the ceiling function. The factor base $\mathcal{F}$ might consist of random $x$-coordinates of points on the elliptic curve $E$ (non-deterministic):
@@ -1139,7 +1181,7 @@ or we can take the $|\mathcal{F}|$ smallest $x$-coordinates of points on the ell
 \item Construct a relation matrix $M \in GF(r)^{|\mathcal{F}| + 1 \times |\mathcal{F}| + 2}$, $r$ is prime, therefore there exists a finite field of order $r$. Lets order elements of $\mathcal{F}$ and denote the $i$-th element of the factor base $\mathcal{F}$ by $\mathcal{F}_i,\ i \in \{0,\ldots,|\mathcal{F}| - 1\}.$
 \begin{align*}
 &\begin{matrix}
-\hphantom{........}\mathbf{\mathcal{F}_0} & \hphantom{.......} \mathbf{\mathcal{F}_1} & \hphantom{...}\ldots &\hphantom{...} \mathbf{\mathcal{F}_{\mathcal{F} - 1}} & \hphantom{....}\mathbf{a} & \hphantom{......} \mathbf{b}
+\hphantom{........}\mathbf{\mathcal{F}_0} & \hphantom{.........} \mathbf{\mathcal{F}_1} & \hphantom{....}\ldots &\hphantom{...} \mathbf{\mathcal{F}_{\mathcal{F} - 1}} & \hphantom{......}\mathbf{a} & \hphantom{........} \mathbf{b}
 \end{matrix}\\
 M := &\begin{pmatrix}
 m_{1,1} & m_{1,2} & \ldots & m_{1,|\mathcal{F}|} & a_1 & b_1 \\
@@ -1157,10 +1199,10 @@ The matrix $M$ is initialized as a zero matrix and we gradually fill it with rel
 $$k \equiv  (-a)(b)^{-1} \text{ (mod $r$)}.$$ Otherwise, $R$ has affine coordinates $(R_x, R_y)$. If $R_x = \mathcal{F}_k,$ for some $k \in \{0,\ldots,|\mathcal{F}| - 1\},$ then we have a relation and we add to the relation matrix $M$.
 \begin{align*}
 M_{rowID,\ k} &=\begin{cases} 1, \quad &R_y < \frac{p}{2}, \\
-p-1, \quad &R_y > \frac{p}{2}.
+r-1, \quad &R_y > \frac{p}{2}.
 \end{cases}\\
-M_{rowID,\ |\mathcal{F}| + 1} &= a_{rowID} = b, \\
-M_{rowID,\ |\mathcal{F}| + 2} &= b_{rowID} = a, \\
+M_{rowID,\ |\mathcal{F}| + 1} &= a_{rowID} = a \text{ (mod $r$)}, \\
+M_{rowID,\ |\mathcal{F}| + 2} &= b_{rowID} = b \text{ (mod $r$)}, \\
 rowID &= rowID + 1.
 \end{align*}
 Otherwise, we try to decompose this point as a sum of factor base $\mathcal{F}$ points by solving following multivariate polynomial system, compute $x_1,\ldots,x_m \in \mathcal{F}$ and $u_1,\ldots,u_{m-2} \in GF(p)$ such that:
@@ -1175,11 +1217,29 @@ the last $m$ products is used to restrict found solutions $x_1,\ldots,x_m$ to li
 $$
 x_j^p - x_j = 0, \quad j \in \{1, \ldots, m\},
 $$
-which is not computationally feasible for large $p$ (approximately $p \geq 2^{10}$), so we won't generally use them (unless stated otherwise). Lets denote the set of the polynomials described above as $T$. Ideal $I = \langle T \rangle$ is a zero-dimensional ideal. Therefore, we can compute its Gröbner basis $G$ with respect to lexicographic order $X_1 >_{lex} >_{lex} \cdots >_{lex} X_n$ and by definition \ref{triagForm} it will be in a triangular form, so we can easily find the affine variety $\mathcal{V}(G) = \mathcal{V}(T)$, the set of the common zeroes of the polynomials in the set $T$. For every found solution ${(s_1, \ldots, s_m) \in GF(p)^m}$ we add update one row in the relation matrix:
+which is not computationally feasible for large $p$ (approximately $p \geq 2^{10}$), so we won't generally use them (unless stated otherwise). Lets denote the set of the polynomials described above as $T$. Ideal $I = \langle T \rangle$ is a zero-dimensional ideal. Therefore, we can compute its Gröbner basis $G$ with respect to lexicographic order $X_1 >_{lex} >_{lex} \cdots >_{lex} X_n$ and by definition \ref{triagForm} it will be in a triangular form, so we can easily find the affine variety $\mathcal{V}(G) = \mathcal{V}(T)$, the set of the common zeroes of the polynomials in the set $T$. For every found solution ${(s_1, \ldots, s_m) \in GF(p)^m}$ we add update one row in the relation matrix, we first need to determine the signs $v_i,\ i \in \{1,\ldots,m\}$, such that:
 $$
+\bigg[\sum_{i=1}^m(-1)^{v_i}(s_i, y_i) \bigg] = \mathcal{O}, 
 $$
-\item 
+where $y_i = \text{min}(y_i,\ p - y_i)$ is the (smaller) $y$-coordinate of a point on $E$ with $x$-coordinate equal to $s_i$. After determining the signs $v_i$ we update the matrix $M$ (we start with a row of zeroes):
+\begin{align*}
+\forall i \in \{1,\ldots,m\}: M_{rowID,\ i} &= M_{rowID,\ i} + \begin{cases} 1, \quad &v_i = 0, \\
+r-1, \quad &v_i = 1. \\
+\end{cases}\\
+M_{rowID,\ |\mathcal{F}| + 1} &= a_{rowID} = a \text{ (mod $r$)}, \\
+M_{rowID,\ |\mathcal{F}| + 2} &= b_{rowID} = b \text{ (mod $r$)}, \\
+rowID &= rowID + 1.
+\end{align*}
+\item We repeat step 3. until the end condition is met. The end condition could obviously just be that the matrix $M$ has a full rank $\mathcal{F} + 1$, but in reality we need way less relations so it's not efficient to always generate that many relations. To solve the ECDLP we just need to transform one row of the matrix $M$ to this form: $(0, \ldots, 0,a',b')$ using only elementary row operations (we expect our reader is familiar with the Gaussian elimination algorithm and the definition of the matrix rank, otherwise feel free to consult your nearest textbook of linear algebra). \\ \\
+\noindent We can state the end condition as follows. Lets denote the matrix $M$ without last two columns by $M'$. We proceed to step 5 if rank$(M) > $ rank($M')$, which implies that if we reduce $M$ to its \textbf{row echelon form}, meaning the first non-zero element in each row, called the \textbf{leading entry}, is 1. Each leading entry is in a column to the right of the leading entry in the previous row and zero rows are below rows having a non-zero element. We will have a leading entry in the $(\mathcal{F} + 1)$-th column corresponding to \textbf{a}, we don't consider the degenerate case when $Q = \mathcal{O}$ in which case a leading entry could be in the very last column as well.
+\item We reduce $M$ to its row echelon form, as described above, as denote it by $M_R$. We can now solve the ECDLP using the last non-zero row of $M_R$ which has to be in the following form:
+$$
+(0, \ldots, 0, 1, b') \implies P \oplus b'Q = \mathcal{O} \implies k \equiv (-b')^{-1} \text{ (mod $r$)}.
+$$
+This multiplicative inverse of $(-b')$ always exists, since $r$ is a prime and $b' \not\equiv 0$ (mod $r$), because $P \neq \mathcal{O}$. If we denote the rank of the matrix $M$ by~$d$, then the last non-zero row of the matrix $M_R$ is the $d$-th row. \\ Integer $k$ is the solution to the ECDLP.
 \end{enumerate}
+\section{Algorithm 2 (Amadori et al. 2017)}
+Algorithm 2 is based on the algorithm by Amadori, Pintore and Sala presented in \cite{amadori17}, the main difference to the algorithm 1 is using a factor base with known decomposition of each of its elements as a linear combination of $P,Q$, so we only need to find one relation to solve the ECDLP. 
 
 %$$\bigg[\prod_{\mathcal{F}_i \in V_j}\Big(x_j - \mathcal{F}_i\Big)\bigg] = 0, \quad  j \in \{1, \ldots, m\},\ i \in \{0, \ldots, |\mathcal{F}| - 1\},$$
 %where $V_j$ are pair-wise disjoint sets of approximately the same size of factor base elements, $\forall j \in \{1, \ldots, m\}: |V_j| \approx \frac{|\mathcal{F}|}{m},\ V_j \subset \mathcal{F},$ it is used to restrict found solutions $x_1,\ldots,x_m$ to lie in the factor base $\mathcal{F}$. Each $x_i$ lies in the set $V_i$
