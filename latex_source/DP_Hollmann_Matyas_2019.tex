@@ -15,6 +15,7 @@
 \usepackage[utf8]{inputenc} % LaTeX source encoded as UTF-8
 % \usepackage[latin2]{inputenc} % LaTeX source encoded as ISO-8859-2
 % \usepackage[cp1250]{inputenc} % LaTeX source encoded as Windows-1250
+\usepackage[style=british]{csquotes}
 
 \usepackage{graphicx} %graphics files inclusion
 % \usepackage{subfig} %subfigures
@@ -77,11 +78,11 @@
 \chapter{Introduction}
 
 \setsecnumdepth{all}
-\chapter{Mathematical Background}\label{mathBG}
+\chapter{General Algebra}\label{mathBG}
 %\input{mathBG.tex}
- In this chapter, we define terms that we use in the rest of this thesis. The first section is a revision of the terms standard in general algebra, the second part focuses on polynomials, and the last section introduces the reader to the topic of Gröbner bases. In the next chapter, we revise elliptic curve theory, introduce the reader to the concept of summation polynomials and state the discrete logarithm problem. This chapter is based mostly on the book by David A. Cox~\cite{algGeom}, MI-MKY lecture notes~\cite{mky} and my bachelor thesis~\cite{myBP}. Other sources are cited individually at specific locations.
-\section{Introduction to General Algebra}
-General algebra, also called universal algebra in the past, is the theory of algebraic structures. An algebraic structure is a set of objects with a collection of mathematical operations on this set.  An algebraic structure is defined by a set of axioms, requirements on the set and operations on it, and other properties of said algebraic structure are logically deduced based on the axioms. When we encounter a particular problem, we may try to classify it as a specific algebraic structure (by verifying its axioms) and use all of its deduced properties without the need to reprove them. We start this section with a definition of a simple algebraic structure called group.
+ In this chapter, we define terms that we use in the rest of this thesis. The first section is a revision of basic algebraic structures such as groups, rings and fields. The second part focuses on polynomials, and the last section introduces the reader to the topic of Gröbner bases. In the next chapter, we revise elliptic curve theory, introduce the reader to the concept of summation polynomials and state the discrete logarithm problem. This chapter is based mostly on the book \textit{Ideals, Varieties, and Algorithms} by David A. Cox et al.~\cite{algGeom}, MI-MKY lecture notes~\cite{mky} and my bachelor thesis~\cite{myBP}. Other sources are cited individually at specific locations.
+\section{Basic Algebraic Structures}
+General algebra, also called universal algebra in the past, is the theory of algebraic structures. An algebraic structure is a set of objects with a collection of mathematical operations on this set.  An algebraic structure is defined by a set of axioms, requirements on the set and operations on it, and other properties of said algebraic structure are logically deduced based on the axioms. When we encounter a particular problem, we may try to classify it as a specific algebraic structure (by verifying its axioms) and use all of its deduced properties without the need to reprove them. We start this section with a definition of a basic algebraic structure called group.
 \begin{DF}
 A \textbf{group} $G$ is an ordered pair $(M,  \circ)$, where $M$ is a non-empty set and binary operation $\circ : M \times M \to M $ (sometimes called the group law of $G$) that satisfies three requirements known as group axioms: 
 \end{DF}
@@ -137,7 +138,7 @@ Order of an identity element in any group $G$ is always $1$, and due to the uniq
 A group $(H, \circ)$ is a \textbf{subgroup} of a group $(G, \circ)$ if and only if $H \subseteq G.$ The group law $\circ$ is the same, therefore an identity element $e \in G$ has to be an identity in any subgroup $H$ of $G$ as well. $H$ is called a \textbf{trivial subgroup} of $G$ if $H = \{e\}$ or $H = G$.
 \end{DF}
 \begin{DF}
-\textbf{Lagrange's Theorem}: Let $G$ be a finite group and $H$ a subgroup of $G$, then the order of the subgroup $H$ divides the order of the group $G$: $\exists n \in \mathbb{N}: \#G = \#H \cdot n.$
+\textbf{(Lagrange's Theorem).} Let $G$ be a finite group and $H$ a subgroup of $G$, then the order of the subgroup $H$ divides the order of the group $G$: $\exists n \in \mathbb{N}: \#G = \#H \cdot n.$
 \label{lagrange}
 \end{DF}
 %\begin{DF}
@@ -226,6 +227,26 @@ Let $\mathbb{F},\ \mathbb{T}$ be fields (equipped with the same binary operation
 \begin{RM}
 The finiteness of a vector space over a field is related only to the dimension of said vector space, it doesn't have to do anything with the finiteness of the base field. For example, we can view complex numbers $\mathbb{C}$ (an infinite field) as a 2-dimensional vector space over the real numbers $\mathbb{R}$ with a basis $(1,\ \mathit{i})$, where $\mathit{i}$ is the imaginary unit satisfying the equation: $\mathit{i}^2 = -1.$
 \end{RM}
+\begin{DF}\label{rowEch}
+Matrix $M\in \mathbb{F}^{n\times m}$, where $\mathbb{F}$ is a field and $n,m$ are positive integers, is said to be in a \textbf{row echelon form}, if the first non-zero element in each row, called the \textbf{leading entry}, is 1. Moreover, each leading entry is in a column to the right of the leading entry in the previous row and zero rows are below rows having a non-zero element. Each matrix can be modified, using only elementary row operations, to a row echelon form. A simple method of doing so is called \textbf{Gaussian Elimination}. 
+\end{DF}
+\noindent For example, let matrix $M \in \mathbb{R}^{3\times6}$ be:
+$$
+M = \begin{pmatrix}
+0 & 3 & - 6 &6 & 4 & - 5 \\
+3 & -7 & 8 &-5 & 8 & 9 \\
+3 & -9 & 12 &-9 & 6 & 15 \\
+\end{pmatrix}.
+$$
+One of row echelon forms of this matrix is $M'$ (a row echelon form of a matrix is not unique):
+$$
+M' = \begin{pmatrix}
+\mathbf{1} & 0 & -2 &3 & 0 & -24 \\
+0 & \mathbf{1} & -2 & 2 & 0 & -7 \\
+0 & 0 & 0 &0 & \mathbf{1} & 4 \\
+\end{pmatrix}.
+$$
+The leading entries of the matrix $M'$ are highlighted in bold.
 \section{Multivariate Polynomials}
 In this section, we discuss monomials and polynomials of multiple variables. In the first part, we revise some standard notation regarding polynomials. And in the second part, we introduce the reader to the concept of a monomial ordering, which is an essential building block for Gröbner bases that are the main topic of the next section. This section is based on~\cite{algGeom}.
 \begin{DF}
@@ -502,7 +523,7 @@ $$
 $$
 \end{itemize}
 \end{DF}
-\noindent To illustrate that, let $f(x,y,z) = 4xy^2z + 4z^2 - 5x^3 + 7x^2z^2 \in \mathbb{Z}[x,y,z]$ as before and lets use $>_{grevlex}$ order.
+\noindent To illustrate that, let $f(x,y,z) = 4xy^2z + 4z^2 - 5x^3 + 7x^2z^2 \in \mathbb{Z}[x,y,z]$ as before and let's use $>_{grevlex}$ order.
 \begin{align*}
 f(x,y,z) &= 4xy^2z + 7x^2z^2  -5x^3 + 4z^2, \text{ (in  grevlex order)}\\
 \text{multideg}(f)&=(1,2,1), \\
@@ -525,9 +546,9 @@ $$
 \text{multideg}(f) \geq \text{multideg}(q_if_i).
 $$
 \end{DF}
-\noindent We won't describe the division algorithm itself in this thesis. If you are not familiar with this algorithm, please refer to \cite{algGeom} on pages 61-68, where the algorithm is discussed in great detail.\\ \\
+\noindent We won't describe the division algorithm itself in this thesis. If you are not familiar with this algorithm, please refer to~\cite{algGeom} on pages 61-68, where the algorithm is discussed in great detail.\\ \\
 \noindent Unfortunately, the remainder is not uniquely characterised and depends on the order of the divisors in the set $F$, and also on the monomial order itself. \\ \\
-\noindent Furthermore, we would like to use this idea to answer the ideal membership problem. Let $f, f_1, \ldots, f_s \in \mathbb{F}[X]$ and let $I = \langle f_1, \ldots, f_s \rangle$ be an ideal. We would like to determine whether $f \in I$ is true. We can clearly state, that if the remainder $r$ obtained after division of $f$ by $F = (f_1, \ldots, f_s)$ is $0$, then $f$ has to be an element of the ideal $I$. So $r=0$ is a sufficient condition for the ideal membership. However, it isn't a necessary condition for $f$ being in the ideal. To remedy this situation, we try to describe a "good" basis of the ideal $I$, such that the remainder $r$ on division by the polynomials of this basis is uniquely determined, and that the condition $r=0$ is equivalent to the membership in the ideal. Exactly those good properties have Gröbner bases, which we describe in the following section.
+\noindent Furthermore, we would like to use this idea to answer the ideal membership problem. Let $f, f_1, \ldots, f_s \in \mathbb{F}[X]$ and let $I = \langle f_1, \ldots, f_s \rangle$ be an ideal. We would like to determine whether $f \in I$ is true. We can clearly state, that if the remainder $r$ obtained after division of $f$ by $F = (f_1, \ldots, f_s)$ is $0$, then $f$ has to be an element of the ideal $I$. So $r=0$ is a sufficient condition for the ideal membership. However, it isn't a necessary condition for $f$ being in the ideal. To remedy this situation, we try to describe a \textquote{good} basis of the ideal $I$, such that the remainder $r$ on division by the polynomials of this basis is uniquely determined, and that the condition $r=0$ is equivalent to the membership in the ideal. Exactly those good properties have Gröbner bases, which we describe in the following section.
 \section{Gröbner Bases}
 Gröbner bases may be used to solve many problems about polynomial ideals in an algorithmic or computational fashion. It is one of the most used methods for solving systems of multivariate polynomial equations, i.e. calculating the affine variety defined by those polynomial equations. This section is based on~\cite{algGeom}.
 \begin{DF}
@@ -560,7 +581,7 @@ $$
 Additionally, we define the Gröbner basis of the zero ideal $\{0\}$ to be the empty set $\emptyset$ using the convention that $\langle \emptyset \rangle = \{0\}.$
 \end{DF}
 \begin{RM}
-Every ideal $I \subseteq \mathbb{F}[X]$ has a Gröbner basis. Furthermore, any Gröbner basis for an ideal $I$ is a basis of $I$. Gröbner bases for ideals in polynomial rings were introduced by B. Buchberger in his PhD thesis (1965) \cite{bruno} and named by him in honour of his thesis's advisor W. Gröbner. Buchberger also developed fundamental algorithms to find and work with Gröbner bases. In many computer algebra systems, there is usually used an alternative spelling "Groebner bases".
+Every ideal $I \subseteq \mathbb{F}[X]$ has a Gröbner basis. Furthermore, any Gröbner basis for an ideal $I$ is a basis of $I$. Gröbner bases for ideals in polynomial rings were introduced by B. Buchberger in his PhD thesis (1965)~\cite{bruno} and named by him in honour of his thesis's advisor W. Gröbner. Buchberger also developed fundamental algorithms to find and work with Gröbner bases. In many computer algebra systems, there is usually used an alternative spelling \textquote{Groebner bases}.
 \end{RM}
 \phantom{.}
 \phantom{.}
@@ -591,11 +612,11 @@ $$
 &= x\cdot f - \frac{1}{3}y^3\cdot g \\
 &= -x^3y^3 + x^2 - \frac{1}{3}y^3.
 \end{align*}
-An S-polynomial is "designed" to produce cancellation of the leading terms.
+An S-polynomial is \textquote{designed} to produce cancellation of the leading terms.
 \begin{DF}
 \textbf{(Buchberger's Criterion)}: Let $I$ be a polynomial ideal. Then a basis $G = \{g_1,\ldots,g_t\}$ of $I$ is a Gröbner basis of $I$ if and only if for all pairs $i\neq j$, the remainder on division by S$(g_i,g_j)$ by $G$ (listed in some order) is zero.
 \end{DF}
-\noindent Based on this criterion, there is the Buchberger's algorithm (described on page 91 in \cite{algGeom}), that computes the Gröbner basis.
+\noindent Based on this criterion, there is the Buchberger's algorithm (described on page 91 in~\cite{algGeom}), that computes the Gröbner basis.
 \begin{DF}
 A \textbf{reduced Gröbner basis} for a polynomial ideal $I$ is a Gröbner basis $G$ for $I$ such that:
 \begin{itemize}
@@ -623,15 +644,13 @@ is a Gröbner basis of the $l$-th elimination ideal $I_l$.
 \end{DF}
 \vphantom{.}
 \noindent To find all the points in the affine variety $\mathcal{V}(I)$, we build up the solutions one coordinate at a time. At first, we find the affine variety $\mathcal{V}(I_{n-1})$, which is equivalent to finding the roots of a univariate polynomial in $\mathbb{F}[x_n]$. We call any solution $(a_n) \in \mathcal{V}(I_{n-1})$ a \textbf{partial solution} of the original system of equations. Next step is to extend a partial solution $(a_n)$ to a partial solution $(a_{n-1},a_n) \in \mathcal{V}(I_{n-2})$. To do that, we substitute $(a_n)$ into all the polynomial equations in $I_{n-2}$. Thereafter, we obtain a univariate polynomial equation in $\mathbb{F}[x_{n-1}]$, which we can conveniently solve. Note that not every partial solution in $\mathcal{V}(I_{n-1})$ extends to a partial solution in $\mathcal{V}(I_{n-2})$. We repeat this process until we find $\mathcal{V}(I_0) = \mathcal{V}(I)$, a set of all \textbf{complete solutions} to the original system of equations.
-%
-%Define VectorSpace?
 %Divison Res => alg in the next section with F4, F5
 %
 %Schoof–Elkies–Atkin algorithm - pocet bodu na EC 
 \chapter{Elliptic Curves and the Discrete Logarithm Problem}
 In this chapter, we revise the theory of elliptic curves and state the elliptic curve discrete logarithm problem (ECDLP). In the last section, we also introduce the reader to the concept of summation polynomials, which are the primary building block in many specialised algorithms (exploiting the particular group structure) solving the ECDLP. Examples of such algorithms are discussed in detail in chapter \ref{specAlg}.
 \section{Elliptic Curves}
-This section focuses on elliptic curves over finite fields and groups of points on them. At first, we define what is a general elliptic curve. Afterwards, we show how to define an Abelian group on the set of points of an elliptic curve. This section is based mostly on \cite{mky}.
+This section focuses on elliptic curves over finite fields and groups of points on them. At first, we define what is a general elliptic curve. Afterwards, we show how to define an Abelian group on the set of points of an elliptic curve. This section is based mostly on~\cite{mky}.
 \begin{DF}
 An \textbf{elliptic curve} over a (prime order) finite field $GF(p),$ \\ $p > 3,\ p$ prime, defined by the short Weierstrass equation, is a set:
 $$
@@ -658,7 +677,7 @@ Else if $P = Q$ (\textbf{point doubling}), let $\lambda$ be the slope of the tan
 $$
 \lambda = \mathlarger{\mathlarger{\frac{\frac{\mathrm{d}E}{\mathrm{d}X}}{\frac{\mathrm{d}E}{\mathrm{d}Y}}}}(x_1, y_1) = \frac{3x_1^2+ A}{2y_1}, 
 $$
-where $\frac{\mathrm{d}E}{\mathrm{d}X}, \frac{\mathrm{d}E}{\mathrm{d}Y}$ are the derivatives of the elliptic curve equation with respect to $X,Y$. \\ \\
+where $\mathrm{d}E/\mathrm{d}X$ and  $\mathrm{d}E/\mathrm{d}Y$ are the derivatives of the elliptic curve equation with respect to $X,Y$. \\ \\
 \noindent The result of the operation $\oplus$ is:
 \begin{align*}
 x_3 &= \lambda^2 - x_1 - x_2, \\
@@ -679,8 +698,14 @@ $$
 \end{cases}
 $$
 \end{NRM}
-\subsection{Complexity of the Arithmetic Operations on an Elliptic Curve} 
-The complexity of arithmetic operations on $E$ is based on the complexity of operations in the underlying finite field $GF(p)$. The exact number of arithmetic operations depends on the used algorithm, its implementation, and on the architecture of the CPU, where the particular code is executed. Table \ref{tblComp} provides a brief summary of the relationship between the operations on elliptic curve $E$ and the number of arithmetic operations in the underlying finite field $GF(p)$. Addition in $GF(p)$ is denoted by $+_p$, multiplication in $GF(p)$ is denoted by $\cdot_p$, and the last column is the number of multiplicative inverses in $GF(p)^{\times}$.
+\begin{DF}\textbf{(Hasse's Theorem.)} \label{hase}Let $E$ be an elliptic curve over a finite field $GF(p),\ p$ prime. Then the following inequalities hold:
+$$
+p + 1 -2\sqrt{p} \leq \#E(p) \leq p + 1 + 2\sqrt{p}.
+$$
+In other words, the number of points in the elliptic curve group $E(p)$ is close to the prime $p$. To calculate the exact number of points in $E(p)$, the Schoof-Elkies-Atkin's (SEA) algorithm is commonly used. The time complexity of the SEA algorithm amounts to $O(\log^{2\mu + 2}(p))$ bit operations, where $\mu$ is a constant such that two $T$-bit integers can be multiplied in time $T^\mu$, and the space complexity is $O(\log^2(p)).$ The detailed description of the SEA algorithm can be found in chapter 17 of~\cite{handbook}. 
+\end{DF}
+\subsection{Complexity of Arithmetic Operations on an Elliptic Curve} 
+The complexity of arithmetic operations on $E$ is based on the complexity of operations in the underlying finite field $GF(p)$. The exact number of arithmetic operations depends on the used algorithm, its implementation, and on the architecture of the CPU, where the particular code is executed. Table \ref{tblComp} provides a brief summary of the relationship between the operations on elliptic curve $E$ and the number of arithmetic operations in the underlying finite field $GF(p)$. Addition in $GF(p)$ is denoted by $+_p$, multiplication in $GF(p)$ is denoted by $\cdot_p$, and the last column of column of table \ref{tblComp} is the number of multiplicative inverses in $GF(p)^{\times}$.
 \begin{table}[H]
 \centering
 \begin{tabular}{ |c||c|c|c| } 
@@ -696,15 +721,15 @@ $tP,\ t \in \mathbb{Z}_{\geq 0},\ k = \mathlarger{\lceil} \log_2(t) \mathlarger{
 \caption[Complexity of arithmetic operations on $E$]{Complexity of arithmetic operations on the elliptic curve $E$ over a finite field $GF(p)$.}
 \label{tblComp}
 \end{table}
-\footnotetext{Using signed binary expansion of $t$ for the double-and-add algorithm, see \cite{mky} page 105.}
-\noindent We denote the number of bits of $p$ by $n = \mathlarger{\lceil} \log_2(p) \mathlarger{\rceil}$, then addition in $GF(p)^{+}$ is asymptotically $O(n)$, multiplication in $GF(p)^{\times}$, using Montgomery method \cite{handbook}, is $O(n^2)$ and calculation of a multiplicative inverse in $GF(p)^{\times}$, using a careful implementation of the extended Euclidean algorithm (EEA) \cite{handbook}, is $O(n^2)$. An alternative to the EEA, for calculating a multiplicative inverse in $GF(p)^{\times}$, is based on (Lagrange's) theorem \ref{lagrange}. 
+\footnotetext{Using signed binary expansion of $t$ for the double-and-add algorithm, see~\cite{mky} page 105.}
+\noindent We denote the number of bits of $p$ by $n = \mathlarger{\lceil} \log_2(p) \mathlarger{\rceil}$, then addition in $GF(p)^{+}$ is asymptotically $O(n)$, multiplication in $GF(p)^{\times}$, using Montgomery method~\cite{handbook}, is $O(n^2)$ and calculation of a multiplicative inverse in $GF(p)^{\times}$, using a careful implementation of the extended Euclidean algorithm (EEA)~\cite{handbook}, is $O(n^2)$. An alternative to the EEA, for calculating a multiplicative inverse in $GF(p)^{\times}$, is based on Lagrange's theorem (\ref{lagrange}). 
 \begin{align*}
 \forall a \in GF(p)^{\times},\ \exists n \in \mathbb{N}: \#a \cdot n = \#GF(p)^{\times} &= p - 1, \\ 
 \forall a \in GF(p)^{\times},\ \forall n \in \mathbb{N}: a^{\#a \cdot n} = 1 \implies a^{\#a \cdot n - 1} &= a^{-1}, \\
 \forall a \in GF(p)^{\times}: a^{-1} &= a^{p-2}.
 \end{align*}
-To calculate $a^{p-2}$, we can use the standard algorithm, called square-and-multiply, for details see \cite{mky}, which has the same complexity $O(n^2)$ as the EEA.
-\section{The Discrete Logarithm Problem}
+To calculate $a^{p-2}$, we can use the standard algorithm, called square-and-multiply, for details see~\cite{mky}, which has the same complexity $O(n^2)$ as the EEA.
+\section{Discrete Logarithm Problem}
 Let $y = b^x$, given $y \in \mathbb{R}_{> 0}$ and the base $b \in \mathbb{R}_{>0}$, we are asked to find the exponent $x \in \mathbb{R}$. We can rewrite this problem from the exponential form to the logarithmic form, i.e. $x = \log_b(y)$. To find the $x$ we can easily evaluate it on a calculator (using change of logarithm basis rule). Even if we didn't know the inverse function (logarithm), the exponential function is a strictly increasing function. Therefore, we could have just guessed a random initial solution $x_0$, evaluate $b^{x_0}$, compare it with $y$. And based on the result of this comparison, we would have immediately known, whether the true solution $x$ is greater, equal, or less than $x_0$. Therefore, we can solve this problem effortlessly over the real numbers.
 \\
 \\
@@ -712,14 +737,14 @@ Let $y = b^x$, given $y \in \mathbb{R}_{> 0}$ and the base $b \in \mathbb{R}_{>0
 \begin{DF}
 Let $G = (M, \cdot)$ be an Abelian group and let $h = g^x$, given $h \in M$ and the base $g \in M,\ \langle g \rangle = G,$ we are asked to find the exponent $x$~$\in$~$\{0,1, \ldots, \#G - 1\}.$ We call $x$ the \textbf{discrete logarithm} of $h$ with respect to the base $g$, and denote it by $x= \log_g(h)$. Problem of finding the solution $x$ is therefore called the \textbf{discrete logarithm problem} (DLP). We require $g$ to be a generator of $G$, in order to guarantee the existence of the solution to the DLP. 
 \end{DF}
-\noindent To illustrate the difficulty of solving the DLP. Lets consider the multiplicative group $G$ of the finite field $GF(19).$ $G = (\{1,2,\ldots,18\}, \cdot_{19})$ and its generator $g=3,\ g \in G$. Group structure is shown on the figure \ref{fig2}. We might be asked to find such $k$, that $3^k \equiv 4 \text{ (mod 19)}$. 
+\noindent To illustrate the difficulty of solving the DLP, let's consider the multiplicative group $G$ of the finite field $GF(19).$ $G = (\{1,2,\ldots,18\}, \cdot_{19})$ and let's use one of its generators $g=3$ as a base. Group structure is shown on figure \ref{fig2}. We might be asked to find such $k$, that $3^k \equiv 4 \text{ (mod 19)}$. 
  \begin{figure}[h]
 \hspace*{-2cm}
  	\includegraphics[width=1.25\textwidth]{graph3in19.png}
- 	\caption[Example of the group structure of $GF(19)^\times$.]{Powers of the generator $g = 3$ in $GF(19)^\times$. Image was created by the author himself.}
+ 	\caption[Example of the group structure of $GF(19)^\times$.]{Powers of the generator $g = 3$ in $GF(19)^\times$.}
  	\label{fig2}
  \end{figure}
-\noindent Unfortunately, the function $g^k \text{ (mod 19)},\ k \in \mathbb{N},$ isn't monotonic, therefore we can't use the idea of trying a randomly selected $k_0$ and comparing $3^{k_0} \text{ (mod 19)}$ with $4$, but we can use the fact that the group $G$ is finite and its order is $\#G = 18 \implies 3^{18} \equiv 1 \text{ (mod 19)}.$ We can just try all possible values of $k \in \{0, 1, \ldots, 17\}$ and find the answer. This method is called the \textbf{brute-force attack}. 
+\noindent Unfortunately, the function $g^k \text{ (mod 19)},\ k \in \mathbb{N},$ isn't monotonic. Therefore, we can't use the idea of trying a randomly selected $k_0$ and comparing $3^{k_0} \text{ (mod 19)}$ with $4$, but we can use the fact the group $G$ is finite and its order is $\#G = 18$. We can try all possible values of $k \in \{0, 1, \ldots, 17\}$ and find the solution. This method is called the \textbf{brute-force attack}. 
 \begin{align*}
 3^0 \equiv 1 \text{ (mod 19)} &\not\equiv 4 \text{ (mod 19)}, \\
 3^1 \equiv 3 \text{ (mod 19)} &\not\equiv 4 \text{ (mod 19)}, \\
@@ -729,54 +754,58 @@ Let $G = (M, \cdot)$ be an Abelian group and let $h = g^x$, given $h \in M$ and 
 3^{13} \equiv 14 \text{ (mod 19)} &\not\equiv 4 \text{ (mod 19)}, \\
 3^{14} &\equiv 4 \text{ (mod 19)}.
 \end{align*}
-The solution of this DLP is therefore $k = 14$ and we can see that the brute-force approach is very lengthy even for DLP in groups of small order. Complexity of solving the DLP in a group $G$ using the brute-force attack is $O(\#G)$ of group operations.
+Therefore, the solution of this DLP is $k = 14$. We can see the brute-force approach is quite lengthy even for a DLP in a group of small order. The complexity of the brute-force attack in a group $G$ is $O(\#G)$ of group operations.
 \begin{RM}
-Standard properties of the logarithm may be used in the discrete logarithm case as well. Let $G$ be a finite Abelian group and let $g$ be a generator of $G$.
+Standard properties of logarithms hold for discrete logarithms as well. Let $G$ be a finite Abelian group and let $g$ be a generator of $G$.
 \begin{itemize}
 \item $\forall p, q \in G: \log_g(pq) \equiv log_g(p) + log_g(q) \text{ (mod $\#G$)}$,
 \item $\forall p, q \in G: \log_g(p(q)^{-1}) \equiv log_g(p) - log_g(q) \text{ (mod $\#G$)}$,
 \item $\forall k \in \mathbb{Z},\ p \in G: \log_g(p^k) \equiv k \cdot log_g(p) \text{ (mod $\#G$)}$,
 \item $h \in G,\ \langle h \rangle = G,\ \forall p \in G: log_g(p) \equiv log_h(p) \cdot log_g(h)  \text{ (mod $\#G$)}$.
 \end{itemize}
-Last property is the well-known change-of-base formula and tells us that if we are able to effectively solve the DLP with respect to some base we can use it to effectively solve the DLP with respect to any other base.
+Last property is the well-known change-of-base formula. That tells us that if we can solve the DLP with respect to some base effectively, we can use it to solve the DLP with respect to any other base effectively.
 \end{RM}
 
-\noindent Discrete logarithm problem can be stated in any group, the difficulty of solving it greatly depends on the group structure and the group operation. To solve the DLP we can develop a generic algorithm that works in any group and doesn't explore the group structure, or we can develop a specific algorithm for a chosen type of a group. For example, in an additive group $(\{0,1,\ldots, p-1\}, +_p)$, $p$ prime, we can solve the DLP in $O(\log^2(p))$ time using the extended Euclidean algorithm. Shoup proved that a generic algorithm to solve the DLP in a generic group of prime order $p$ would have to do $O(\sqrt{p})$ group operations \cite{shoup}. The best general algorithm to match this lower bound is Pollard's $\rho$ (rho) algorithm, described in the subsection \ref{polard}. 
+\noindent The discrete logarithm problem can be stated in any group. The difficulty of solving it greatly depends on the group structure and the group operation. To solve the DLP, we can develop a generic algorithm that works in any group and doesn't explore the group structure. Alternatively, we can develop a specialised algorithm to tackle the DLP in a specific type of group. \\\\
+\noindent For example, in an additive group $(\{0,1,\ldots, p-1\}, +_p)$, $p$ prime, we can solve the DLP in $O(\log^2(p))$ group operations using the EEA. In 1997, Victor Shoup proved that a generic algorithm to solve the DLP in a generic group of prime order $p$ has to do $O(\sqrt{p})$ group operations~\cite{shoup}. The best generic algorithm to match this lower bound is Pollard's $\rho$ (rho)-algorithm, described in subsection \ref{rhoText}. 
 \\
 \\
-\noindent The main focus of this thesis is to solve the DLP stated on an elliptic curve using a specific algorithm. 
+\noindent The main focus of this thesis is to solve the DLP stated on an elliptic curve using a specialised algorithm. 
 \begin{DF}
-Let $E$ be an elliptic curve over a prime field $GF(p)$, let $P$ be a generator of $E$ and let $Q$ be a second point on $E$. \textbf{Elliptic curve discrete logarithm problem} (ECDLP) is to find an integer $k \in \{1,2,\ldots	, \#E\}$ such that $Q = kP$.
+Let $E$ be an elliptic curve over a prime field $GF(p)$, let $P$ be a generator of $E$ and let $Q$ be another point on $E$. \textbf{Elliptic curve discrete logarithm problem (ECDLP)} is to find an integer $k \in \{0,1,\ldots, \#E(p) - 1\}$, such that $Q = kP$.
 \end{DF}
 \section{Generic Algorithms for Solving ECDLP}
-In this section we will describe three most known generic algorithms for solving the DLP, we will use the elliptic curve notation. The first algorithm is based on collision finding, time complexity is lower than for a naive brute-force algorithm, but we the memory requirements are significant. This section was based mostly on \cite{mky}.
-\subsection{Baby-step Giant-step Algorithm (BsGs)}
+In this section, we present the three most known generic algorithms for solving the DLP, we use elliptic curves notation. The first algorithm is based on collision finding, the time complexity matches the Shoup's lower bound, but the memory requirements are immense. All three algorithms in this section are based on~\cite{mky}.
+\subsection{Baby-step Giant-step Algorithm}
 \begin{DF}
-\textbf{(Baby-step Giant-step)}: Let $E$ be an elliptic curve group over $GF(p)$, equipped with operation $\oplus$, $P \in E$ its generator and $xP = Q \in G,\ x \in \{0, 1, \ldots, \#E - 1\}$, we will denote the order of $E$ by $N = \#E$. We know, based on Hasse's theorem (\ref{hase}), for large $p$, $N$ is approximately $p$. Following algorithm solves the ECDLP in $O(\sqrt{N})$ group operations $\oplus$.
+\textbf{(Baby-step Giant-step (BSGS))}: Let $E(p)$ be an elliptic curve group over $GF(p)$, equipped with the operation $\oplus$, $P \in E$ its generator and $kP = Q \in G,\ k \in \{0, 1, \ldots, \#E - 1\}$, we denote the order of $E(p)$ by $N = \#E(p)$. We know, based on Hasse's theorem (\ref{hase}), for large $p$, $N$ is approximately $p$. Following algorithm solves the ECDLP in $O(\sqrt{N}) \approx O(\sqrt{p})$ group operations $\oplus$.
 \begin{itemize}
-\item Let $n = \mathlarger{\mathlarger{\mathlarger{\lceil}}} \sqrt{N} \mathlarger{\mathlarger{\mathlarger{\rceil}}}$, we will pre-compute a list of length $n$ of multiples of $P$.
-\item $0P = \mathcal{O}, P, 2P, \ldots, (n-1)P,$ \hfill (baby-step phase) \\
-next generate multiples of $Q$ and try to find it in the list generated in the baby-step phase.
-\item $Q \oplus (0\cdot n \ominus P) = Q, Q \oplus (1\cdot n \ominus P), Q \oplus (2\cdot n \ominus P), \ldots, Q \oplus ((n-1)\cdot n \ominus P),$\\
-This is called the giant-step phase.
-\item If there is a collision for some $iP$ and $Q \oplus (j\cdot n \ominus P)$, we can solve the ECDLP and find $x$:
+\item Let $n = \mathlarger{\mathlarger{\mathlarger{\lceil}}} \sqrt{N} \mathlarger{\mathlarger{\mathlarger{\rceil}}}$, we pre-compute a list of length $n$ of multiples of $P$.
+\item $0P = \mathcal{O}, P, 2P, \ldots, (n-1)P.$ \hfill (baby-step phase) \\
+Afterwards, we generate multiples of $Q$ until the first collision, with the list generated in the baby-step phase, occurs.
+\item $Q \oplus (0\cdot n \ominus P) = Q,\ Q \oplus (1\cdot n \ominus P),\ \ldots\ 2,\ Q \oplus ((n-1)\cdot n \ominus P).$\\
+This stage is called the giant-step phase.
+\item When the collision occurs for some $i,j$, such that $iP$ and $Q \oplus (j\cdot n \ominus P)$ are equal. We can solve the ECDLP and find the solution $k$:
 \begin{align*}
-iP = Q \oplus (j\cdot n \ominus P) \implies i &\equiv x + (-jn) \text{ (mod $N$)} \\
-x &\equiv i + jn \text{ (mod $N$)}.
+iP = Q \oplus (j\cdot n \ominus P) \implies i &\equiv k + (-jn) \text{ (mod $N$)}, \\
+k &\equiv i + jn \text{ (mod $N$)}.
 \end{align*}
 \end{itemize}
-\noindent The algorithm is deterministic and is guaranteed to find the solution, because it basically tries all the possible values of $x$. Every number in $\{0, 1, \ldots, N - 1\}$ can be expressed as $i + jn,\ n = \mathlarger{\mathlarger{\mathlarger{\lceil}}} \sqrt{N} \mathlarger{\mathlarger{\mathlarger{\rceil}}},i,j \in \{0,1,\ldots, n-1\}.$ 
-For the efficient implementation it's crucial to be able to effectively find a collision in the pre-computed list, therefore it's advisable to use a hash table, to achieve the constant time lookup. If that is satisfied the algorithm time complexity is $O(\sqrt{N})$ of group operations and space complexity is $O(\sqrt{N})$.
+\noindent The algorithm is deterministic and is guaranteed to find the solution as it goes over all the possible values of $k$. Every integer in $\{0, 1, \ldots, N - 1\}$ can be expressed as $i + jn,\ n = \mathlarger{\mathlarger{\mathlarger{\lceil}}} \sqrt{N} \mathlarger{\mathlarger{\mathlarger{\rceil}}},\ i,j \in \{0,1,\ldots, n-1\}.$ 
+For the efficient implementation, it's crucial to be able to find a collision in the pre-computed list effectively. Therefore, it's advisable to use a hash table, to store the elements generated in the baby-step phase, in order to achieve the constant time lookup. If that is satisfied, the algorithm's complexity is $O(\sqrt{N})$ of group operations and the space complexity is also $O(\sqrt{N})$.
 \end{DF}
-\noindent For example, let $E = E(1,1,29)$ be an elliptic curve group over $GF(29)$ and its elliptic curve equation is $y^2 = x^3 + x + 1$. Let $P = (24,25)$ be a generator of $E$, let $Q \in E$, we want to find an integer $x$ such that: $Q = xP.$ Order of $E$ is 36, so we will set $n = 6$ and pre-calculate the baby-step list:
-\begin{center}
+\noindent For example, let $E = E_{1,1}(29)$ be an elliptic curve group over $GF(29)$ defined by the elliptic curve equation $y^2 = x^3 + x + 1$. Let $P = (24,25)$ be a generator of $E$, and let $Q \in E$ be some other point, we want to find an integer $k$, such that $Q = kP.$ Order of $E$ is 36, so we set $n = 6$. The list of points pre-calculated in the baby-step phase is shown in table \ref{baby}.
+\begin{table}[h]
+\centering
 \begin{tabular}{ |c||c|c|c|c|c|c| }
 \hline
 $i$ & 0 & 1 & 2 & 3 & 4 & 5\\ \hline
  $iP$ & $\mathcal{O}$ & $(24,25)$ &  $(6,7)$ & $(0,28)$ & $(10,24)$ & $\textbf{(28,12)}$ \\ \hline
 \end{tabular}
-\end{center}
-This step depends only on the group $E$ and its generator $P$, we can pre-calculate it only once and reuse it for different points $Q$. Let solve the ECDLP in this group for $Q = (18,15)$. We will now iterate over multiples of $Q$ and look for a collision in the pre-calculated list.
+\caption[List of points pre-calculated in the baby-step phase]{List of points pre-calculated in the baby-step phase.}
+\label{baby}
+\end{table}
+This step depends only on the elliptic curve group $E$ and its generator $P$. Therefore, we can pre-calculate it only once and reuse for calculation of discrete logarithms of different points with respect to the same base point $P$. Let's solve the ECDLP in this group for $Q = (18,15)$. We iterate over the multiples of $Q$ and look for a collision with the pre-calculated list shown in table \ref{baby}.
 \begin{center}
 \begin{tabular}{ |c||c|c|c|c|c|c| }
 \hline
@@ -784,85 +813,87 @@ $j$ & 0 & 1 & 2 & 3 & 4 & 5\\ \hline
  $Q\oplus(6j\ominus P)$ & $(18,15)$ & $(11,3)$ &  $(12,1)$ & $(8,17)$ & $\mathbf{(28,12)}$ & $(24,4)$ \\ \hline
 \end{tabular}
 \end{center}
-We have found a collision for $j=4$ and $i=5$ (in the pre-computed list):
+We have found a collision for $j=4$ and $i=5$, found collision is highlighted in bold in both tables. Therefore:
 $$
-5P = Q\oplus(24\ominus P) \implies 4 \equiv x -24 \text{ (mod 36)} \implies x \equiv 29  \text{ (mod 36)}.
+5P = Q\oplus(24\ominus P) \implies 4 \equiv k -24 \text{ (mod 36)} \implies k \equiv 29  \text{ (mod 36)}.
 $$
-We can now verify that $29P = (18,15) = Q.$
-\subsection{Pollard $\mathbf{\rho}$-Algorithm}
-\noindent The main drawback of the BsGs algorithm is its space complexity, we need to store $\sqrt{\#E}$ elliptic curve points. To remedy this problem, in 1978 John Pollard published a different algorithm, which is called after him the Pollard~$\rho$(rho)-algorithm, with the same time complexity as BsGs but with very little memory requirements. A similar algorithm can be used for factoring composite integers. This subsection is based on \cite{mky}.
+We can easily verify that $29P = (18,15) = Q.$
+\subsection{Pollard's $\boldsymbol\rho$-Algorithm} \label{rhoText}
+\noindent The main drawback of the BSGS algorithm is its space complexity, it needs to store $\sqrt{\#E}$ elliptic curve points. To remedy this problem, in 1978, John Pollard published a different algorithm, which is called after him, the Pollard's~$\rho$-algorithm. It has the same time complexity as BSGS, yet the memory requirements are minimal. We first describe Pollard's idea in general, then show how it can be applied to solve the ECDLP.
 \begin{DF}
 \label{pol}
- \textbf{(Pollard $\mathbf{\rho}$ algorithm)}: Let $S$ be a finite set of $N$ elements, let $f: S \to S$ be a function. Choose $x_0 \in S$ a starting point of the sequence defined by: $x_i = (\underbrace{f\circ f \circ \cdots \circ f}_\text{$i$-times})(x_0)$, then there exists $L \in \mathbb{N}$ such that:
+ \textbf{(Pollard's $\boldsymbol\rho$-algorithm)}: Let $S$ be a finite set of $N$ elements, let $f: S \to S$ be a function. Choose $x_0 \in S$ a starting point of the sequence defined by: $x_i = (\underbrace{f\circ f \circ \cdots \circ f}_\text{$i$-times})(x_0)$, then there exists $L \in \mathbb{N}$ such that:
  $$
  x_{2i} = x_i, \quad 1\leq i < L.
  $$
-Set $S$ is finite, therefore for some $k \in \mathbb{N}_{< N}$ the sequence $x_0, x_1, \ldots, x_k$ has to a point that repeats twice in this sequence, we denote the first such point by $x_T$, it's clear that after that point the sequence is in a cycle of length $M$, where $T+M$ is the index of the second occurrence of the point $x_T$ in the sequence. To prove the existence of $i$ such that: $x_{2i} = x_i$ we can start with the fact that: $\forall k \in \{0, 1, \ldots, M-1\}: x_{T+k} = x_{T+k+M},$ which implies:
+Set $S$ is finite, therefore for some $k \in \mathbb{N}_{< N},$ the sequence $x_0, x_1, \ldots, x_k$ has to contain a point that repeats twice in this sequence. We denote the first such point by $x_T$. It's clear that after the point $x_T$, the sequence is in a cycle of length $M$, where $T+M$ is the index of the second occurrence of the point $x_T$ in the sequence. To prove the existence of an integer $i$, such that $x_{2i} = x_i$, we start with the fact that $\forall k \in \{0, 1, \ldots, M-1\}: x_{T+k} = x_{T+k+M},$ which implies:
 $$
-\exists i \geq T,\ i < T + M: 2i \equiv i \text{ (mod $M$)} \implies i\ |\ M.
+\exists i \in \mathbb{N},\ T \leq i < T + M: 2i \equiv i \text{ (mod $M$)} \implies i\ |\ M.
 $$
-The argument is simple, in every sequence of $M$ consecutive integers there has to be exactly one that is divisible by $M$, therefore we can see that the $L$ in the definition \ref{pol} is in fact $L= T + M \leq N$. On average (with different choices of $x_0$ and function $f$) it takes $O(\sqrt{N})$ steps to obtain a collision with a probability over 50\% (based on the birthday paradox), for a thorough analysis see \cite{polProb}. \\ \\
-\noindent For a graphical illustration see figure \ref{rho}, the first point in the sequence that repeats itself twice is $x_3$, therefore we set $T = 3$, and the length of the cycle is $M = 6$, because $x_T = x_3 = x_{3+6}$. The only integer in the set $\{3,4,5,6,7,8\}$ that is divisible by $M = 6$ is $6$, therefore $i=6$ and we can easily verify that $x_6 = x_{2*6} = x_{12}$. The graph \ref{rho} has a strong resemblance to the Greek letter $\rho$, hence the name of the algorithm.
+The argument is simple, in every sequence of $M$ consecutive integers there has is exactly one integer divisible by $M$. Therefore, we can see that the $L$, from the definition \ref{pol}, is in fact $L= T + M \leq N$. On average (with different choices of $x_0$ and function $f$) it takes $O(\sqrt{N})$ steps to obtain a collision with a probability over 50\% (based on the birthday paradox), for a thorough analysis see~\cite{polProb}. \\ \\
+\noindent For a graphical illustration see figure \ref{rho}, the first point in the sequence that repeats itself twice is $x_3$. Therefore, we set $T = 3$. The length of the cycle is $M = 6$, because $x_T = x_3 = x_{3+6}$. The only integer in the set $\{3,4,5,6,7,8\}$ that is divisible by $M = 6$ is $6$, therefore $i=6$ and we can easily verify that $x_6 = x_{2*6} = x_{12}$. Figure \ref{rho} has a strong resemblance to the Greek letter $\rho$, hence the name of the algorithm.
  \begin{figure}[h]
  \centering
  \hspace*{-1cm}
  	\includegraphics[width=1\textwidth]{rho.png}
- 	\caption[Graphical illustration of Pollard $\rho$ collision idea]{Graphical illustration of the idea behind the Pollard $\rho$ algorithm. $T = 3$, length of the cycle $M = 6$. Image source: (\cite{mky}, page $70$).}
+ 	\caption[Graphical illustration of the Pollard's $\rho$ collision idea]{Graphical illustration of the idea behind the Pollard's $\rho$-algorithm. $T = 3$, length of the cycle $M = 6$. Image source: (\cite{mky}, page $70$).}
  	\label{rho}
  \end{figure}
  \end{DF}
  \begin{DF}
- The Pollard $\rho$ algorithm might be used to solve the ECDLP. Let $E$ be an elliptic curve group with points' coordinates $\in GF(p)$, let $P$ be its generator and let $Q \in E$ be some other point. We want to find $x=\log_P(Q)$. Let denote the order of $E$ by $N := \#E$. We divide $E$ into three disjunctive sets $S_1, S_2, S_3$, so that $\mathcal{O} \not\in S_2$ and for $i \in \mathbb{Z}_{\geq 0}$ define $f: E \to E$:
+ The Pollard's $\rho$-algorithm might be used to solve the ECDLP. Let $E(p)$ be an elliptic curve group over the finite field $\in GF(p)$. Let $P$ be a generator of $E(p)$, and let $Q \in E(p)$ be some other point. We want to find an integer $t=\log_P(Q)$. Let's denote the order of $E(p)$ by $N = \#E$. We divide $E$ into three disjunctive sets $S_1, S_2, S_3$ of approximately the same size. Additionally, we require that $\mathcal{O} \not\in S_2$. For $i \in \mathbb{Z}_{\geq 0}$ we define a function $f: E \to E$ as follows:
  $$
  T_{i+1} = f(T_i) := \begin{cases} P \oplus T_i,\quad T_i \in S_1, \\
  2T_i, \quad T_i \in S_2, \\
  Q \oplus T_i, \quad T_i \in S_3.
  \end{cases}
  $$
- We can start with $T_0 = \mathcal{O}$, so after $k$ steps we get:
+ We can start with any point in $E(p)$ as long as we know how to express it as a linear combination of points $P,Q$. The usual choice is $T_0 = \mathcal{O} = 0P + 0Q$. After $k$ steps we get:
  $$
  T_k = (\underbrace{f\circ f \circ \cdots \circ f}_\text{$k$-times}(\mathcal{O}) = \alpha_k P \oplus \beta_k Q.
  $$
- We need to keep track of $\alpha_k,\ \beta_k$, so we set $\alpha_0 = \beta_0 = 0$ and define it recursively for $k \in \mathbb{Z}_{\geq 0}$:
-$$ 
-  \alpha_{k+1} := \begin{cases} \alpha_k + 1\text{ (mod $N$)},\quad T_k \in S_1, \\
- 2\alpha_k\text{ (mod $N$)}, \quad T_k \in S_2, \\
- \alpha_k, \quad T_k \in S_3.
+ We need to keep track of $\alpha_k,\ \beta_k$. We start with integers $\alpha_0, \beta_0$, such that $\alpha_0P + \beta_0Q = T_0,$ and define the update process recursively.
+\begin{align*}
+ \forall k \in \mathbb{Z}_{\geq 0}:  \alpha_{k+1} := \begin{cases} \alpha_k + 1\text{ (mod $N$)},\quad &T_k \in S_1, \\
+ 2\alpha_k\text{ (mod $N$)}, \quad &T_k \in S_2, \\
+ \alpha_k, \quad &T_k \in S_3.
+ \end{cases} \\
+   \forall k \in \mathbb{Z}_{\geq 0}: \beta_{k+1} := \begin{cases} \beta_k,\quad &T_k \in S_1, \\
+ 2\beta_k\text{ (mod $N$)}, \quad &T_k \in S_2, \\
+ \beta_k + 1\text{ (mod $N$)}, \quad &T_k \in S_3.
  \end{cases}
-$$
-$$ 
-  \beta_{k+1} := \begin{cases} \beta_k,\quad T_k \in S_1, \\
- 2\beta_k\text{ (mod $N$)}, \quad T_k \in S_2, \\
- \beta_k + 1\text{ (mod $N$)}, \quad T_k \in S_3.
- \end{cases}
-$$
-We also create a second sequence of points on elliptic curve $E$: $R_0 = \mathcal{O},\forall k \in \mathbb{N}: R_k := T_{2k} = \gamma_kP \oplus \delta_kQ$, we also need to keep track of $\gamma_k,\ \delta_k$. After some number of steps ($i$) we will encounter a collision: $R_i = T_{2i} = T_i$, then we have a relation: 
+ \end{align*}
+We also create a second sequence of points on the elliptic curve $E$: 
+$$\forall k \in \mathbb{Z}_{\geq 0}: R_k := T_{2k} = \gamma_kP \oplus \delta_kQ.$$
+After some number of steps, let's denote it by $i$, we encounter a collision: $R_i = T_i$. Then we have a relation: 
 $$
 \gamma_iP \oplus \delta_iQ = \alpha_iP \oplus \beta_iQ.
 $$
-Let $d = \text{gcd}(\beta_i - \delta_i, N)$, if $d=1$ we can easily find the solution $x$ to the ECDLP:
+Let $d = \text{gcd}(\beta_i - \delta_i, N)$, if $d=1$ we can easily find the solution $t$ to the ECDLP:
 $$
-x \equiv (\gamma_i - \alpha_i)\cdot(\beta_i - \delta_i)^{-1} \text{ (mod $N$)}.
+t \equiv (\gamma_i - \alpha_i)\cdot(\beta_i - \delta_i)^{-1} \text{ (mod $N$)}.
 $$
-If $d \neq 1$ and is small it might be worthy to to find a solution $y$ mod($\frac{N}{d}$) in the same fashion:
+If $d \neq 1$, but is small, it might be favourable to find a particular solution $y$ mod($N/d$) in the same fashion:
 $$
-y \equiv (\gamma_i - \alpha_i)\cdot(\beta_i - \delta_i)^{-1} \text{ $\bigg($mod $\frac{N}{d}\bigg)$}, 
-$$then we can find $x$ in the set:
+y \equiv (\gamma_i - \alpha_i)\cdot(\beta_i - \delta_i)^{-1} \text{ $\bigg($mod $\frac{N}{d}\bigg)$}.
+$$
+Afterwards, we can recover the complete solution $t$ from the set:
 $$
 \bigg\{y + k\cdot\frac{N}{d}\ \bigg| \ k \in \{0, 1, \ldots, d -1\}\bigg\}.
 $$
-For $N$ prime $d$ will be small, if $N$ is not small and $d$ is not small we can restart the algorithm with a different partitioning $S_1,S_2,S_3$ or a different starting point $T_0$. Another option is to use the Pohlig-Hellman algorithm and solve multiple ECDLPs in prime subgroups and then find the final solution $x$ using the Chinese remainder theorem (CRT).
+For $N$ prime $d$ will be small, if $d$ is not small, we can restart the algorithm with a different partitioning $S_1,S_2,S_3$ or a different starting point $T_0$. Another option is to use the Pohlig-Hellman algorithm and solve multiple ECDLPs in prime subgroups. Then find the complete solution $t$ using the Chinese remainder theorem (CRT).
 \end{DF}
-\noindent For example, let $E = E(11,18,29)$ be an elliptic curve group over $GF(29)$ and its elliptic curve equation is $y^2 = x^3 + 11x + 11$. Let $P = (1,1)$ be a generator of $E$, let $Q \in E$, we want to find an integer $x$ such that: $Q = xP.$
-Order of $E$ is 29 (prime). We divide elliptic curve points into sets $S_1,S_2,S_3$ based on their $x$-coordinates:
-$$
-\forall R = (R_x, R_y) \in E: \begin{cases} R \in S_1, \quad \text{ if } 0\leq R_x < \big\lfloor\frac{p}{3}\big\rfloor, \\ 
-R \in S_2, \quad \text{ if } \big\lfloor\frac{p}{3}\big\rfloor \leq R_x < 2\big\lfloor\frac{p}{3}\big\rfloor, \\
-R \in S_3, \quad \text{ if } 2\big\lfloor\frac{p}{3}\big\rfloor \leq R_x, 
+\noindent For example, let $E = E_{11,18}(29)$ be an elliptic curve group over $GF(29)$, defined by the elliptic curve equation is $y^2 = x^3 + 11x + 18$. Let $P = (1,1)$ be a generator of $E$, and let $Q \in E$ be a second point, we want to find an integer $t$ such that: $Q = tP.$
+Order of $E$ is 29 (prime). We divide points in $E$ into sets $S_1,S_2,S_3$ based on their $x$-coordinates (assume $x$-coordinate of $\mathcal{O}$ is $0$):
+\begin{align*}
+\forall R = (R_x, R_y) \in E: \begin{cases} R \in S_1, \quad \text{ if } 0 &\leq R_x < \big\lfloor\frac{p}{3}\big\rfloor, \\ 
+R \in S_2, \quad \text{ if } \big\lfloor\frac{p}{3}\big\rfloor &\leq R_x < 2\big\lfloor\frac{p}{3}\big\rfloor, \\
+R \in S_3, \quad \text{ if } 2\big\lfloor\frac{p}{3}\big\rfloor &\leq R_x, 
 \end{cases}
-$$ where $p = 29.$ 
-Set $S_1$ contains the identity element $\mathcal{O}$. Cardinalities of the sets are following $|S_1| = 9,\ |S_2| = 12, \ |S_3| = 8.$ \\
-Lets solve the ECDLP for $Q=(13,26)$. In the table \ref{tblRho} are shown the intermediate results of the algorithm.
+\end{align*}
+where $p = 29.$ 
+Set $S_1$ contains the identity element $\mathcal{O}$. Cardinalities of the sets are $|S_1| = 9,\ |S_2| = 12, \ |S_3| = 8.$ There are many different ways how to divide the points in $E$ into sets $S_1,S_2,S_3$. The important thing here is, the three sets are approximately of the same size. Also, for every point $R \in E$ we can efficiently decide to which of the three sets it belongs. \\ \\
+\noindent Let's solve the ECDLP with $Q=(13,26)$. In the table \ref{tblRho} are shown the intermediate results of the Pollard's $\rho$-2algorithm.
 \begin{table}[!h]
 \centering
 \begin{tabular}{ |c||c|c|c|c|c|c| } 
@@ -882,19 +913,19 @@ $i$ & $\alpha_i$ & $\beta_i$ & $T_i$ & $\gamma_i$ & $\delta_i$ & $R_i$ \\
 9 & 4 & 8 & $(26,25)$ &  6 & 14 & $(13,3)$ \\ \hline
 10 & 4 & 9 & $\mathbf{(13,3)}$ &  12 & 0 & $\mathbf{(13,3)}$ \\ \hline
 \end{tabular}
-\caption{Intermediate values of the Pollard $\rho$ algorithm.}
+\caption[Intermediate values of the Pollard's $\rho$-algorithm]{Intermediate values of the Pollard's $\rho$-algorithm.}
 \label{tblRho}
 \end{table}
 \\
-\noindent After 10 iterations we have found a collision: 
+\noindent A collision was found after 10 iterations: 
 $$
-4P + 9Q = 12P \implies x \equiv 8\cdot9^{-1} \text{ (mod $29$)} \equiv 17 \text{ (mod $29$)}. 
+4P + 9Q = 12P \implies t \equiv 8\cdot9^{-1} \text{ (mod $29$)} \equiv 17 \text{ (mod $29$)}. 
 $$
-We can now verify that $17P = (13,26) = Q.$
+We can easily verify that $17P = (13,26) = Q.$
 \subsection{Pohlig-Hellman Algorithm}
-As we have mentioned in the previous subsection, Pollard $rho$ algorithm works the best in a prime order group. In a case when order of a group $G$ is a composite number $N$ with small factors, we can solve multiple ECDLPs in subgroups of prime order and then using the CRT find the final solution. This algorithm was presented in 1978 by Stephen Pohlig and Martin Hellman in their article \cite{PH}. 
-\begin{DF} (\textbf{Chinese Remainder Theorem} (CRT)): Let $m_i \in \mathbb{N},\ i \in \{1,\ldots, k\},$ be mutually relatively prime integers, and $N=\prod_{i=1}^k m_i,\ x_i \in \mathbb{Z},\ i \in \{1,\ldots, k\}.$ 
-The following system of congruences:
+As we have mentioned in the previous subsection, Pollard's $\rho$-algorithm works best in a prime order group. In a case, when the order of a group $G$ is a composite number $N$ with small factors, we can solve multiple ECDLPs in subgroups of prime order. Then, we can use the CRT to find the complete solution. In 1978, Stephen Pohlig and Martin Hellman presented this algorithm in their article~\cite{PH}. 
+\begin{DF} (\textbf{Chinese Remainder Theorem (CRT))}: Let $m_i \in \mathbb{N},\ i \in \{1,\ldots, k\},$ be mutually prime integers, and $N=\prod_{i=1}^k m_i,\ x_i \in \mathbb{Z},\ i \in \{1,\ldots, k\}.$ 
+The following system of linear congruences:
 \begin{align*}
 x &\equiv x_1 \text{ (mod $m_1$)}, \\
 x &\equiv x_2 \text{ (mod $m_2$)}, \\
@@ -903,26 +934,26 @@ x &\equiv x_k \text{ (mod $m_k$)},
 \end{align*}
 has a solution $c$:
 $$
-c = \sum_{i=1}^k x_iN_iM_i,
-$$ where $N_i=\frac{N}{m_i}$ and $M_i\equiv(N_i)^{-1} \text{ (mod $m_i$)}$ and any other solution $c'$ is congruent to $c$ modulo $N$.
+c = \sum_{i=1}^k x_iN_iM_i \text{ (mod $N$)},
+$$ where $N_i=N/m_i$ and $M_i\equiv(N_i)^{-1} \text{ (mod $m_i$)}$. Moreover, any other solution $c'$ is congruent to $c$ modulo $N$.
 \end{DF}
-\begin{DF}(\textbf{Pohlig-Hellmann algorithm}): Let $E$ be an elliptic curve group of composite order $N$ and let the factorization of $N$ be:
+\begin{DF}(\textbf{Pohlig-Hellman algorithm}): Let $E(p)$ be an elliptic curve group of composite order $N$ and let the factorisation of $N$ be:
 $$
-N = \prod_{i=1}^kp_i^{e_i},\ \forall i \in \{1, 2, \ldots, k\}: e_i \in \mathbb{Z}_{\geq 0},\ p_i \text{ is prime}.
- $$ Let $P$ be a generator of $E$ and let $Q \in E$, we want to find an integer $x$ such that: $xP = Q$. We can split this ECDLP into multiple ECDLPs in a prime power subgroups. 
+N = \prod_{i=1}^kp_i^{e_i},\ \forall i,j \in \{1, 2, \ldots, k\}: e_i \in \mathbb{Z}_{\geq 0},
+$$ where $p_i$ are distinct primes. Let $P$ be a generator of $E(p)$ and let $Q \in E(p)$. We want to find an integer $x$, such that $xP = Q$. We can split this ECDLP into multiple ECDLPs in a prime power subgroups as follows:
  \begin{itemize}
  \item For each $i \in \{1, 2, \ldots, k\}$ let:
  $$
  P_i := \frac{N}{p_i^{e_i}}P, \quad Q_i := \frac{N}{p_i^{e_i}}Q.
- $$ Each $P_i$ is a generator of an elliptic curve subgroup of prime power order  $\#P_i = p_i^{e_i}.$ In this subgroup we will solve the ECDLP, find an integer $x_i$  such that: $x_iP_i = Q_i.$
- \item  For each $i \in \{1, 2, \ldots, k\}$ we will solve the ECDLP in a prime power subgroup.  We may rewrite the unknown integer $x_i := y_{i,0} + y_{i,1}p_i + y_{i,2}p_i^2+ \cdots + y_{i,e-1}p_i^{e_i-1}.$ We can now repeatedly solve the ECDLP in a prime subgroup to obtain one unknown digit of $x_i$ by shifting the rest of them out. To find the first digit $y_{i,0}$ we will multiply both sides of the equation by $p_i^{e_i-1}$:
+ $$ Each $P_i$ is a generator of a prime power subgroup of $E(p)$. Order of $P_i$ is $\#P_i = p_i^{e_i}.$ We solve an ECDLP in every subgroup $\langle P_i \rangle$, i.e. find an integer $x_i$  such that: $x_iP_i = Q_i.$
+ \item  In every prime power subgroup $\langle P_i \rangle$, we may split the ECDLP to $e_i$ ECDLPs in prime subgroups of order $p_i$.  We may rewrite the unknown integer $x_i := y_{i,0} + y_{i,1}p_i + y_{i,2}p_i^2+ \cdots + y_{i,e-1}p_i^{e_i-1}.$ We can now repeatedly solve an ECDLP in a prime subgroup to obtain one unknown digit of $x_i$ at a time, by shifting the rest of them out. To find the first digit $y_{i,0}$ multiply both sides of the equation by $p_i^{e_i-1}$:
 \begin{align*}
 p_i^{e_i-1} Q_i &= p_i^{e_i-1}\cdot x_i  P_i\\ 
 &= p_i^{e_i-1}\cdot (y_{i,0} + y_{i,1}p_i + y_{i,2}p_i^2+ \cdots + y_{i,e-1}p_i^{e_i-1})P_i \\
 &= p_i^{e_i-1}y_{i,0}P_i \oplus p_i^{e_i}\cdot\underbrace{(y_{i,1} + y_{i,2}p_i+ \cdots + y_{i,e-1}p_i^{e_i-2})P_i}_{\in \langle P_i \rangle} \\
 &= y_{i,0}p_i^{e_i-1}P_i, \quad \text{(because }\forall T \in \langle P_i \rangle : p_i^{e_i}T = \mathcal{O})
 \end{align*}
-We may now solve the ECDLP in a prime subgroup of order $p_i$ generated by $p_i^{e_i-1}P_i$ and obtain first digit $y_{i,0}.$ Now we can move to the next digit $y_{i,1}$:
+We may now solve the ECDLP in a prime subgroup of order $p_i$ generated by $p_i^{e_i-1}P_i$, and obtain the first digit $y_{i,0}.$ Afterwards, we move to the next digit $y_{i,1}$ and find it in a similar fashion.
 \begin{align*}
 p_i^{e_i-2} Q_i &= p_i^{e_i-2}\cdot x_i  P_i\\ 
 &= p_i^{e_i-2}\cdot (y_{i,0} + y_{i,1}p_i + y_{i,2}p_i^2+ \cdots + y_{i,e-1}p_i^{e_i-1})P_i \\
@@ -930,23 +961,24 @@ p_i^{e_i-2} Q_i &= p_i^{e_i-2}\cdot x_i  P_i\\
 &= y_{i,0}p_i^{e_i-2}P_i \oplus y_{i,1}p_i^{e_i-1}P_i \implies \\
 p_i^{e_i-2}(Q_i \ominus y_{i,0}P_i) &= y_{i,1}p_i^{e_i-1}P_i.
 \end{align*}
-To find the next digit $y_{i,1}$ we just need to solve the ECDLP in a prime subgroup of order $p_i$. We continue in the same fashion until all digits of $x_i$ are found.
-\item Finally we solve the following system of congruences
+To the digit $y_{i,1}$, we need to solve the ECDLP in a prime subgroup of order $p_i$. We continue in the same fashion until all digits of $x_i$ are recovered.
+\item Finally we solve the following system of linear congruences.
 \begin{align*}
 x &\equiv x_1 \text{ (mod $p_1^{e_1}$)}, \\
 x &\equiv x_2 \text{ (mod $p_2^{e_2}$)}, \\
 &\vdots \quad \vdots \\
 x &\equiv x_k \text{ (mod $p_k^{e_k}$)},
 \end{align*}
-using the CRT to obtain the final solution $x$.
+using the CRT to obtain the complete solution $x$.
 \end{itemize}
 \end{DF}
-In the individual phase when we are solving the ECDLP in a prime order subgroup we can use any algorithm, usually BsGs or Pollard $\rho$ are used. The time complexity of Pohlig-Hellman algorithm is therefore (for more information see \cite{mky}):
+\noindent In the individual phase, when we are solving the ECDLP in a prime order subgroup we can use any algorithm. Usually, the BSGS or Pollard's $\rho$-algorithm is used. The time complexity of Pohlig-Hellman algorithm is therefore (for more information see~\cite{mky}):
 $$
 O\bigg(\sum_{i=1}^k\bigg[e_i\big(S(p_i) + \log(p_i)\big)\bigg]\bigg),
-$$ where $S(p_i)$ is the time complexity of the algorithm used to solve the ECDLP in the prime subgroup of order $p_i$. For elliptic curve groups of order with small factors is Pohlig-Hellman significantly faster than the BsGs or Pollard $\rho$ (we often need to run it more than once with different starting points if the order is composite).
-\noindent For example, let $E = E(1,2,75941)$ be an elliptic curve group over $GF(75941)$ and its elliptic curve equation is $y^2 = x^3 + x + 2$. Let $P = (64579,62139)$ be a generator of $E$, let $Q \in E$ be a point on elliptic curve $E$, we want to find an integer $x$ such that: $Q = xP.$ Order of $E$ is $76428 = 2^2\cdot 3^2\cdot 11 \cdot 193$. We will solve this problem using Pohling-Hellman algorithm. Let $Q = (1447, 50835)$.
-\begin{table}[!h]
+$$ where $S(p_i)$ is the time complexity of the algorithm used to solve the ECDLP in the prime subgroup of order $p_i$. For elliptic curve groups of composite order with small factors is Pohlig-Hellman significantly faster than the BSGS or Pollard's $\rho$-algorithm (we often need to run it more than once with different starting points if the group order is a composite number). \\\\
+\noindent For example, let $E = E_{1,2}(75941)$ be an elliptic curve over the finite field $GF(75941)$, defined by the elliptic curve equation $y^2 = x^3 + x + 2$. Let $P = (64579,62139)$ be a generator of $E$, let $Q \in E$ be a point on the elliptic curve $E$, we want to find an integer $x$, such that $Q = xP.$ Order of $E$ is $76428 = 2^2\cdot 3^2\cdot 11 \cdot 193$. Let's solve the ECDLP for $Q = (1447, 50835)$. \\ \\
+\noindent We show how can the Pohlig-Hellman algorithm solve this ECDLP. 
+\begin{table}[H]
 \centering
 \begin{tabular}{ |c||c|c|c|c|c| } 
 \hline
@@ -958,32 +990,34 @@ $$ where $S(p_i)$ is the time complexity of the algorithm used to solve the ECDL
 3 & 11 & 1 & $6948P = (39499, 25804)$ &  $6948Q = (29264,5197)$ & 9 \\  \hline
 4 & 193 & 1 & $396P = (58124, 73147)$ &  $396Q = (34502,8697)$ & 189 \\ \hline
 \end{tabular}
-\caption{Intermediate values of Pohlig-Hellman algorithm stating individual ECDLPs in prime power subgroups.}
+\caption[Intermediate values of the Pohlig-Hellman algorithm]{Intermediate values of the Pohlig-Hellman algorithm.}
 \label{tblPH}
 \end{table}
-For $i=1,2$ we need to solve the ECDLP in a subgroup of prime square order. In the subgroup of order $2^2$ generated by $P_1 = (1, 75939)$, we can rewrite the unknown $x_1$ as $x_1 = y_{1,0} + 2y_{1,1}$, to find the first digit $y_{1,0}$ we will use the relation:
+\noindent For $i=1,2$ we need to solve an ECDLP in a subgroup of prime power order. In the subgroup of order $2^2$, generated by $P_1 = (1, 75939)$. We rewrite the unknown partial solution $x_1$ as $x_1 = y_{1,0} + 2y_{1,1}$. We use the following equation to find the first digit $y_{1,0}$.
 \begin{align*}
 2Q_1 &= y_{1,0}\cdot2P_1 \\
 (75940, 0) &= y_{1,0}(75940, 0) \implies y_{1,0} = 1.
 \end{align*}
-To find the second digit $y_{1,1}$ we will use the relation:
+To recover the second digit $y_{1,1}$, we proceed in the similar fashion.
 \begin{align*}
 Q_1 \ominus y_{1,0}\cdot P_1 &= y_{1,1}\cdot 2P_1 \\
 (1,2) \oplus (1,2) & = y_{1,1}(75940, 0) \\
 (75940, 0) &= y_{1,1}(75940, 0) \implies y_{1,1} = 1.
 \end{align*}
-Therefore, $x_1 = y_{1,0} + y_{1,0}\cdot 2 = 1 + 2 = 3.$ In reality we could have just tried all four possible values for $x_1$. We will repeat the whole process in the subgroup generated by $P_2 = (55693, 45178)$ of order $3^2$. We rewrite the unknown integer $x_2$ as $x_2 = y_{2,0} + 3y_{2,1}$, to find the first digit $y_{2,0}$ we will use the relation:
+Therefore, $x_1 = y_{1,0} + y_{1,0}\cdot 2 = 1 + 2 = 3.$ In reality, we could have just tried all four possible values for $x_1$. \\ \\
+\noindent We repeat the whole process in the subgroup of order $3^2$ generated by $P_2 = (55693, 45178)$. We rewrite the unknown partial solution $x_2$ as $x_2 = y_{2,0} + 3y_{2,1}$, and use the following equation to find the first digit $y_{2,0}$.
 \begin{align*}
 3Q_2 &= y_{2,0}\cdot 3P_2 \\
 (35655, 11621) &= y_{2,0}(35655, 64320) \implies y_{2,0} = 2.
 \end{align*}
-To find the second digit $y_{2,1}$ we will use the relation:
+To find the second digit $y_{2,1}$, we proceed in the similar fashion.
 \begin{align*}
 Q_2 \ominus y_{2,0}\cdot P_2 &= y_{2,1}\cdot 3P_2 \\
 Q_2 \ominus 2P_2 &= y_{2,1}\cdot (35655, 64320) \\
 \mathcal{O} &= y_{2,1}\cdot (35655, 64320) \implies y_{2,1} = 0.
 \end{align*}
-Therefore, $x_2 = 2 + 0\cdot 3 = 2$. In this case there are nine possible values for $x_2$, so in reality we could have easily tried them all. Now we can put the system of congruences together and solve it to find the final solution $x$.
+Therefore, $x_2 = 2 + 0\cdot 3 = 2$. In this case, there are nine possible values for $x_2$, which could all have been tried out in the blink of an eye. \\\\
+\noindent Now we assemble the system of linear congruences and solve it to find the complete solution $x$.
 \begin{align*}
 x &\equiv 3 \text{ (mod $4$)}, \\
 x &\equiv 2 \text{ (mod $9$)}, \\
@@ -1002,124 +1036,147 @@ x &\equiv 189 \text{ (mod $193$)}, \\
 3 & 9 & 11 & 6948 & 8 \\ \hline
 4 & 189 &193 & 396 & 58 \\ \hline
 \end{tabular}
-\caption{Intermediate values of the CRT phase of the Pohlig-Hellman algorithm.}
+\caption[CRT phase of Pohlig-Hellman algorithm]{Intermediate values of the CRT phase of the Pohlig-Hellman algorithm.}
 \label{tblPH3}
 \end{table}
-\noindent Using the CRT we compute $x$ (the intermediate values are in the table \ref{tblPH3}):
-$$
-x \equiv 3\cdot 19107 \cdot 3 + 2\cdot 8492 \cdot 2 +  9\cdot 6948 \cdot 8 +  189\cdot 396 \cdot 58 \text{ (mod  76428)} \equiv 2891\text{ (mod  76428)}.
-$$ We can now verify that $2891P = (1447, 50835) = Q.$
+\noindent Using the CRT, we compute $x$ (the intermediate values are in table \ref{tblPH3}).
+\begin{align*}
+x &\equiv 3\cdot 19107 \cdot 3 + 2\cdot 8492 \cdot 2 +  9\cdot 6948 \cdot 8 +  189\cdot 396 \cdot 58 \text{ (mod  76428)}\\
+ &\equiv 2891\text{ (mod  76428)}.
+\end{align*}
+We can easily verify that $2891P = (1447, 50835) = Q.$
 \section{Index Calculus for ECDLP}
-The Index Calculus is originally a \textbf{subexponential} algorithm to solve the DLP in the multiplicative group of a finite field. 
+The Index Calculus is originally a \textbf{subexponential} algorithm for solving the DLP in a multiplicative group of a finite field. 
 \begin{DF}
 Let $0\leq a \leq 1,\ a \in \mathbb{R}$ and $c \in \mathbb{R}_{>0}$. The \textbf{subexponential function} for the parameters $a$ and $c$ is:
 $$
 L_N(a,c) := \exp(c\log(N)^a \log(\log(N))^{1-a}).
 $$
-Let $N$ be a $k$-bit integer, note that taking $a=0$ gives $L_N(0,c) = \log(N)^c = k^c$ (polynomial) while taking $a=1$ gives $L_N(1,c) = N^c = \exp(ck)$ (exponential). Hence $L_N(a,c)$ interpolates exponential and polynomial growth. An algorithm is called \textbf{subexponential} when it's complexity is $O(L_N(a,c))$ with $0 < a < 1$, for more context see chapter 15 in \cite{subExp}.
+Let $N$ be a $k$-bit integer, note that taking $a=0$ gives $L_N(0,c) = \log(N)^c = k^c$ (polynomial), while taking $a=1$ gives $L_N(1,c) = N^c = \exp(ck)$ (exponential). Thus, $L_N(a,c)$ interpolates exponential and polynomial growth. An algorithm is called \textbf{subexponential} when it's complexity is $O(L_N(a,c))$ for some $a$, $0 < a < 1$. For more information see chapter 15 in~\cite{subExp}.
 \end{DF} 
-\noindent However it is common to use the name index calculus algorithm to refer to any algorithm that operates in the same fashion as the original Index Calculus algorithm, which solves the DLP by collecting relations index calculus algorithm and using linear algebra afterwards \cite{amadori17}.
+\noindent However, it's common to use the name index calculus algorithm to refer to any algorithm, that operates in the same fashion as the original Index Calculus algorithm. In other words, that solves the DLP by first collecting relations between the group elements, and then using linear algebra~\cite{amadori17}.
 \begin{DF}
-\textbf{Index Calculus for ECDLP}: Let $E$ be an elliptic curve over a prime order field $GF(p)$, let $P$ be a generator of $E$ and for simplicity we assume $\#P$ is prime (if it's not the case we can using the Pohlig-Hellman idea and split the ECDLP into multiple ECDLPs in prime subgroups). Let $Q \in E$, we want to find an integer $x$ such that $xP = Q$. The simplest version of index calculus algorithm consists of two main stages: the relation collection step and the linear algebra step. At first, we need to collect the relations:
+\textbf{Index Calculus for ECDLP}: Let $E(p)$ be an elliptic curve over a prime order field $GF(p)$, let $P$ be a generator of $E(p)$. For simplicity, we assume $\#P$ is prime, if that's not the case, we can use the Pohlig-Hellman idea to split the ECDLP into multiple ECDLPs in prime order subgroups. Let $Q \in E$ be another point, we want to find an integer $x$, such that $xP = Q$. The simplest version of the index calculus algorithm consists of two main stages, the relation collection step and the linear algebra step. First, we need to collect relations.
 \begin{enumerate}
-\item Specify a factor base $\mathcal{F} \subset E$ such that we can effortlessly test the membership of an element to this factor base. 
-\item Generate a random linear combination of points $P,Q$: 
+\item Specify a factor base $\mathcal{F} \subset E$, such that we can effortlessly test the membership of an element to this factor base. 
+\item Generate a random linear combination $R$ of points $P,Q$.
 $$
-R := uP + vQ,\quad \text{$u,v$ are random integers from $GF(\#P)$}.
+R := uP + vQ,\quad \text{$u,v$ are random integers in $GF(\#P)$}.
 $$
 \item If possible, express $R$ as a linear combination of the elements of the factor base $\mathcal{F}$:
 \begin{align*}
-R &= uP + vQ = \sum_{k=1}^{|\mathcal{F}|}a_k P_k,\quad \forall k \in \{1,2,\ldots,|\mathcal{F}|\}: P_k \in \mathcal{F},\ a_k \in GF(\#P), \\
-\mathcal{O} &= -uP - vQ + \sum_{k=1}^{|\mathcal{F}|}a_k P_k.
+&\forall k \in \{1,2,\ldots,|\mathcal{F}|\}: P_k \in \mathcal{F},\ a_k \in GF(\#P): \\
+&R = uP + vQ = \sum_{k=1}^{|\mathcal{F}|}a_k P_k, \\
+&\mathcal{O} = -uP - vQ + \sum_{k=1}^{|\mathcal{F}|}a_k P_k.
 \end{align*}
 \item If $R$ cannot be expressed in terms of the factor base $\mathcal{F}$, continue with step 2. Otherwise, store the coordinates of $R$ with respect to $\mathcal{F}$ and integers $u,v$ as a row in the relation matrix $M$. The row is stored in this form:
 $$
 (a_1, a_2, \ldots, a_{|\mathcal{F}|}, -u, -v).
 $$
 \item We repeat this procedure (steps 2 to 4) until the end condition is met.
-\end{enumerate}
-\noindent Some authors (see \cite{amadori17} page 2) suggest end condition to set to number of decomposed points $R$ to be at least $|\mathcal{F}|$, but we need to state that this condition doesn't guarantee these relations are enough to solve the ECDLP. Another option, which guarantees we will be able to solve the ECDLP in the next step, is to collect relations until the rank of matrix $M$ is $|\mathcal{F}| + 1$, which is also the maximum rank this matrix can have (assuming $Q \neq \mathcal{O}$). We will state a weaker (that usually requires less relations to be found) end condition in the following section \ref{betterCond}. \\ \\
-\noindent After collecting enough relations, the linear algebra step solves the ECDLP:
-\begin{enumerate}
-\item Matrix $M$ is over $GF(\#P)$, we will reduce it to row echelon form (using some linear algebra technique, e.g. Gaussian Elimination Method), the last non-zero row of the reduced matrix will look like $(0,0,\ldots, 0, 1, -v')$, which describes a relation:
+\noindent Some authors (see~\cite{amadori17} page 2) suggest, to set the end condition to the number of decomposed points $R$ to be at least $|\mathcal{F}|$. However, we need to state this condition doesn't guarantee the obtained relations are enough to solve the ECDLP. Another option, which guarantees we can solve the ECDLP in the next step, is to collect relations until the rank of the matrix $M$ is $|\mathcal{F}| + 1$. Which is also the maximum rank, matrix $M$ can have (assuming $Q \neq \mathcal{O}$). We will state a weaker, that usually requires fewer relations to be found, end condition in section \ref{alg1}. 
+\\ \\
+\noindent After collecting enough relations, the linear algebra step solves the ECDLP.
+\item We reduce matrix $M$ to a row echelon form (definition \ref{rowEch}). Then, the last non-zero row of the reduced matrix looks like $(0,0,\ldots, 0, 1, -v')$, which transforms into the following relation.
 \begin{align*}
 \mathcal{O}  &= 1P \oplus (-v'Q) \\
 P &= v'Q \implies x \equiv (v')^{-1} \text{ (mod $\#P$)}.
 \end{align*}
-We can always recover this solution $x$, because order of $\#P$ is prime and $P \neq \mathcal{O} \implies v' \not\equiv 0 \text{ (mod $\#P$)}$.
+We can always recover the solution $x$ because the order of $\#P$ is prime and $P \neq \mathcal{O} \implies v' \not\equiv 0 \text{ (mod $\#P$)}$.
 \end{enumerate}
 \end{DF}
-The main bottleneck of this algorithm lies in the decomposition of a point $R$ into the factor basis $\mathcal{F}$, usually known as \textbf{point decomposition problem} (PDP). Therefore, in order for this algorithm to be efficient, we require the solution of the PDP to be efficient (including the case when $R$ can't be decomposed into elements of $\mathcal{F}$) and we also require high success rate of the decomposition of $R$. Both there requirements are deeply affected by the choice of factor base $\mathcal{F}$ and its size \cite{amadori17}. \\ 
+\noindent The main bottleneck of this algorithm lies in the decomposition of a point $R$ into the factor basis $\mathcal{F}$, called the \textbf{point decomposition problem (PDP)}. Therefore, in order for this algorithm to be efficient, we need to be able to efficiently solve the PDP (including the case when $R$ can't be decomposed into the elements of $\mathcal{F}$). Additionally, we require a high success rate of the decomposition of $R$ into the factor base $\mathcal{F}$. Both these requirements are deeply affected by choice of the factor base $\mathcal{F}$ and its size~\cite{amadori17}. \\ 
 
 \subsection{Summation Polynomials}
-\noindent In 2004 Igor Semaev published an article introducing summation polynomials in order transform the PDP to a problem of finding a solution of a multivariate polynomial equation based on the group law of a specific elliptic curve, for more information see the original article \cite{semaev04}.
+\noindent In 2004, Igor Semaev published an article introducing summation polynomials in order to transform the PDP to a problem of finding a solution of a multivariate polynomial equation based on the group law of a specific elliptic curve. This section is based on the original article by Semaev~\cite{semaev04}.
 \begin{DF}
-Let $E$ be the elliptic curve given by the short Weierstrass equation over a prime field $\mathbb{F} = GF(p),\ p > 3$. For any natural number $n \geq 2$ let $S_n = S_n(X_1, X_2, \ldots, X_n)$ be a polynomial in $n$ variables which is related to the group operation on $E$. We call this polynomial the $n$-th \textbf{summation polynomial} and define it by the following property. Let $x_1,x_2,\ldots,x_n$ be any elements from $\overline{\mathbb{F}}$, the algebraic closure of the field $\mathbb{F}$, then $S_n(x_1,x_2,\ldots,x_n)=0$ if and only if there exist $y_1,y_2,\ldots,y_n \in \overline{\mathbb{F}}$ such that points $(x_i,y_i), \forall i \in \{1,2,\ldots,n\}$ are in the elliptic curve group defined by $E$ over $\overline{\mathbb{F}}$ and their sum is the identity element of this elliptic curve group:
+Let $E_{A,B}(p)$ be an elliptic curve given by the short Weierstrass equation over a prime field $\mathbb{F} = GF(p),\ p > 3$. For any natural number $n \geq 2$, let $S_n = S_n(X_1, X_2, \ldots, X_n)$ be a polynomial in $n$ variables, which is related to the group operation on $E_{A,B}(p)$. We call this polynomial the $n$-th \textbf{summation polynomial} and define it by the following property. Let $x_1,x_2,\ldots,x_n$ be any elements in $\overline{\mathbb{F}}$, the algebraic closure of the field $\mathbb{F}$, then $S_n(x_1,x_2,\ldots,x_n)=0$ if and only if there exist $y_1,y_2,\ldots,y_n \in \overline{\mathbb{F}}$, such that the points $(x_i,y_i), \forall i \in \{1,2,\ldots,n\}$, are in $E(\overline{\mathbb{F}})$, and sum to the identity element of $E_{A,B}(\overline{\mathbb{F}})$.
 $$
-\mathcal{O} = \sum_{i=1}^n (x_i,y_i).
+\sum_{i=1}^n (x_i,y_i) = \mathcal{O}, \quad  \mathcal{O} \in E_{A,B}(\overline{\mathbb{F}}).
 $$
-For $n=2$ the summation polynomial is defined as: 
+For $n=2$, the summation polynomial is defined as follows. 
 $$
 S_2(X_1, X_2) := X_1 - X_2,
 $$ it comes from the fact that 
 $$
-\forall P, Q \in E(A,B,p): P \oplus Q = \mathcal{O} \implies  Q = \ominus P.
+\forall P, Q \in E_{A,B}(\overline{\mathbb{F}}): P \oplus Q = \mathcal{O} \implies  Q = \ominus P.
 $$
-Based on the definition of the additive inverse in $E(A,B,p)$ we know, the points $P = (x_1,y_1)$ and $\ominus P = (x_1, -y_1)$ have the same $x$-coordinate which is equivalent to $S_2(x_1, x_2) = 0 \implies x_1 = x_2.$ To determine $S_3(X_1,X_2,X_3),$ let $(x_1,y_1)$ and $(x_2, y_2)$ be two affine ($\neq  \mathcal{O}$) points on $E(A,B,p$ such that $x_1 \neq x_2.$ We denote their sum and difference by:
+Based on the definition of the additive inverse in $E_{A,B}(\overline{\mathbb{F}})$, we know, the points $P = (x_1,y_1)$ and $\ominus P = (x_1, -y_1)$ have the same $x$-coordinate. Which is equivalent to $S_2(x_1, x_2) = 0 \implies x_1 = x_2.$ 
+\\\\
+\noindent To determine $S_3(X_1,X_2,X_3),$ let $(x_1,y_1)$ and $(x_2, y_2)$ be two affine ($\neq  \mathcal{O}$) points on $E_{A,B}(\overline{\mathbb{F}})$, such that $x_1 \neq x_2.$ We denote their sum and difference by:
 \begin{align*}
 (x_3,y_3) &:= (x_1,y_1) \oplus (x_2,y_2),\\
 (x_4,y_4) &:= (x_1,y_1) \ominus (x_2,y_2).\\
 \end{align*}
-We will use the group law $\oplus$ to express $x_3$ and $x_4$ in terms of $x_1,x_2, y_1, y_2$:
+We use the group law $\oplus$ to express $x_3$ and $x_4$ in terms of $x_1,x_2, y_1, y_2$.
 \begin{align*}
 x_3 &= \lambda_3^2 - (x_1 + x_2), \text{ where } \lambda_3 = \frac{y_2 - y_1}{x_2 - x_1},\\ 
 x_4 &= \lambda_4^2 - (x_1 + x_2), \text{ where } \lambda_4 = \frac{y_2 + y_1}{x_2 - x_1}, \text{ since } \ominus (x_2,y_2) = (x_2, -y_2),\\ 
 \end{align*}
-To find a polynomial such that $x_3$ and $x_4$ are its roots, recall \textbf{Vieta's formulas}, let $z_1, z_2$ be two roots of the polynomial $p(z) = az^2 + bz + c$, then it has to satisfy following formulas:
+To find a polynomial, such that $x_3$ and $x_4$ are its roots, recall \textbf{Vieta's formulas}, let $z_1, z_2$ be two roots of a polynomial $p(z) = az^2 + bz + c$. Then the following formulas must be satisfied:
 $$
 z_1 + z_2 = -\frac{b}{a},\quad z_1z_2 = \frac{c}{a}.
 $$
-Therefore, we want to find $x_3 + x_4$ and $x_3 x_4$:
+Therefore, we want to express $x_3 + x_4$ and $x_3 x_4$ in terms of $x_1,x_2,A,B$.
 \begin{align*}
 x_3 + x_4 &= \lambda_3^2 + \lambda_4^2 - 2(x_1+x_2) \\
 &= \frac{(y_2-y_1)^2 + (y_2+y_1)^2 -2(x_1+x_2)(x_2-x_1)^2}{(x_2-x_1)^2} \\
-&= \frac{2y_2^2+2y_1^2 -2(x_1+x_2)(x_2-x_1)^2}{(x_2-x_1)^2}, \text{ (substite for $y_1^2,y_2^2$ using $E$ eq.)} \\
-&= \frac{2(x_1^3+Ax_1+B+x_2^3+Ax_2+B) -2(x_1^3+x_2^3-x_1^2x_2-x_1x_2^2)}{(x_2-x_1)^2}\\
-&= 2\frac{(Ax_1+Ax_2+2B) +x_1^2x_2+x_1x_2^2}{(x_2-x_1)^2} \\
-&= 2\frac{x_1(x_1x_2 + A) + x_2(x_1x_2 + A)+2B}{(x_2-x_1)^2}\\ 
+&= \frac{2y_2^2+2y_1^2 -2(x_1+x_2)(x_2-x_1)^2}{(x_2-x_1)^2}.
+\end{align*}
+Substitute for $y_1^2,y_2^2$ using the elliptic curve equation $Y^2 = X^3 + AX + B.$
+ \begin{align*}
+x_3 + x_4 &= \frac{2(x_1^3+Ax_1+B+x_2^3+Ax_2+B) -2(x_1^3+x_2^3-x_1^2x_2-x_1x_2^2)}{(x_2-x_1)^2},\\
+&= 2\frac{(Ax_1+Ax_2+2B) +x_1^2x_2+x_1x_2^2}{(x_2-x_1)^2}, \\
+&= 2\frac{x_1(x_1x_2 + A) + x_2(x_1x_2 + A)+2B}{(x_2-x_1)^2},\\ 
 &= 2\frac{(x_1 + x_2)(x_1x_2 + A)+2B}{(x_2-x_1)^2}.
 \end{align*}
+\vphantom{.}
 \begin{align*}
-x_3x_4 &= \frac{\bigg((y_2-y_1)^2 -(x_1^3+x_2^3-x_1^2x_2-x_1x_2^2)\bigg)\bigg((y_2+y_1)^2-(x_1^3+x_2^3-x_1^2x_2-x_1x_2^2)\bigg)}{(x_2-x_1)^4} \\
-&= \frac{\bigg(y_1^2 + y_2^2 -2y_1y_2 -x_1^3-x_2^3+x_1^2x_2+x_1x_2^2\bigg)\bigg(y_1^2 + y_2^2 +2y_1y_2 -x_1^3-x_2^3+x_1^2x_2+x_1x_2^2\bigg)}{(x_2-x_1)^4}\\
-&= \frac{\bigg(x_1^2x_2 + x_1x_2^2 + Ax_1 + Ax_2 - 2y_1y_2 + 2B\bigg)\bigg(x_1^2x_2 + x_1x_2^2 + Ax_1 + Ax_2 + 2y_1y_2 + 2B\bigg)}{(x_2-x_1)^4}\\
-&= \frac{- 4 y_{1}^{2} y_{2}^{2} + x_{1}^{2} x_{2}^{4} + 2 x_{1}^{3} x_{2} A + 4 x_{1}^{2} x_{2}^{2} A + 2 x_{1} x_{2}^{3} A + x_{1}^{2} A^{2} + 2 x_{1} x_{2} A^{2} + x_{2}^{2} A^{2}}{(x_2-x_1)^4} \\
-&+ \frac{4 x_{1}^{2} x_{2} B + 4 x_{1} x_{2}^{2} B + 4 x_{1} A B + 4 x_{2} A B + 4 B^{2} + x_{1}^{4} x_{2}^{2} + 2 x_{1}^{3} x_{2}^{3}}{(x_2-x_1)^4} \\
-&= \frac{\bigg((x_1-x_2)^2\bigg)\bigg(x_{1}^{2} x_{2}^{2} - 2 x_{1} x_{2} A + A^{2} - 4 x_{1} B - 4 x_{2} B\bigg)}{(x_2-x_1)^4}, \text{ (substited for $y_1^2,y_2^2$ using $E$ eq.)}\\
+\mathsmaller{x_3x_4} &= \mathsmaller{\frac{\big((y_2-y_1)^2 -(x_1^3+x_2^3-x_1^2x_2-x_1x_2^2)\big)\big((y_2+y_1)^2-(x_1^3+x_2^3-x_1^2x_2-x_1x_2^2)\big)}{(x_2-x_1)^4}}, \\
+&= \mathsmaller{\frac{\big(y_1^2 + y_2^2 -2y_1y_2 -x_1^3-x_2^3+x_1^2x_2+x_1x_2^2\big)\big(y_1^2 + y_2^2 +2y_1y_2 -x_1^3-x_2^3+x_1^2x_2+x_1x_2^2\big)}{(x_2-x_1)^4}},\\
+&= \mathsmaller{\frac{\big(x_1^2x_2 + x_1x_2^2 + Ax_1 + Ax_2 - 2y_1y_2 + 2B\big)\big(x_1^2x_2 + x_1x_2^2 + Ax_1 + Ax_2 + 2y_1y_2 + 2B\big)}{(x_2-x_1)^4}},\\
+&= \mathsmaller{\frac{- 4 y_{1}^{2} y_{2}^{2} + x_{1}^{2} x_{2}^{4} + 2 x_{1}^{3} x_{2} A + 4 x_{1}^{2} x_{2}^{2} A + 2 x_{1} x_{2}^{3} A + x_{1}^{2} A^{2} + 2 x_{1} x_{2} A^{2} + x_{2}^{2} A^{2}}{(x_2-x_1)^4}} \\
+&+\mathsmaller{ \frac{4 x_{1}^{2} x_{2} B + 4 x_{1} x_{2}^{2} B + 4 x_{1} A B + 4 x_{2} A B + 4 B^{2} + x_{1}^{4} x_{2}^{2} + 2 x_{1}^{3} x_{2}^{3}}{(x_2-x_1)^4}}.
+\end{align*}
+\vphantom{.}
+Substitute for $y_1^2,y_2^2$ using the elliptic curve equation $Y^2 = X^3 + AX + B.$\\
+\vphantom{.}
+\begin{align*}
+x_3x_4 &= \frac{\bigg((x_1-x_2)^2\bigg)\bigg(x_{1}^{2} x_{2}^{2} - 2 x_{1} x_{2} A + A^{2} - 4 x_{1} B - 4 x_{2} B\bigg)}{(x_2-x_1)^4},\\
 &= \frac{(x_1x_2-A)^2 - 4B(x_1+x_2)}{(x_2-x_1)^2}.
 \end{align*}
-Therefore, the $x_3$ and $x_4$ are roots of the polynomial:
-$$
-f(X) := (x_2-x_1)^2X^2-2\bigg((x_1+x_2)(x_1x_2 + A) + 2B\bigg)X + \bigg((x_1x_2-A)^2 - 4B(x_1+x_2)\bigg).
-$$
-In the case $x_1=x_2$ one of points $(x_3,y_3), (x_4,y_4)$ is $2(x_1,y_1)$ and the other one has to be $\mathcal{O}$, without loss of generality, let's consider $(x_3,y_3) = 2(x_1,y_1)$ we will show that $x_3$ is the root of the polynomial $f(X)$.
+Therefore, the $x_3$ and $x_4$ are roots of the polynomial $f(X)$.
+\begin{align*}
+f(X) :=& (x_2-x_1)^2X^2-2\bigg((x_1+x_2)(x_1x_2 + A) + 2B\bigg)X \\
++& \bigg((x_1x_2-A)^2 - 4B(x_1+x_2)\bigg).
+\end{align*}
+In the case $x_1=x_2$, one of the points $(x_3,y_3),\ (x_4,y_4)$ is $2(x_1,y_1)$ and the other one has to be $\mathcal{O}$. Without loss of generality, let's consider $(x_3,y_3) = 2(x_1,y_1)$, we show that $x_3$ is the root of the polynomial $f(X)$.
 \begin{align*}
 x_1 = x_2:\ f(X) &= -2\bigg(2x_1(x_1^2+A)+2B\bigg)X +\bigg((x_1^2-A)^2-8Bx_1\bigg),
-\\ X &= \frac{(x_1^2-A)^2-8Bx_1}{4(x_1^3+Ax_1+B)} \\ 
-	X &= \frac{x_1^4-2Ax_1^2-8Bx_1+A^2}{4(x_1^3+Ax_1+B)}. \\
-	x_3 &= \lambda^2 -2x_1, \quad \lambda = \frac{3x_1^2+A}{2y_1} \\
-	x_3 &= \frac{9 x_{1}^{4} + 6 Ax_{1}^{2} + A^{2} -8x_1y_1^2}{4y_1^2}, \text{ (substitute for $y_1^2$ using $E$ eq.)} \\
-	x_3 &= \frac{9 x_{1}^{4} + 6A x_{1}^{2} + A^{2}-8 x_{1}^{4} - 8 x_{1}^{2} A - 8B x_{1}}{4(x_1^3+Ax_1+B)} \\
-	x_3 &= \frac{x_1^4-2Ax_1^2 - 8Bx_1+ A^2}{4(x_1^3+Ax_1+B)}. \\
+\\ X &= \frac{(x_1^2-A)^2-8Bx_1}{4(x_1^3+Ax_1+B)}, \\ 
+	X &= \frac{x_1^4-2Ax_1^2-8Bx_1+A^2}{4(x_1^3+Ax_1+B)}.
 \end{align*}
-Therefore we can define the third summation polynomial as follows:
+Let's express $x_3$ in terms of $x_1,x_2,A,B$.
+\begin{align*}
+\lambda &= \frac{3x_1^2+A}{2y_1}, \\
+	x_3 &= \lambda^2 -2x_1, \\
+	x_3 &= \frac{9 x_{1}^{4} + 6 Ax_{1}^{2} + A^{2} -8x_1y_1^2}{4y_1^2}.
+\end{align*}
+Substitute for $y_1^2$ using the elliptic curve equation $Y^2 = X^3 + AX + B.$
+\begin{align*}
+x_3 &= \frac{9 x_{1}^{4} + 6A x_{1}^{2} + A^{2}-8 x_{1}^{4} - 8 x_{1}^{2} A - 8B x_{1}}{4(x_1^3+Ax_1+B)} \\
+x_3 &= \frac{x_1^4-2Ax_1^2 - 8Bx_1+ A^2}{4(x_1^3+Ax_1+B)}.\\
+\end{align*}
+The root of $f(X)$ is indeed $x_3$.
+Therefore, we define the third summation polynomial as follows:
 \begin{align*}
 S_3(X_1,X_2,X_3) &:= (X_2-X_1)^2X_3^2-2\bigg((X_1+X_2)(X_1X_2 + A) + 2B\bigg)X_3\\
 &+ (X_1X_2-A)^2 - 4B(X_1+X_2).
 \end{align*}
-$S_3$ is symmetric polynomial of degree $2$ in each variable $X_1,X_2,X_3$. $S_3$ is absolutely irreducible, for a proof and more information about summation polynoamials see \cite{semaev04}. In the same article Semaev also defined $n$-th summation polynomials (using resultant) for an arbitrary $n$ as follows:
+$S_3$ is a symmetric polynomial of degree $2$ in each variable $X_1,X_2,X_3$. For more information about summation polynomials see~\cite{semaev04}. In the same article, Semaev also defined a general $n$-th summation polynomial as follows:
 \begin{align*}
-\forall k,n \in \mathbb{N},\ n \geq 4,\ n-3\geq k \geq 1:\ S_n(X_1,X_2,\ldots, X_n) := \\ \text{Res}_y\bigg(S_{n-k}(X_1,\ldots,X_{n-k-1},y),\ S_{k+2}(X_{n-k},\ldots,X_n,y)\bigg).
+&\forall k,n \in \mathbb{N},\ n \geq 4,\ n-3\geq k \geq 1:\\
+&S_n(X_1,X_2,\ldots, X_n) := \text{Res}_y\bigg(S_{n-k}(X_1,\ldots,X_{n-k-1},y),\ S_{k+2}(X_{n-k},\ldots,X_n,y)\bigg).
 \end{align*}
 For example, 
 \begin{align*}
@@ -1142,14 +1199,32 @@ c_2 & c_1 &  d_2 & d_1 \\
 \end{align*}
 \end{DF}
 \label{resExample}
-\noindent If we recall that resultant of two polynomials with respect to variable $y$ is zero if and only if both polynomials (over an algebraically closed field) have a common root. We can see that summation polynomials $S_{n-k}(X_1,\ldots,X_{n-k-1},y)$ and $S_{k+2}(X_{n-k},\ldots,X_n,y)$ are tied together with variable $y$, because if there exist $x_1,\ldots, x_n, y_0$ ($y_0$ is the common root of $S_{n-k}(y)$ and $S_{k+2}(y)$) such that:
+If we recall, that the resultant of two polynomials with respect to some variable, is zero if and only if both polynomials have a common root (over an algebraically closed field). 
+///
+/////
+// FIX THIS
+/////
+Note that, $y_0$ is a common root of polynomials $S_{n-k}(y)$ and $S_{k+2}(y)$.
+ \\ \\\\
+We can immediately see, the summation polynomials $S_{n-k}(X_1,\ldots,X_{n-k-1},y)$ and $S_{k+2}(X_{n-k},\ldots,X_n,y)$ are tied together by the variable $y$. Because if there exist $x_1,\ldots, x_n, y_0 \in \overline{\mathbb{F}}$ such that:
+$$
+S_{n-k}(x_1,\ldots,x_{n-k-1}, y_0) = 0 \land S_{k+2}(x_{n-k},\ldots,x_{n}, y_0) = 0,$$
+which implies, there exist $P_1,\ldots,P_n, (y_0, y_1) \in E(\overline{\mathbb{F}})$ such that:
 \begin{align*}
-S_{n-k}(x_1,\ldots,x_{n-k-1}, y_0) = 0 \land S_{k+2}(x_{n-k},\ldots,x_{n}, y_0) &= 0 \implies\\ \exists P_1,\ldots,P_n, (y_0, y_1) \in E(\overline{\mathbb{F}}): P_1 \oplus \cdots \oplus P_{n-k-1} \oplus (y_0,y_1) &= \mathcal{O}, \\
-\exists v \in \{0,1\}: P_{n-k} \oplus \cdots \oplus P_{n} \oplus (-1)^{v}(y_0,y_1) &= \mathcal{O} \implies \\P_1 \oplus \cdots \oplus P_{n-k-1} \oplus (-1)^{v+1}\bigg(P_{n-k} \oplus \cdots \oplus P_{n}\bigg) &= \mathcal{O} \implies \\
-S_n(x_1,\ldots,x_n) &= 0.
+P_1 \oplus \cdots \oplus P_{n-k-1} \oplus (y_0,y_1) &= \mathcal{O}, \\
+\exists v \in \{0,1\}: P_{n-k} \oplus \cdots \oplus P_{n} \oplus (-1)^{v}(y_0,y_1) &= \mathcal{O},
 \end{align*}
-\noindent Summation polynomials for $n \geq 3,\ n \in \mathbb{N}$ are symmetric, absolutely irreducible and of degree $2^{n-2}$ in each variable $X_i,\ i \in \{1,\ldots,n\}$.\\ \\
-However, the higher summation polynomials are hardly practical (compared to $S_3$), because the growth of their degrees (in each variable) is exponential with respect to $n$. In 2015 Semaev himself presented a \textit{splitting trick}, a way how to transform $n$-th summation polynomial into a polynomial system of $S_3$ summation polynomials which can be solved more efficiently \cite{semaev15}. This trick is based on the resultant properties and the idea of tying multiple polynomial equations together with \textbf{bounding variables}. 
+which implies:
+$$
+P_1 \oplus \cdots \oplus P_{n-k-1} \oplus (-1)^{v+1}\bigg(P_{n-k} \oplus \cdots \oplus P_{n}\bigg) = \mathcal{O}.
+$$
+Therefore, 
+$$
+S_n(x_1,\ldots,x_n) = 0.
+$$
+
+\noindent Summation polynomials for $n \geq 3,\ n \in \mathbb{N}$ are symmetric, absolutely irreducible and of degree $2^{n-2}$ in each variable $X_i,\ i \in \{1,\ldots,n\}$.
+However, the higher summation polynomials are hardly practical (compared to $S_3$), because the growth of their degrees (in each variable) is exponential with respect to $n$. In 2015, Semaev himself presented a \textit{splitting trick}, a way how to transform $n$-th summation polynomial into a polynomial system of $S_3$ summation polynomials which can be solved more efficiently~\cite{semaev15}. This trick is based on the resultant properties and the idea of tying multiple polynomial equations together with \textbf{bounding variables}. 
 \begin{DF}\textbf{(The splitting trick)}: The roots of the $n$-th summation polynomial $S_n(X_1,\ldots,X_n)$ in $\overline{\mathbb{F}}[X_1,\ldots,X_n]$ are equivalent to the solutions of the following polynomial system:
 \begin{align*}
 &S_3(X_1,X_2,U_1) = 0, \\
@@ -1158,18 +1233,18 @@ However, the higher summation polynomials are hardly practical (compared to $S_3
 \end{align*} 
 We call the variables $U_i,\ i \in \{1, \ldots, n - 3\}$ bounding variables. Therefore, by introducing $n-3$ new variables we obtain a polynomial system that consists of $n-2$ symmetric polynomials (each only in three variables) of degree two in each its variable instead of a single polynomial in $n$ variables of degree $2^{n-2}$ in each of its $n$ variables.
 \end{DF}
-\noindent Summation polynomials reduce the PDP to the solution of a system of multivariate polynomial equations which are usually solved by calculating the Gröbner basis of the ideal generated by those polynomial equations. This ideal $I$ is zero-dimensional, the set of common zeroes of the polynomials in $I$ is finite in $\overline{\mathbb{F}}$, which is equivalent to the fact that, for each variable $X_i,\ i \in \{1,\ldots,n\}$ there is a polynomial in the Gröbner basis for $i$, with a power of $X_i$ as a leading monomial \cite{FGLM}. Reduced Gröbner basis of the ideal spanned by those polynomial equations is either calculated with respect to the lexicographic order of monomials or is calculated with respect to some other order and then then converted using the FGLM algorithm to a Gröbner basis for the same ideal with respect to a different monomial order, for detailed information about this algorithm see \cite{FGLM}.
+\noindent Summation polynomials reduce the PDP to the solution of a system of multivariate polynomial equations which are usually solved by calculating the Gröbner basis of the ideal generated by those polynomial equations. This ideal $I$ is zero-dimensional, the set of common zeroes of the polynomials in $I$ is finite in $\overline{\mathbb{F}}$, which is equivalent to the fact that, for each variable $X_i,\ i \in \{1,\ldots,n\}$ there is a polynomial in the Gröbner basis for $i$, with a power of $X_i$ as a leading monomial~\cite{FGLM}. Reduced Gröbner basis of the ideal spanned by those polynomial equations is either calculated with respect to the lexicographic order of monomials or is calculated with respect to some other order and then then converted using the FGLM algorithm to a Gröbner basis for the same ideal with respect to a different monomial order, for detailed information about this algorithm see~\cite{FGLM}.
 \begin{DF}
 \label{triagForm}
 Let $G = \{g_1,\ldots,g_s\}$ be the reduced basis for a zero-dimensional ideal $I \subset \mathbb{F}[X_1,\ldots,X_n]$ with respect to lex order with $X_1 >_{\text{lex}} \cdots >_{\text{lex}} X_n$ and ordered so that every LT$(g_j) >_{\text{lex}} $LT($g_{j+1}$). Then for each $i \in \{1,\ldots,n\}$ there is some $j=j(i)$ for which LT$(g_j)=x_i^{d_i}$ for some $d_i > 0.$ This is called the \textbf{triangular form} and is especially convenient for finding all the points that lie in the affine variety defined by the polynomials $g_1,\ldots,g_n$. \\ \\
 \noindent The last polynomial in the Gröbner basis $G$ is univariate: $g_s = g_s(X_n)$, we find its roots and substitute them into other polynomials in $G$, after such substitution, at least one of the earlier polynomials $g_i,\ i \in \{1,\ldots,s-1\}$ is univariate in $X_{n-1}$. This is called \textbf{backsolving} or \textbf{backsubstitution}, for more information see~\cite{week11}.
 \end{DF}
-\noindent In the next chapter we describe specific algorithms solving ECDLP that were implemented and tested by us. The experimental results are in the chapter~\ref{expResults}.
-\chapter{Specialized Algorithms Solving ECDLP}
+\noindent In the next chapter we describe specialised algorithms solving ECDLP that were implemented and tested by us. The experimental results are in the chapter~\ref{expResults}.
+\chapter{Specialised Algorithms Solving ECDLP}
 \label{specAlg}
 In this chapter we first describe four specialized algorithms for solving ECDLP that are based on the theoretical concepts presented in the previous chapters. Afterwords, we follow up with the actual implementation's details. The experimental results are presented in chapter~\ref{expResults}.
-\section{Algorithm 1 (based on Semaev 2015)}
-Algorithm 1 is based on the Semaev's algorithm presented in \cite{semaev15}, few changes had to be made to make the algorithm work for ECDLP over finite fields $GF(p),\ p$ prime. Semaev's algorithm works best over prime field extensions, where the base field is of prime characteristic $q,\ q \leq 2^{10}$ ( approximately).  \\ \\
+\section{Algorithm 1 (based on Semaev 2015)} \label{alg1}
+Algorithm 1 is based on the Semaev's algorithm presented in~\cite{semaev15}, few changes had to be made to make the algorithm work for ECDLP over finite fields $GF(p),\ p$ prime. Semaev's algorithm works best over prime field extensions, where the base field is of prime characteristic $q,\ q \leq 2^{10}$ ( approximately).  \\ \\
 \noindent Let $P$ be a generator of the prime order ($\#P = r$) group $E(p)$, where $E$ is an elliptic curve defined over prime field $GF(p)$, $p$ prime. We are restricting this algorithm to the case where $E(p)$ is a group of prime order, because if it's not the case, we can use the Pohlig-Hellman algorithm to split the initial ECDLP in the group of composite order to a multiple smaller ECDLPs in prime order subgroups, where algorithm 1 can be used to find the solution. The ECDLP is given a generator $P$ and some other point $Q \in E(p)$, find an integer $k$ such that $kP = Q,$ since $E(p)$ is a finite group of prime order $r$ we are interested in the solution $k\ \text{(mod }r)$. For large $p$, $r \approx p$. Algorithm 1, which computes this integer $k$, works in multiple steps and is described below.
 \begin{enumerate}
 \item Define the decomposition constant $m \geq 2,\ m \in \mathbb{N},$ and a factor base $\mathcal{F} \subset GF(p)$ of size $\mathlarger{\Big\lceil \sqrt[m]{r} \Big\rceil}$, where $\lceil \cdot \rceil$ is the ceiling function. The factor base $\mathcal{F}$ might consist of random $x$-coordinates of points on the elliptic curve $E$ (non-deterministic):
@@ -1177,7 +1252,7 @@ $$
 \mathcal{F} := \Big\{x\ \Big|\ x \in GF(p),\ \exists y \in GF(p): (x,y) \in E(p)  \Big\},
 $$
 or we can take the $|\mathcal{F}|$ smallest $x$-coordinates of points on the elliptic curve $E$ (deterministic).
-\item Construct a relation matrix $M \in GF(r)^{|\mathcal{F}| + 1 \times |\mathcal{F}| + 2}$, $r$ is prime, therefore there exists a finite field of order $r$. Lets order elements of $\mathcal{F}$ and denote the $i$-th element of the factor base $\mathcal{F}$ by $\mathcal{F}_i,\ i \in \{0,\ldots,|\mathcal{F}| - 1\}.$
+\item Construct a relation matrix $M \in GF(r)^{|\mathcal{F}| + 1 \times |\mathcal{F}| + 2}$, $r$ is prime, therefore there exists a finite field of order $r$. Let's order elements of $\mathcal{F}$ and denote the $i$-th element of the factor base $\mathcal{F}$ by $\mathcal{F}_i,\ i \in \{0,\ldots,|\mathcal{F}| - 1\}.$
 \begin{align*}
 &\begin{matrix}
 \hphantom{........}\mathbf{\mathcal{F}_0} & \hphantom{.........} \mathbf{\mathcal{F}_1} & \hphantom{....}\ldots &\hphantom{...} \mathbf{\mathcal{F}_{\mathcal{F} - 1}} & \hphantom{......}\mathbf{a} & \hphantom{........} \mathbf{b}
@@ -1216,7 +1291,7 @@ the last $m$ products is used to restrict found solutions $x_1,\ldots,x_m$ to li
 $$
 x_j^p - x_j = 0, \quad j \in \{1, \ldots, m\},
 $$
-which is not computationally feasible for large $p$ (approximately $p \geq 2^{10}$), so we won't generally use them (unless stated otherwise). Lets denote the set of the polynomials described above as $T$. Ideal $I = \langle T \rangle$ is a zero-dimensional ideal. Therefore, we can compute its Gröbner basis $G$ with respect to lexicographic order $X_1 >_{lex} >_{lex} \cdots >_{lex} X_n$ and by definition \ref{triagForm} it will be in a triangular form, so we can easily find the affine variety $\mathcal{V}(G) = \mathcal{V}(T)$, the set of the common zeroes of the polynomials in the set $T$. For every found solution ${(s_1, \ldots, s_m) \in GF(p)^m}$ we add update one row in the relation matrix, we first need to determine the signs $v_i,\ i \in \{1,\ldots,m\}$, such that:
+which is not computationally feasible for large $p$ (approximately $p \geq 2^{10}$), so we won't generally use them (unless stated otherwise). Let's denote the set of the polynomials described above as $T$. Ideal $I = \langle T \rangle$ is a zero-dimensional ideal. Therefore, we can compute its Gröbner basis $G$ with respect to lexicographic order $X_1 >_{lex} >_{lex} \cdots >_{lex} X_n$ and by definition \ref{triagForm} it will be in a triangular form, so we can easily find the affine variety $\mathcal{V}(G) = \mathcal{V}(T)$, the set of the common zeroes of the polynomials in the set $T$. For every found solution ${(s_1, \ldots, s_m) \in GF(p)^m}$ we add update one row in the relation matrix, we first need to determine the signs $v_i,\ i \in \{1,\ldots,m\}$, such that:
 $$
 \bigg[\sum_{i=1}^m(-1)^{v_i}(s_i, y_i) \bigg] = \mathcal{O}, 
 $$
@@ -1230,15 +1305,15 @@ M_{rowID,\ |\mathcal{F}| + 2} &= b_{rowID} = b \text{ (mod $r$)}, \\
 rowID &= rowID + 1.
 \end{align*}
 \item We repeat step 3. until the end condition is met. The end condition could obviously just be that the matrix $M$ has a full rank $\mathcal{F} + 1$, but in reality we need way less relations so it's not efficient to always generate that many relations. To solve the ECDLP we just need to transform one row of the matrix $M$ to this form: $(0, \ldots, 0,a',b')$ using only elementary row operations (we expect our reader is familiar with the Gaussian elimination algorithm and the definition of the matrix rank, otherwise feel free to consult your nearest textbook of linear algebra). \\ \\
-\noindent We can state the end condition as follows. Lets denote the matrix $M$ without last two columns by $M'$. We proceed to step 5 if rank$(M) > $ rank($M')$, which implies that if we reduce $M$ to its \textbf{row echelon form}, meaning the first non-zero element in each row, called the \textbf{leading entry}, is 1. Each leading entry is in a column to the right of the leading entry in the previous row and zero rows are below rows having a non-zero element. We will have a leading entry in the $(\mathcal{F} + 1)$-th column corresponding to \textbf{a}, we don't consider the degenerate case when $Q = \mathcal{O}$ in which case a leading entry could be in the very last column as well.
-\item We reduce $M$ to its row echelon form, as described above, as denote it by $M_R$. We can now solve the ECDLP using the last non-zero row of $M_R$ which has to be in the following form:
+\noindent We can state the end condition as follows. Let's denote the matrix $M$ without last two columns by $M'$. We proceed to step 5 if rank$(M) > $ rank($M')$, which implies that if we reduce $M$ to its \textbf{row echelon form}, meaning the first non-zero element in each row, called the \textbf{leading entry}, is 1. Each leading entry is in a column to the right of the leading entry in the previous row and zero rows are below rows having a non-zero element. We will have a leading entry in the $(\mathcal{F} + 1)$-th column corresponding to \textbf{a}, we don't consider the degenerate case when $Q = \mathcal{O}$ in which case a leading entry could be in the very last column as well.
+\item We reduce $M$ to a row echelon form, as described above, as denote it by $M_R$. We can now solve the ECDLP using the last non-zero row of $M_R$ which has to be in the following form:
 $$
 (0, \ldots, 0, 1, b') \implies P \oplus b'Q = \mathcal{O} \implies k \equiv (-b')^{-1} \text{ (mod $r$)}.
 $$
 This multiplicative inverse of $(-b')$ always exists, since $r$ is a prime and $b' \not\equiv 0$ (mod $r$), because $P \neq \mathcal{O}$. If we denote the rank of the matrix $M$ by~$d$, then the last non-zero row of the matrix $M_R$ is the $d$-th row. \\ Integer $k$ is the solution to the ECDLP.
 \end{enumerate}
 \section{Algorithm 2 (based on Amadori et al. 2017)}
-Algorithm 2 is based on the algorithm by Amadori, Pintore and Sala presented in \cite{amadori17}, the main difference to the algorithm 1 is using a factor base with known decomposition of each of its elements as a linear combination of $P,Q$, so we only need to find one relation to solve the ECDLP. 
+Algorithm 2 is based on the algorithm by Amadori, Pintore and Sala presented in~\cite{amadori17}, the main difference to the algorithm 1 is using a factor base with known decomposition of each of its elements as a linear combination of $P,Q$, so we only need to find one relation to solve the ECDLP. 
 
 %$$\bigg[\prod_{\mathcal{F}_i \in V_j}\Big(x_j - \mathcal{F}_i\Big)\bigg] = 0, \quad  j \in \{1, \ldots, m\},\ i \in \{0, \ldots, |\mathcal{F}| - 1\},$$
 %where $V_j$ are pair-wise disjoint sets of approximately the same size of factor base elements, $\forall j \in \{1, \ldots, m\}: |V_j| \approx \frac{|\mathcal{F}|}{m},\ V_j \subset \mathcal{F},$ it is used to restrict found solutions $x_1,\ldots,x_m$ to lie in the factor base $\mathcal{F}$. Each $x_i$ lies in the set $V_i$
@@ -1261,13 +1336,7 @@ Algorithm 2 is based on the algorithm by Amadori, Pintore and Sala presented in 
 
 \chapter{Experimental Results}
 \label{expResults}
-poly division alg
-Pohling-Hellmann
-Pollard-Rho
-BsGs
-Groebner basic
 F4, F5 Groebner
-SumPoly 
 
 \setsecnumdepth{part}
 \chapter{Conclusion}
@@ -1284,10 +1353,11 @@ SumPoly
 \chapter{Acronyms}
 % \printglossaries
 \begin{description}
-	\item[EEA] Extended Euclidean algorithm
+	\item[SEA] Schoof- Elkies-Atkin’s (algorithm)
 	\item[DLP] Discrete logarithm problem
 	\item[ECDLP] Elliptic curve discrete logarithm problem
-	\item[BsGs] Baby-step giant-step (algorithm)
+	\item[EEA] Extended Euclidean algorithm
+	\item[BSGS] Baby-step giant-step (algorithm)
 	\item[CRT] Chinese remainder theorem
 	\item[PDP] Point decomposition problem
 \end{description}
