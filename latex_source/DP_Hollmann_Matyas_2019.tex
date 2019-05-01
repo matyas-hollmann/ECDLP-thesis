@@ -644,9 +644,11 @@ is a Gröbner basis of the $l$-th elimination ideal $I_l$.
 \end{DF}
 \vphantom{.}
 \noindent To find all the points in the affine variety $\mathcal{V}(I)$, we build up the solutions one coordinate at a time. At first, we find the affine variety $\mathcal{V}(I_{n-1})$, which is equivalent to finding the roots of a univariate polynomial in $\mathbb{F}[x_n]$. We call any solution $(a_n) \in \mathcal{V}(I_{n-1})$ a \textbf{partial solution} of the original system of equations. Next step is to extend a partial solution $(a_n)$ to a partial solution $(a_{n-1},a_n) \in \mathcal{V}(I_{n-2})$. To do that, we substitute $(a_n)$ into all the polynomial equations in $I_{n-2}$. Thereafter, we obtain a univariate polynomial equation in $\mathbb{F}[x_{n-1}]$, which we can conveniently solve. Note that not every partial solution in $\mathcal{V}(I_{n-1})$ extends to a partial solution in $\mathcal{V}(I_{n-2})$. We repeat this process until we find $\mathcal{V}(I_0) = \mathcal{V}(I)$, a set of all \textbf{complete solutions} to the original system of equations.
-%Divison Res => alg in the next section with F4, F5
-%
-%Schoof–Elkies–Atkin algorithm - pocet bodu na EC 
+\begin{DF}
+\label{triagForm}
+Let $G = \{g_1,\ldots,g_s\}$ be the reduced Gröbner basis for a zero-dimensional ideal $I \subset \mathbb{F}[X_1,\ldots,X_n]$ with respect to the lexicographic order of monomials with $X_1 >_{\text{lex}} \cdots >_{\text{lex}} X_n$ and ordered so that every LT$(g_j) >_{\text{lex}} $LT($g_{j+1}$). Then for each $i \in \{1,\ldots,n\}$ there is some $j=j(i)$ for which LT$(g_j)=x_i^{d_i}$ for some $d_i > 0.$ This is called the \textbf{triangular form} and is especially convenient for finding all the points, that lie in the affine variety defined by the polynomials $g_1,\ldots,g_n$. The last polynomial in $G$ is univariate: $g_s = g_s(X_n)$. We can find its roots (a partial solution) and substitute them into all the other polynomials in $G$. After such substitution, at least one of the earlier polynomials $g_i,\ i \in \{1,\ldots,s-1\}$ is univariate in $X_{n-1}$. We can repeat this process until we find the affine variety $\mathcal{V}(G)$, the set of all complete solutions. This method is called \textbf{backsolving} or \textbf{backsubstitution}, for more information see~\cite{week11}.
+\end{DF}
+
 \chapter{Elliptic Curves and the Discrete Logarithm Problem}
 In this chapter, we revise the theory of elliptic curves and state the elliptic curve discrete logarithm problem (ECDLP). In the last section, we also introduce the reader to the concept of summation polynomials, which are the primary building block in many specialised algorithms (exploiting the particular group structure) solving the ECDLP. Examples of such algorithms are discussed in detail in chapter \ref{specAlg}.
 \section{Elliptic Curves}
@@ -1199,14 +1201,9 @@ c_2 & c_1 &  d_2 & d_1 \\
 \end{align*}
 \end{DF}
 \label{resExample}
-If we recall, that the resultant of two polynomials with respect to some variable, is zero if and only if both polynomials have a common root (over an algebraically closed field). 
-///
-/////
-// FIX THIS
-/////
-Note that, $y_0$ is a common root of polynomials $S_{n-k}(y)$ and $S_{k+2}(y)$.
- \\ \\\\
-We can immediately see, the summation polynomials $S_{n-k}(X_1,\ldots,X_{n-k-1},y)$ and $S_{k+2}(X_{n-k},\ldots,X_n,y)$ are tied together by the variable $y$. Because if there exist $x_1,\ldots, x_n, y_0 \in \overline{\mathbb{F}}$ such that:
+\noindent If we recall, that the resultant of two polynomials with respect to some variable, is zero if and only if both polynomials have a common root (over an algebraically closed field). 
+ \\ \\
+\noindent We can immediately see, the summation polynomials $S_{n-k}(X_1,\ldots,X_{n-k-1},y)$ and $S_{k+2}(X_{n-k},\ldots,X_n,y)$ are tied together by the variable $y$. Because if there exist $x_1,\ldots, x_n, y_0 \in \overline{\mathbb{F}}$ (where $y_0$ is a common root of polynomials $S_{n-k}(y)$ and $S_{k+2}(y)$), such that:
 $$
 S_{n-k}(x_1,\ldots,x_{n-k-1}, y_0) = 0 \land S_{k+2}(x_{n-k},\ldots,x_{n}, y_0) = 0,$$
 which implies, there exist $P_1,\ldots,P_n, (y_0, y_1) \in E(\overline{\mathbb{F}})$ such that:
@@ -1222,24 +1219,19 @@ Therefore,
 $$
 S_n(x_1,\ldots,x_n) = 0.
 $$
-
-\noindent Summation polynomials for $n \geq 3,\ n \in \mathbb{N}$ are symmetric, absolutely irreducible and of degree $2^{n-2}$ in each variable $X_i,\ i \in \{1,\ldots,n\}$.
-However, the higher summation polynomials are hardly practical (compared to $S_3$), because the growth of their degrees (in each variable) is exponential with respect to $n$. In 2015, Semaev himself presented a \textit{splitting trick}, a way how to transform $n$-th summation polynomial into a polynomial system of $S_3$ summation polynomials which can be solved more efficiently~\cite{semaev15}. This trick is based on the resultant properties and the idea of tying multiple polynomial equations together with \textbf{bounding variables}. 
-\begin{DF}\textbf{(The splitting trick)}: The roots of the $n$-th summation polynomial $S_n(X_1,\ldots,X_n)$ in $\overline{\mathbb{F}}[X_1,\ldots,X_n]$ are equivalent to the solutions of the following polynomial system:
+\\
+\noindent Summation polynomials for $n \geq 3,\ n \in \mathbb{N}$, are symmetric, absolutely irreducible and of degree $2^{n-2}$ in each variable $X_i,\ i \in \{1,\ldots,n\}$.
+However, the higher summation polynomials are hardly practical (compared to $S_3$), because the growth of their degrees (in each variable) is exponential with respect to $n$. In 2015, Semaev himself presented a \enquote{splitting trick}, a way how to transform the $n$-th summation polynomial into a  system of $S_3$ summation polynomials. The splitting trick is based on the resultant properties and the idea of tying multiple polynomial equations together with \textbf{bounding variables}. The constructed polynomial system can be solved more efficiently than a single summation polynomial $S_n$ for $n > 3$, for more information see~\cite{semaev15}. 
+\begin{DF}\textbf{(The splitting trick)}: The roots of the $n$-th summation polynomial $S_n(X_1,\ldots,X_n),\ n \in \mathbb{N},\ n > 3,$ in $\overline{\mathbb{F}}[X_1,\ldots,X_n]$ are equivalent to the solutions (in variables $X_1,\ldots,X_n$) of the following polynomial system:
 \begin{align*}
 &S_3(X_1,X_2,U_1) = 0, \\
 &S_3(X_{k+2}, U_{k}, U_{k+1}) = 0, \quad 1 \leq k \leq n-4,\ k \in \mathbb{N}, \\
 &S_3(X_{n-1}, X_n, U_{n-3}) = 0.
 \end{align*} 
-We call the variables $U_i,\ i \in \{1, \ldots, n - 3\}$ bounding variables. Therefore, by introducing $n-3$ new variables we obtain a polynomial system that consists of $n-2$ symmetric polynomials (each only in three variables) of degree two in each its variable instead of a single polynomial in $n$ variables of degree $2^{n-2}$ in each of its $n$ variables.
+We call the variables $U_i,\ i \in \{1, \ldots, n - 3\}$, bounding variables. Therefore, by introducing $n-3$ new variables, we obtain a polynomial system that consists of $n-2$ symmetric polynomials (each only in three variables) of degree two in each its variable instead of a single polynomial in $n$ variables of degree $2^{n-2}$ in each of its $n$ variables.
 \end{DF}
-\noindent Summation polynomials reduce the PDP to the solution of a system of multivariate polynomial equations which are usually solved by calculating the Gröbner basis of the ideal generated by those polynomial equations. This ideal $I$ is zero-dimensional, the set of common zeroes of the polynomials in $I$ is finite in $\overline{\mathbb{F}}$, which is equivalent to the fact that, for each variable $X_i,\ i \in \{1,\ldots,n\}$ there is a polynomial in the Gröbner basis for $i$, with a power of $X_i$ as a leading monomial~\cite{FGLM}. Reduced Gröbner basis of the ideal spanned by those polynomial equations is either calculated with respect to the lexicographic order of monomials or is calculated with respect to some other order and then then converted using the FGLM algorithm to a Gröbner basis for the same ideal with respect to a different monomial order, for detailed information about this algorithm see~\cite{FGLM}.
-\begin{DF}
-\label{triagForm}
-Let $G = \{g_1,\ldots,g_s\}$ be the reduced basis for a zero-dimensional ideal $I \subset \mathbb{F}[X_1,\ldots,X_n]$ with respect to lex order with $X_1 >_{\text{lex}} \cdots >_{\text{lex}} X_n$ and ordered so that every LT$(g_j) >_{\text{lex}} $LT($g_{j+1}$). Then for each $i \in \{1,\ldots,n\}$ there is some $j=j(i)$ for which LT$(g_j)=x_i^{d_i}$ for some $d_i > 0.$ This is called the \textbf{triangular form} and is especially convenient for finding all the points that lie in the affine variety defined by the polynomials $g_1,\ldots,g_n$. \\ \\
-\noindent The last polynomial in the Gröbner basis $G$ is univariate: $g_s = g_s(X_n)$, we find its roots and substitute them into other polynomials in $G$, after such substitution, at least one of the earlier polynomials $g_i,\ i \in \{1,\ldots,s-1\}$ is univariate in $X_{n-1}$. This is called \textbf{backsolving} or \textbf{backsubstitution}, for more information see~\cite{week11}.
-\end{DF}
-\noindent In the next chapter we describe specialised algorithms solving ECDLP that were implemented and tested by us. The experimental results are in the chapter~\ref{expResults}.
+\noindent Summation polynomials reduce the PDP to the solution of a system of multivariate polynomial equations, which are usually solved by calculating the reduced Gröbner basis of the ideal generated by those polynomials, we denote this ideal by~$I$. Ideal~$I$ is zero-dimensional, which means the set of common zeroes of the polynomials in $I$ is finite in $\overline{\mathbb{F}}$. Therefore, the Gröbner basis of~$I$ with respect to the lexicographic monomial order is in triangular form, see definition \ref{triagForm}. The reduced Gröbner basis of the ideal $I$ is directly calculated with respect to the lexicographic monomial order. Alternatively, it is calculated with respect to some other monomial order and then converted, using the FGLM algorithm, to a Gröbner basis of the same ideal with respect to the lexicographic monomial order, for detailed information about the FGLM algorithm see~\cite{FGLM}. \\ \\
+\noindent In the next chapter, we describe four specialised algorithms for solving the ECDLP. We have implemented and tested these algorithms, and we present the obtained experimental results in chapter~\ref{expResults}.
 \chapter{Specialised Algorithms Solving ECDLP}
 \label{specAlg}
 In this chapter we first describe four specialized algorithms for solving ECDLP that are based on the theoretical concepts presented in the previous chapters. Afterwords, we follow up with the actual implementation's details. The experimental results are presented in chapter~\ref{expResults}.
