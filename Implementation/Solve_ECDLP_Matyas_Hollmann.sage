@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
 def getNumThreads():
     import multiprocessing
     try:
@@ -275,7 +274,7 @@ def buildFactorBase(Q, P, m):
     OUTPUT:
     
     Returns a vector of coordinates ``(a_i, b_i)``, factorbase ``F`` consisting of points
-    ``a_iP + b_iQ =R_i``.
+    ``a_iP + b_iQ =R_i`` and the hashed factorbase to speed up the lookup operation.
     
     If the solution ``res`` to the ECDLP is found, it's returned as well, otherwise last returned value is ``None``.
     
@@ -285,6 +284,7 @@ def buildFactorBase(Q, P, m):
 
     factorBaseSize = calcFactorBaseSize(orderP, m)
     factorBase = [] #store points
+    hashFactorBase = {} #efficient lookup
     coord = []
     
     res = None
@@ -298,8 +298,9 @@ def buildFactorBase(Q, P, m):
             res = solveECDLP(a, b, orderP)
             if res != None:
                 break
-        elif candidate not in factorBase:
+        elif candidate not in hashFactorBase.keys():
             factorBase.append(candidate)
+            hashFactorBase[candidate] = currentSize
             coord.append((a,b))
             currentSize += 1
         else: #there exists an relation aP + bQ = cP + dQ
@@ -309,12 +310,12 @@ def buildFactorBase(Q, P, m):
             if res != None:
                 break
             
-    return coord, factorBase, res
+    return coord, factorBase, hashFactorBase, res
 
 ########################################################################################################
 ########################################################################################################
 
-def generateRandomEC(bits = 0, p = 0, primeOrder=False):
+def generateRandomEC(bits = 0, p = 0, primeOrder = False):
     """
     Generates a random elliptic curve defined by the short
     Weierstrass equation over a prime order field.
@@ -768,10 +769,12 @@ def algorithm3McGuire(Q, P, m):
     res = None
 
     attempts = 0
-    fbs = 0
     pointsTried = 0
+    factorBaseGenTime = 0
     while res == None:
-        coord, factorBase, res = buildFactorBase(Q, P, m)
+        tmp = time.time()
+        coord, factorBase, hashFactorBase, res = buildFactorBase(Q, P, m)
+        factorBaseGenTime += time.time() - tmp
         if res != None:
             break
 
@@ -787,8 +790,8 @@ def algorithm3McGuire(Q, P, m):
             for v in VectorSpace(GF(2), indexDim):
                 tmp = sum(-points[k] if v[k] else points[k] for k in srange(indexDim))
 
-                if tmp in factorBase:
-                    baseId = factorBase.index(tmp)
+                if tmp in hashFactorBase: #speed-up the lookup operation
+                    baseId = hashFactorBase[tmp]
 
                     sumB = -coord[baseId][1] + sum(-coord[index[k]][1] if v[k] 
                                               else coord[index[k]][1] for k in srange(0,indexDim))
@@ -809,20 +812,19 @@ def algorithm3McGuire(Q, P, m):
 
     #print statistics
     printResults(E, P, Q, res, orderP, m, fbs, attempts, totalTime, 0)
+    print("Points tried: {}, tBase: {}.".format(pointsTried, tbs))
     
-    return res, attempts, totalTime, pointsTried
+    return res, attempts, totalTime, pointsTried, factorBaseGenTime
      
     
-
-
 #EXAMPLE USAGE:
 
 #generate a random prime order Elliptic Curve ~~ 2**18
-E = generateRandomEC(bits=18, primeOrder=True)
+#E = generateRandomEC(bits=20, primeOrder=True)
 
 #obtain its generator and a random point Q in <P>
-P, Q = initECDLP(E)
+#P, Q = initECDLP(E)
 
 #run a selected algorithm to solve the ECDLP
-result, iterations, totalTime, GBtime = algorithm2Amadori(Q, P, m=5, t0=3)
+#result, iterations, totalTime, pointsTried, factorBaseGenTime = algorithm3McGuire(Q,P,3)
 
